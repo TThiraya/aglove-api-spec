@@ -1,0 +1,15 @@
+# AGLove API Spec
+
+เอกสาร API Spec แบบ interactive (tab Request/Response, JSON Body แบบ collapsible, type badge, O/M badge)
+
+> คลิกลิงก์ด้านล่างเพื่อเปิดดูแบบ render (ผ่าน GitHub Pages)
+
+## Company
+
+- [POST /Company/active](https://tthiraya.github.io/aglove-api-spec/API%20Spec/Company/active.html)
+- [POST /Company/grid/full/list](https://tthiraya.github.io/aglove-api-spec/API%20Spec/Company/grid-full-list.html)
+
+## SKRegisterBackEnd
+
+- [POST /SKRegisterBackEnd/register/save](https://tthiraya.github.io/aglove-api-spec/API%20Spec/SKRegisterBackEnd/register-save.html)
+- [POST /SKRegisterBackEnd/register/summary/get](https://tthiraya.github.io/aglove-api-spec/API%20Spec/SKRegisterBackEnd/register-summary-get.html)
