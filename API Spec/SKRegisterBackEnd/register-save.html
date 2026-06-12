@@ -1,0 +1,156 @@
+<!DOCTYPE html>
+<html lang="th">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>POST /SKRegisterBackEnd/register/save</title>
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/tabler-icons/3.1.0/iconfont/tabler-icons.min.css">
+<style>
+  :root {
+    --color-background-primary: #ffffff;
+    --color-background-secondary: #f4f3ef;
+    --color-background-tertiary: #ebe9e1;
+    --color-text-primary: #0f172a;
+    --color-text-secondary: #5f5e5a;
+    --color-text-tertiary: #888780;
+    --color-text-success: #0f6e56;
+    --color-border-tertiary: rgba(15,23,42,.15);
+    --color-border-secondary: rgba(15,23,42,.3);
+    --font-sans: -apple-system, "Segoe UI", Roboto, Helvetica, Arial, sans-serif;
+    --font-mono: ui-monospace, SFMono-Regular, Menlo, Consolas, monospace;
+    --border-radius-md: 8px;
+  }
+  @media (prefers-color-scheme: dark) {
+    :root {
+      --color-background-primary: #1c1c1a;
+      --color-background-secondary: #2c2c2a;
+      --color-background-tertiary: #383836;
+      --color-text-primary: #f1efe8;
+      --color-text-secondary: #b4b2a9;
+      --color-text-tertiary: #888780;
+      --color-text-success: #5dcaa5;
+      --color-border-tertiary: rgba(255,255,255,.15);
+      --color-border-secondary: rgba(255,255,255,.3);
+    }
+  }
+  * { box-sizing: border-box; }
+  body {
+    margin: 0; padding: 24px; font-family: var(--font-sans);
+    background: var(--color-background-primary); color: var(--color-text-primary);
+    font-size: 14px; line-height: 1.6;
+  }
+  h1 { font-size: 20px; font-weight: 500; margin: 0 0 4px; }
+  .endpoint { font-family: var(--font-mono); font-size: 14px; color: var(--color-text-secondary); margin: 0 0 16px; }
+  .method { display: inline-block; font-size: 12px; font-weight: 500; padding: 2px 8px; border-radius: var(--border-radius-md); background: #E6F1FB; color: #0C447C; font-family: var(--font-mono); margin-right: 8px; }
+  .hints { background: var(--color-background-secondary); border-radius: var(--border-radius-md); padding: 12px 16px; margin-bottom: 20px; font-size: 13px; }
+  .hints p { margin: 0 0 6px; font-weight: 500; }
+  .hints ul { margin: 0; padding-left: 20px; }
+  .hints li { margin-bottom: 4px; color: var(--color-text-secondary); }
+  .toolbar { display: flex; align-items: center; gap: 8px; margin-bottom: 16px; }
+  .tab { cursor: pointer; padding: 6px 14px; border-radius: var(--border-radius-md); border: 0.5px solid var(--color-border-tertiary); font-size: 13px; font-weight: 500; }
+  .tab.active { background: var(--color-background-secondary); border-color: var(--color-border-secondary); }
+  input[type=text] {
+    padding: 6px 10px 6px 30px; border-radius: var(--border-radius-md); border: 0.5px solid var(--color-border-tertiary);
+    background: var(--color-background-primary); color: var(--color-text-primary); font-size: 13px; width: 220px;
+  }
+  .search-wrap { position: relative; }
+  .search-wrap i { position: absolute; left: 10px; top: 50%; transform: translateY(-50%); font-size: 14px; color: var(--color-text-tertiary); }
+  table { width: 100%; border-collapse: collapse; font-size: 13px; }
+  .group-card { border: 0.5px solid var(--color-border-tertiary); border-radius: var(--border-radius-md); overflow: hidden; margin-bottom: 12px; }
+  .group-header td { padding: 8px 12px; font-weight: 500; background: var(--color-background-secondary); }
+  .col-header td { padding: 4px 12px; font-size: 11px; color: var(--color-text-tertiary); }
+  td { padding: 8px 12px; border-top: 0.5px solid var(--color-border-tertiary); vertical-align: top; }
+  .group-header td, .col-header td { border-top: none; }
+  .pname { font-family: var(--font-mono); font-size: 12.5px; }
+  .copy-icon { cursor: pointer; font-size: 14px; color: var(--color-text-tertiary); margin-left: 6px; vertical-align: -2px; }
+  .badge { display: inline-block; font-size: 11px; font-weight: 500; padding: 2px 8px; border-radius: 999px; }
+  .badge-m { background: #E6F1FB; color: #0C447C; }
+  .badge-o { background: var(--color-background-secondary); color: var(--color-text-secondary); }
+  .type-badge { display: inline-block; font-size: 11px; font-weight: 500; padding: 2px 8px; border-radius: var(--border-radius-md); border: 0.5px solid var(--color-border-tertiary); color: var(--color-text-secondary); font-family: var(--font-mono); }
+  .desc { color: var(--color-text-secondary); }
+</style>
+</head>
+<body>
+  <h1>POST /SKRegisterBackEnd/register/save</h1>
+  <p class="endpoint"><span class="method">POST</span>/SKRegisterBackEnd/register/save</p>
+  <div class="hints">
+    <p>ข้อควรรู้</p>
+    <ul><li>ใช้สำหรับบันทึกข้อมูลที่แก้ไขของ Order กลับเข้าระบบ หลังจากดึงข้อมูลด้วย `/register/summary/get`</li><li>ฟิลด์ที่เป็น GUID (PrefixID, ProvinceID, DistrictID, SubDistrictID ฯลฯ) ต้อง resolve จาก Master API ก่อนเสมอ ห้ามกรอกเอง</li><li>ระบบจะสร้าง `AddressID` ใหม่ทุกครั้งที่ save และ derive `ZipCode` จาก `SubDistrictID` อัตโนมัติ</li></ul>
+  </div>
+  <div class="toolbar">
+    <div class="tab active" data-tab="request" onclick="setTab('request')">Request</div>
+    <div class="tab" data-tab="response" onclick="setTab('response')">Response</div>
+    <div style="flex:1"></div>
+    <div class="search-wrap">
+      <i class="ti ti-search"></i>
+      <input type="text" id="search" placeholder="Filter parameter..." oninput="render()">
+    </div>
+  </div>
+  <div id="content"></div>
+
+<script>
+const SCHEMA = {"request": [{"group": "Request Body", "fields": [{"name": "OrderNo", "type": "string", "om": "M", "desc": "เลขที่คำสั่งซื้อ"}, {"name": "ReferralAgentCode", "type": "string", "om": "M", "desc": "รหัสตัวแทนผู้แนะนำ"}, {"name": "PrefixID", "type": "GUID", "om": "M", "desc": "รหัสคำนำหน้าชื่อ"}, {"name": "FirstName", "type": "string", "om": "M", "desc": "ชื่อ"}, {"name": "LastName", "type": "string", "om": "M", "desc": "นามสกุล"}, {"name": "BirthDate", "type": "DateTime", "om": "M", "desc": "วันเกิด"}, {"name": "IDCard", "type": "string", "om": "M", "desc": "เลขบัตรประชาชน"}, {"name": "Email", "type": "string", "om": "M", "desc": "อีเมล"}, {"name": "PhoneNumber", "type": "string", "om": "M", "desc": "เบอร์โทรศัพท์"}, {"name": "PersonStatus", "type": "string", "om": "M", "desc": "สถานะภาพ (Single/Married/...)"}, {"name": "SpousePrefixID", "type": "GUID", "om": "M", "desc": "รหัสคำนำหน้าชื่อคู่สมรส"}, {"name": "SpouseFirstName", "type": "string", "om": "M", "desc": "ชื่อคู่สมรส"}, {"name": "SpouseLastName", "type": "string", "om": "M", "desc": "นามสกุลคู่สมรส"}, {"name": "BeneficiaryPrefixID", "type": "string", "om": "O", "desc": "รหัสคำนำหน้าผู้รับผลประโยชน์"}, {"name": "BeneficiaryFirstName", "type": "string", "om": "O", "desc": "ชื่อผู้รับผลประโยชน์"}, {"name": "BeneficiaryLastName", "type": "string", "om": "O", "desc": "นามสกุลผู้รับผลประโยชน์"}, {"name": "BeneficiaryIDCard", "type": "string", "om": "O", "desc": "เลขบัตรประชาชนผู้รับผลประโยชน์"}, {"name": "BeneficiaryRelationship", "type": "string", "om": "O", "desc": "ความสัมพันธ์กับผู้รับผลประโยชน์"}, {"name": "PABeneficiaryPrefixID", "type": "string", "om": "O", "desc": "รหัสคำนำหน้าผู้รับผลประโยชน์ (PA)"}, {"name": "PABeneficiaryFirstName", "type": "string", "om": "M", "desc": "ชื่อผู้รับผลประโยชน์ (PA)"}, {"name": "PABeneficiaryLastName", "type": "string", "om": "O", "desc": "นามสกุลผู้รับผลประโยชน์ (PA)"}, {"name": "PABeneficiaryIDCard", "type": "string", "om": "O", "desc": "เลขบัตรประชาชนผู้รับผลประโยชน์ (PA)"}, {"name": "PABeneficiaryRelationship", "type": "string", "om": "O", "desc": "ความสัมพันธ์กับผู้รับผลประโยชน์ (PA)"}, {"name": "OccupationID", "type": "GUID", "om": "O", "desc": "รหัสอาชีพ"}, {"name": "PAPackageCode", "type": "string", "om": "M", "desc": "รหัสแพ็กเกจ PA"}, {"name": "DataJSON", "type": "string", "om": "M", "desc": "ข้อมูลเพิ่มเติมในรูปแบบ JSON string"}, {"name": "LicenseID", "type": "string", "om": "O", "desc": "เลขที่ใบขับขี่"}, {"name": "LicenseStartDate", "type": "DateTime", "om": "O", "desc": "วันที่เริ่มใช้ใบขับขี่"}, {"name": "LicenseExpireDate", "type": "DateTime", "om": "O", "desc": "วันหมดอายุใบขับขี่"}, {"name": "BankAccountBankCode", "type": "string", "om": "O", "desc": "รหัสธนาคาร"}, {"name": "BankAccountBranchName", "type": "string", "om": "O", "desc": "ชื่อสาขาธนาคาร"}, {"name": "BankAccountType", "type": "string", "om": "O", "desc": "ประเภทบัญชีธนาคาร"}, {"name": "BankAccountNo", "type": "string", "om": "O", "desc": "เลขที่บัญชีธนาคาร"}, {"name": "BankAccountName", "type": "string", "om": "O", "desc": "ชื่อบัญชีธนาคาร"}, {"name": "SignatureFileID", "type": "GUID", "om": "M", "desc": "รหัสไฟล์ลายเซ็น"}, {"name": "IsStep1", "type": "boolean", "om": "M", "desc": "สถานะทำรายการขั้นตอนที่ 1 สำเร็จหรือไม่"}, {"name": "IsStep2", "type": "boolean", "om": "M", "desc": "สถานะทำรายการขั้นตอนที่ 2 สำเร็จหรือไม่"}, {"name": "IsStep3", "type": "boolean", "om": "M", "desc": "สถานะทำรายการขั้นตอนที่ 3 สำเร็จหรือไม่"}, {"name": "IsStep4", "type": "boolean", "om": "M", "desc": "สถานะทำรายการขั้นตอนที่ 4 สำเร็จหรือไม่"}, {"name": "IsConsent", "type": "boolean", "om": "M", "desc": "สถานะการยินยอม (Consent)"}, {"name": "IsDeliverySameAsDefault", "type": "boolean", "om": "M", "desc": "ที่อยู่จัดส่งเหมือนที่อยู่ปัจจุบันหรือไม่"}, {"name": "DefaultAddress", "type": "Object", "om": "M", "desc": "DefaultAddress"}, {"name": "DeliveryAddress", "type": "Object", "om": "M", "desc": "DeliveryAddress"}]}, {"group": "DefaultAddress", "fields": [{"name": "AddressID", "type": "GUID", "om": "M", "desc": "รหัสที่อยู่ (GUID) — ระบบจะสร้าง GUID ใหม่ทุกครั้งที่ save"}, {"name": "ReferenceID", "type": "GUID", "om": "M", "desc": "รหัสอ้างอิงเจ้าของที่อยู่ (GUID)"}, {"name": "ReferenceType", "type": "string", "om": "M", "desc": "ประเภทของผู้เป็นเจ้าของที่อยู่ (เช่น SKRegister)"}, {"name": "ProvinceID", "type": "GUID", "om": "M", "desc": "รหัสจังหวัด (GUID) — resolve จาก POST /Master/province/List"}, {"name": "DistrictID", "type": "GUID", "om": "M", "desc": "รหัสอำเภอ (GUID) — resolve จาก POST /Master/v1/district/list"}, {"name": "SubDistrictID", "type": "GUID", "om": "M", "desc": "รหัสตำบล (GUID) — resolve จาก POST /Master/v1/subdistrict/list"}, {"name": "ZipCode", "type": "string", "om": "M", "desc": "รหัสไปรษณีย์ — ระบบ derive จาก SubDistrictID อัตโนมัติ"}, {"name": "Name", "type": "string", "om": "M", "desc": "ชื่อที่อยู่ (Current/Delivery)"}, {"name": "Type", "type": "string", "om": "M", "desc": "ประเภทที่อยู่ (CURRENT/DELIVERY)"}, {"name": "No", "type": "string", "om": "M", "desc": "บ้านเลขที่"}, {"name": "Moo", "type": "string", "om": "O", "desc": "หมู่"}, {"name": "Place", "type": "string", "om": "O", "desc": "หมู่บ้าน/สถานที่"}, {"name": "Building", "type": "string", "om": "O", "desc": "อาคาร"}, {"name": "Floor", "type": "string", "om": "O", "desc": "ชั้น"}, {"name": "Room", "type": "string", "om": "O", "desc": "ห้อง"}, {"name": "Branch", "type": "string", "om": "O", "desc": "สาขา"}, {"name": "Alley", "type": "string", "om": "O", "desc": "ซอย"}, {"name": "Road", "type": "string", "om": "O", "desc": "ถนน"}]}, {"group": "DeliveryAddress", "fields": [{"name": "AddressID", "type": "GUID", "om": "M", "desc": "รหัสที่อยู่ (GUID) — ระบบจะสร้าง GUID ใหม่ทุกครั้งที่ save"}, {"name": "ReferenceID", "type": "GUID", "om": "M", "desc": "รหัสอ้างอิงเจ้าของที่อยู่ (GUID)"}, {"name": "ReferenceType", "type": "string", "om": "M", "desc": "ประเภทของผู้เป็นเจ้าของที่อยู่ (เช่น SKRegister)"}, {"name": "ProvinceID", "type": "GUID", "om": "M", "desc": "รหัสจังหวัด (GUID) — resolve จาก POST /Master/province/List"}, {"name": "DistrictID", "type": "GUID", "om": "M", "desc": "รหัสอำเภอ (GUID) — resolve จาก POST /Master/v1/district/list"}, {"name": "SubDistrictID", "type": "GUID", "om": "M", "desc": "รหัสตำบล (GUID) — resolve จาก POST /Master/v1/subdistrict/list"}, {"name": "ZipCode", "type": "string", "om": "M", "desc": "รหัสไปรษณีย์ — ระบบ derive จาก SubDistrictID อัตโนมัติ"}, {"name": "Name", "type": "string", "om": "M", "desc": "ชื่อที่อยู่ (Current/Delivery)"}, {"name": "Type", "type": "string", "om": "M", "desc": "ประเภทที่อยู่ (CURRENT/DELIVERY)"}, {"name": "No", "type": "string", "om": "M", "desc": "บ้านเลขที่"}, {"name": "Moo", "type": "string", "om": "O", "desc": "หมู่"}, {"name": "Place", "type": "string", "om": "O", "desc": "หมู่บ้าน/สถานที่"}, {"name": "Building", "type": "string", "om": "O", "desc": "อาคาร"}, {"name": "Floor", "type": "string", "om": "O", "desc": "ชั้น"}, {"name": "Room", "type": "string", "om": "O", "desc": "ห้อง"}, {"name": "Branch", "type": "string", "om": "O", "desc": "สาขา"}, {"name": "Alley", "type": "string", "om": "O", "desc": "ซอย"}, {"name": "Road", "type": "string", "om": "O", "desc": "ถนน"}]}], "response": [{"group": "Response Body", "fields": [{"name": "Status", "type": "int", "om": "M", "desc": "สถานะการทำงานของ API / สถานะรายการ"}, {"name": "Message", "type": "string", "om": "O", "desc": "ข้อความตอบกลับจากระบบ"}, {"name": "ErrorCode", "type": "string", "om": "O", "desc": "รหัสข้อผิดพลาด"}, {"name": "ErrorMessage", "type": "string", "om": "O", "desc": "รายละเอียดข้อผิดพลาด"}, {"name": "Data", "type": "Object", "om": "M", "desc": "ข้อมูลผลลัพธ์"}, {"name": "Options", "type": "string", "om": "O", "desc": "ข้อมูลเพิ่มเติมของระบบ"}]}, {"group": "Data", "fields": [{"name": "ID", "type": "GUID", "om": "M", "desc": "รหัสอ้างอิง (GUID)"}, {"name": "OrderNo", "type": "string", "om": "M", "desc": "เลขที่คำสั่งซื้อ"}, {"name": "AccessToken", "type": "string", "om": "O", "desc": "Access Token สำหรับทำรายการต่อ"}, {"name": "PaymentID", "type": "GUID", "om": "M", "desc": "รหัสการชำระเงิน (GUID)"}, {"name": "AgentType", "type": "string", "om": "O", "desc": "ประเภทตัวแทน"}, {"name": "AgentID", "type": "string", "om": "O", "desc": "รหัสตัวแทน"}, {"name": "ReferralAgentCode", "type": "string", "om": "M", "desc": "รหัสตัวแทนผู้แนะนำ"}, {"name": "EKYCSecretCode", "type": "string", "om": "O", "desc": "รหัสลับสำหรับ EKYC"}, {"name": "EKYCDocumentFileID", "type": "GUID", "om": "M", "desc": "รหัสไฟล์เอกสาร EKYC"}, {"name": "EKYCFaceFileID", "type": "GUID", "om": "M", "desc": "รหัสไฟล์ภาพใบหน้า EKYC"}, {"name": "SignatureFileID", "type": "GUID", "om": "M", "desc": "รหัสไฟล์ลายเซ็น"}, {"name": "PrefixID", "type": "GUID", "om": "M", "desc": "รหัสคำนำหน้าชื่อ"}, {"name": "FirstName", "type": "string", "om": "M", "desc": "ชื่อ"}, {"name": "LastName", "type": "string", "om": "M", "desc": "นามสกุล"}, {"name": "BirthDate", "type": "DateTime", "om": "M", "desc": "วันเกิด"}, {"name": "IDCard", "type": "string", "om": "M", "desc": "เลขบัตรประชาชน"}, {"name": "Email", "type": "string", "om": "M", "desc": "อีเมล"}, {"name": "PhoneNumberOTP", "type": "string", "om": "M", "desc": "เบอร์โทรศัพท์ที่ใช้ยืนยัน OTP"}, {"name": "PhoneNumber", "type": "string", "om": "M", "desc": "เบอร์โทรศัพท์"}, {"name": "PersonStatus", "type": "string", "om": "M", "desc": "สถานะภาพ (Single/Married/...)"}, {"name": "SpousePrefixID", "type": "GUID", "om": "M", "desc": "รหัสคำนำหน้าชื่อคู่สมรส"}, {"name": "SpouseFirstName", "type": "string", "om": "M", "desc": "ชื่อคู่สมรส"}, {"name": "SpouseLastName", "type": "string", "om": "M", "desc": "นามสกุลคู่สมรส"}, {"name": "BeneficiaryPrefixID", "type": "string", "om": "O", "desc": "รหัสคำนำหน้าผู้รับผลประโยชน์"}, {"name": "BeneficiaryFirstName", "type": "string", "om": "O", "desc": "ชื่อผู้รับผลประโยชน์"}, {"name": "BeneficiaryLastName", "type": "string", "om": "O", "desc": "นามสกุลผู้รับผลประโยชน์"}, {"name": "BeneficiaryIDCard", "type": "string", "om": "O", "desc": "เลขบัตรประชาชนผู้รับผลประโยชน์"}, {"name": "BeneficiaryRelationship", "type": "string", "om": "O", "desc": "ความสัมพันธ์กับผู้รับผลประโยชน์"}, {"name": "PABeneficiaryPrefixID", "type": "string", "om": "O", "desc": "รหัสคำนำหน้าผู้รับผลประโยชน์ (PA)"}, {"name": "PABeneficiaryFirstName", "type": "string", "om": "M", "desc": "ชื่อผู้รับผลประโยชน์ (PA)"}, {"name": "PABeneficiaryLastName", "type": "string", "om": "O", "desc": "นามสกุลผู้รับผลประโยชน์ (PA)"}, {"name": "PABeneficiaryIDCard", "type": "string", "om": "O", "desc": "เลขบัตรประชาชนผู้รับผลประโยชน์ (PA)"}, {"name": "PABeneficiaryRelationship", "type": "string", "om": "O", "desc": "ความสัมพันธ์กับผู้รับผลประโยชน์ (PA)"}, {"name": "OccupationID", "type": "GUID", "om": "O", "desc": "รหัสอาชีพ"}, {"name": "DefaultAddressID", "type": "GUID", "om": "M", "desc": "รหัสที่อยู่ปัจจุบัน (GUID)"}, {"name": "DeliveryAddressID", "type": "GUID", "om": "M", "desc": "รหัสที่อยู่จัดส่ง (GUID)"}, {"name": "PAInsuranceCode", "type": "string", "om": "M", "desc": "รหัสบริษัทประกัน (PA)"}, {"name": "PAPackageCode", "type": "string", "om": "M", "desc": "รหัสแพ็กเกจ PA"}, {"name": "DataJSON", "type": "string", "om": "M", "desc": "ข้อมูลเพิ่มเติมในรูปแบบ JSON string"}, {"name": "LicenseID", "type": "string", "om": "O", "desc": "เลขที่ใบขับขี่"}, {"name": "LicenseStartDate", "type": "DateTime", "om": "O", "desc": "วันที่เริ่มใช้ใบขับขี่"}, {"name": "LicenseExpireDate", "type": "DateTime", "om": "O", "desc": "วันหมดอายุใบขับขี่"}, {"name": "BankAccountBankCode", "type": "string", "om": "O", "desc": "รหัสธนาคาร"}, {"name": "BankAccountBankName", "type": "string", "om": "O", "desc": "ชื่อธนาคาร"}, {"name": "BankAccountBranchName", "type": "string", "om": "O", "desc": "ชื่อสาขาธนาคาร"}, {"name": "BankAccountType", "type": "string", "om": "O", "desc": "ประเภทบัญชีธนาคาร"}, {"name": "BankAccountNo", "type": "string", "om": "O", "desc": "เลขที่บัญชีธนาคาร"}, {"name": "BankAccountName", "type": "string", "om": "O", "desc": "ชื่อบัญชีธนาคาร"}, {"name": "PaymentType", "type": "string", "om": "M", "desc": "ประเภทการชำระเงิน"}, {"name": "Total", "type": "number", "om": "M", "desc": "เบี้ยประกันรวม"}, {"name": "Net", "type": "number", "om": "M", "desc": "เบี้ยประกันสุทธิ"}, {"name": "Vat", "type": "number", "om": "M", "desc": "ภาษีมูลค่าเพิ่ม"}, {"name": "Rate", "type": "number", "om": "M", "desc": "อัตราค่าคอมมิชชั่น/อากร"}, {"name": "IsStep1", "type": "boolean", "om": "M", "desc": "สถานะทำรายการขั้นตอนที่ 1 สำเร็จหรือไม่"}, {"name": "IsStep2", "type": "boolean", "om": "M", "desc": "สถานะทำรายการขั้นตอนที่ 2 สำเร็จหรือไม่"}, {"name": "IsStep3", "type": "boolean", "om": "M", "desc": "สถานะทำรายการขั้นตอนที่ 3 สำเร็จหรือไม่"}, {"name": "IsStep4", "type": "boolean", "om": "M", "desc": "สถานะทำรายการขั้นตอนที่ 4 สำเร็จหรือไม่"}, {"name": "IsEKYC", "type": "boolean", "om": "M", "desc": "ผ่านการยืนยัน EKYC แล้วหรือไม่"}, {"name": "IsPA", "type": "boolean", "om": "M", "desc": "เป็นกรมธรรม์ประเภท PA หรือไม่"}, {"name": "IsConsent", "type": "boolean", "om": "M", "desc": "สถานะการยินยอม (Consent)"}, {"name": "IsComplete", "type": "boolean", "om": "M", "desc": "ทำรายการครบถ้วนสมบูรณ์หรือไม่"}, {"name": "IsVerifyByOTP", "type": "boolean", "om": "M", "desc": "ยืนยันตัวตนผ่าน OTP แล้วหรือไม่"}, {"name": "IsReject", "type": "boolean", "om": "M", "desc": "ปฏิเสธรายการหรือไม่"}, {"name": "IsApprove", "type": "boolean", "om": "M", "desc": "อนุมัติรายการแล้วหรือไม่"}, {"name": "IsDeliverySameAsDefault", "type": "boolean", "om": "M", "desc": "ที่อยู่จัดส่งเหมือนที่อยู่ปัจจุบันหรือไม่"}, {"name": "IsCancel", "type": "boolean", "om": "M", "desc": "ยกเลิกรายการหรือไม่"}, {"name": "IsDelete", "type": "boolean", "om": "M", "desc": "ลบรายการหรือไม่ (soft delete)"}, {"name": "AccessTokenExpireDate", "type": "DateTime", "om": "M", "desc": "วันหมดอายุ Access Token"}, {"name": "ApproveDate", "type": "DateTime", "om": "O", "desc": "วันที่อนุมัติรายการ"}, {"name": "ApproveUser", "type": "string", "om": "O", "desc": "ผู้อนุมัติรายการ"}, {"name": "OTPVerifyDate", "type": "DateTime", "om": "M", "desc": "วันที่ยืนยัน OTP"}, {"name": "OTPVerifyUser", "type": "string", "om": "M", "desc": "ผู้ยืนยัน OTP (เลขบัตรประชาชน)"}, {"name": "EKYCVerifyDate", "type": "DateTime", "om": "M", "desc": "วันที่ยืนยัน EKYC"}, {"name": "CreateDate", "type": "DateTime", "om": "M", "desc": "วันที่สร้างรายการ"}, {"name": "CreateUser", "type": "string", "om": "M", "desc": "ผู้สร้างรายการ"}, {"name": "UpdateDate", "type": "DateTime", "om": "M", "desc": "วันที่แก้ไขล่าสุด"}, {"name": "UpdateUser", "type": "string", "om": "M", "desc": "ผู้แก้ไขล่าสุด"}]}]};
+let activeTab = "request";
+
+function badge(om) {
+  return om === "M"
+    ? '<span class="badge badge-m">Mandatory</span>'
+    : '<span class="badge badge-o">Optional</span>';
+}
+
+function typeBadge(type) {
+  return '<span class="type-badge">' + type + '</span>';
+}
+
+function copyName(name, el) {
+  navigator.clipboard.writeText(name);
+  el.className = 'ti ti-check copy-icon';
+  el.style.color = 'var(--color-text-success)';
+  setTimeout(function () {
+    el.className = 'ti ti-copy copy-icon';
+    el.style.color = 'var(--color-text-tertiary)';
+  }, 1000);
+}
+
+function render() {
+  const groups = SCHEMA[activeTab];
+  const q = document.getElementById('search').value.trim().toLowerCase();
+  let html = '';
+
+  groups.forEach(function (g) {
+    const fields = g.fields.filter(function (f) {
+      return !q || f.name.toLowerCase().includes(q);
+    });
+    if (fields.length === 0) return;
+
+    html += '<div class="group-card"><table>';
+    html += '<tr class="group-header"><td colspan="4">' + g.group + '</td></tr>';
+    html += '<tr class="col-header"><td style="width:40%">Parameter</td><td style="width:15%">Type</td><td style="width:15%">O/M</td><td>Description</td></tr>';
+
+    fields.forEach(function (f) {
+      html += '<tr>';
+      html += '<td><span class="pname">' + f.name + '</span><i class="ti ti-copy copy-icon" onclick="copyName(\'' + f.name + '\', this)"></i></td>';
+      html += '<td>' + typeBadge(f.type) + '</td>';
+      html += '<td>' + badge(f.om) + '</td>';
+      html += '<td class="desc">' + f.desc + '</td>';
+      html += '</tr>';
+    });
+
+    html += '</table></div>';
+  });
+
+  document.getElementById('content').innerHTML = html || '<p style="color:var(--color-text-tertiary)">No matching parameters</p>';
+}
+
+function setTab(tab) {
+  activeTab = tab;
+  document.querySelectorAll('.tab').forEach(function (el) {
+    el.classList.toggle('active', el.getAttribute('data-tab') === tab);
+  });
+  render();
+}
+
+render();
+</script>
+</body>
+</html>

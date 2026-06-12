@@ -1,0 +1,156 @@
+<!DOCTYPE html>
+<html lang="th">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>POST /Company/grid/full/list</title>
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/tabler-icons/3.1.0/iconfont/tabler-icons.min.css">
+<style>
+  :root {
+    --color-background-primary: #ffffff;
+    --color-background-secondary: #f4f3ef;
+    --color-background-tertiary: #ebe9e1;
+    --color-text-primary: #0f172a;
+    --color-text-secondary: #5f5e5a;
+    --color-text-tertiary: #888780;
+    --color-text-success: #0f6e56;
+    --color-border-tertiary: rgba(15,23,42,.15);
+    --color-border-secondary: rgba(15,23,42,.3);
+    --font-sans: -apple-system, "Segoe UI", Roboto, Helvetica, Arial, sans-serif;
+    --font-mono: ui-monospace, SFMono-Regular, Menlo, Consolas, monospace;
+    --border-radius-md: 8px;
+  }
+  @media (prefers-color-scheme: dark) {
+    :root {
+      --color-background-primary: #1c1c1a;
+      --color-background-secondary: #2c2c2a;
+      --color-background-tertiary: #383836;
+      --color-text-primary: #f1efe8;
+      --color-text-secondary: #b4b2a9;
+      --color-text-tertiary: #888780;
+      --color-text-success: #5dcaa5;
+      --color-border-tertiary: rgba(255,255,255,.15);
+      --color-border-secondary: rgba(255,255,255,.3);
+    }
+  }
+  * { box-sizing: border-box; }
+  body {
+    margin: 0; padding: 24px; font-family: var(--font-sans);
+    background: var(--color-background-primary); color: var(--color-text-primary);
+    font-size: 14px; line-height: 1.6;
+  }
+  h1 { font-size: 20px; font-weight: 500; margin: 0 0 4px; }
+  .endpoint { font-family: var(--font-mono); font-size: 14px; color: var(--color-text-secondary); margin: 0 0 16px; }
+  .method { display: inline-block; font-size: 12px; font-weight: 500; padding: 2px 8px; border-radius: var(--border-radius-md); background: #E6F1FB; color: #0C447C; font-family: var(--font-mono); margin-right: 8px; }
+  .hints { background: var(--color-background-secondary); border-radius: var(--border-radius-md); padding: 12px 16px; margin-bottom: 20px; font-size: 13px; }
+  .hints p { margin: 0 0 6px; font-weight: 500; }
+  .hints ul { margin: 0; padding-left: 20px; }
+  .hints li { margin-bottom: 4px; color: var(--color-text-secondary); }
+  .toolbar { display: flex; align-items: center; gap: 8px; margin-bottom: 16px; }
+  .tab { cursor: pointer; padding: 6px 14px; border-radius: var(--border-radius-md); border: 0.5px solid var(--color-border-tertiary); font-size: 13px; font-weight: 500; }
+  .tab.active { background: var(--color-background-secondary); border-color: var(--color-border-secondary); }
+  input[type=text] {
+    padding: 6px 10px 6px 30px; border-radius: var(--border-radius-md); border: 0.5px solid var(--color-border-tertiary);
+    background: var(--color-background-primary); color: var(--color-text-primary); font-size: 13px; width: 220px;
+  }
+  .search-wrap { position: relative; }
+  .search-wrap i { position: absolute; left: 10px; top: 50%; transform: translateY(-50%); font-size: 14px; color: var(--color-text-tertiary); }
+  table { width: 100%; border-collapse: collapse; font-size: 13px; }
+  .group-card { border: 0.5px solid var(--color-border-tertiary); border-radius: var(--border-radius-md); overflow: hidden; margin-bottom: 12px; }
+  .group-header td { padding: 8px 12px; font-weight: 500; background: var(--color-background-secondary); }
+  .col-header td { padding: 4px 12px; font-size: 11px; color: var(--color-text-tertiary); }
+  td { padding: 8px 12px; border-top: 0.5px solid var(--color-border-tertiary); vertical-align: top; }
+  .group-header td, .col-header td { border-top: none; }
+  .pname { font-family: var(--font-mono); font-size: 12.5px; }
+  .copy-icon { cursor: pointer; font-size: 14px; color: var(--color-text-tertiary); margin-left: 6px; vertical-align: -2px; }
+  .badge { display: inline-block; font-size: 11px; font-weight: 500; padding: 2px 8px; border-radius: 999px; }
+  .badge-m { background: #E6F1FB; color: #0C447C; }
+  .badge-o { background: var(--color-background-secondary); color: var(--color-text-secondary); }
+  .type-badge { display: inline-block; font-size: 11px; font-weight: 500; padding: 2px 8px; border-radius: var(--border-radius-md); border: 0.5px solid var(--color-border-tertiary); color: var(--color-text-secondary); font-family: var(--font-mono); }
+  .desc { color: var(--color-text-secondary); }
+</style>
+</head>
+<body>
+  <h1>POST /Company/grid/full/list</h1>
+  <p class="endpoint"><span class="method">POST</span>/Company/grid/full/list</p>
+  <div class="hints">
+    <p>ข้อควรรู้</p>
+    <ul><li>Server-side paged/filtered/sorted grid ของ IOM_GLOBAL.dbo.Company ที่ IsDelete=0 (DataTables server-side processing style)</li><li>Admin only — ต้องส่ง Authorization: Bearer &lt;access_token&gt; (field AccessToken ใน body ไม่ถูกใช้งาน ให้ omit)</li><li>⚠ Response สำเร็จใช้ envelope แบบ lowercase (status/draw/recordsTotal/recordsFiltered/data) ต่างจาก endpoint อื่นที่ใช้ {Status, Message, ErrorCode, ErrorMessage, Data, Options}</li><li>⚠ data เป็น "" (empty string) เมื่อไม่พบข้อมูล ไม่ใช่ []</li><li>recordsTotal === recordsFiltered เสมอ ไม่มีการคำนวณ unfiltered total แยก</li><li>ต้องส่ง order: [] และ columns: [] อย่างน้อย (ไม่ใช่ null/omit) มิฉะนั้น error 90000999</li><li>length ต้อง &gt;= 1 (0 หรือค่าลบทำให้ error 90000999 จาก divide-by-zero), server cap ที่ 100 แถวเสมอ</li><li>Sortable fields: ID, Name, NameEn, FriendlyName, Code, RefCompanyID, IsActive, IsDelete, CreateDate, CreateUser, UpdateDate, UpdateUser</li><li>Filter operators ที่รองรับ: MATCH, MATCH_VALUE, NOT_MATCH, NOT_MATCH_VALUE, LIKE, BOOLEAN, BOOLEAN_SELECT, NUMBER_*/NUM_*, DATE_EQ/LT/GT/LTE/GTE</li><li>เมื่อเกิด error (auth/non-admin/exception) response จะสลับไปใช้ standard envelope {Status, ErrorCode, ErrorMessage, Data, Options} — codes: 90000991, null (access denied), 90000999</li></ul>
+  </div>
+  <div class="toolbar">
+    <div class="tab active" data-tab="request" onclick="setTab('request')">Request</div>
+    <div class="tab" data-tab="response" onclick="setTab('response')">Response</div>
+    <div style="flex:1"></div>
+    <div class="search-wrap">
+      <i class="ti ti-search"></i>
+      <input type="text" id="search" placeholder="Filter parameter..." oninput="render()">
+    </div>
+  </div>
+  <div id="content"></div>
+
+<script>
+const SCHEMA = {"request": [{"group": "Request Body", "fields": [{"name": "draw", "type": "int", "om": "M", "desc": "ค่าที่ client ส่งมา ระบบจะ echo กลับเหมือนเดิม ใช้ตรวจสอบ response ที่ล่าช้า"}, {"name": "start", "type": "int", "om": "M", "desc": "ตำแหน่งแถวเริ่มต้น (0-based) สำหรับการแบ่งหน้า"}, {"name": "length", "type": "int", "om": "M", "desc": "จำนวนแถวต่อหน้าที่ต้องการ (1-100, server cap ที่ 100 แถว)"}, {"name": "order", "type": "Array", "om": "M", "desc": "เงื่อนไขการเรียงลำดับแบบ DataTables"}, {"name": "columns", "type": "Array", "om": "M", "desc": "รายชื่อ column ที่ใช้อ้างอิงกับ order"}, {"name": "Filter", "type": "Array", "om": "M", "desc": "เงื่อนไขการค้นหา/กรองข้อมูล แบบ 2D array (กลุ่มนอก = AND, รายการในกลุ่ม = OR)"}]}], "response": [{"group": "Response Body", "fields": [{"name": "status", "type": "int", "om": "M", "desc": "สถานะการทำงานของ API (lowercase — เฉพาะ response สำเร็จของ endpoint นี้)"}, {"name": "draw", "type": "int", "om": "M", "desc": "ค่าที่ client ส่งมา ระบบจะ echo กลับเหมือนเดิม ใช้ตรวจสอบ response ที่ล่าช้า"}, {"name": "recordsTotal", "type": "int", "om": "M", "desc": "จำนวนแถวทั้งหมดที่ตรงกับเงื่อนไข (IsDelete=0 + Filter)"}, {"name": "recordsFiltered", "type": "int", "om": "M", "desc": "จำนวนแถวหลัง filter — มีค่าเท่ากับ recordsTotal เสมอ"}, {"name": "data", "type": "Array", "om": "M", "desc": "รายการข้อมูลบริษัทประกัน (array ของ object) หรือ \"\" (empty string) ถ้าไม่พบข้อมูล"}]}, {"group": "data[]", "fields": [{"name": "Ind", "type": "int", "om": "M", "desc": "ลำดับแถวในหน้านี้ (1-based) = start + ลำดับในหน้า"}, {"name": "ID", "type": "GUID", "om": "M", "desc": "รหัสอ้างอิง (GUID)"}, {"name": "Name", "type": "string", "om": "M", "desc": "ชื่อบริษัทประกัน (ภาษาไทย)"}, {"name": "NameEn", "type": "string", "om": "O", "desc": "ชื่อบริษัทประกัน (ภาษาอังกฤษ)"}, {"name": "FriendlyName", "type": "string", "om": "M", "desc": "ชื่อเรียกสั้น/ชื่อแสดงผลของบริษัทประกัน"}, {"name": "Code", "type": "string", "om": "M", "desc": "รหัสย่อบริษัทประกัน"}, {"name": "RefCompanyID", "type": "int", "om": "M", "desc": "รหัสอ้างอิงบริษัทประกัน (ตัวเลข)"}, {"name": "IsActive", "type": "boolean", "om": "M", "desc": "สถานะเปิด/ปิดใช้งานบริษัทประกัน"}, {"name": "IsDelete", "type": "boolean", "om": "M", "desc": "ลบรายการหรือไม่ (soft delete)"}, {"name": "CreateUser", "type": "string", "om": "M", "desc": "ผู้สร้างรายการ"}, {"name": "CreateDate", "type": "string", "om": "M", "desc": "วันที่สร้างรายการ"}, {"name": "UpdateUser", "type": "string", "om": "O", "desc": "ผู้แก้ไขล่าสุด"}, {"name": "UpdateDate", "type": "string", "om": "O", "desc": "วันที่แก้ไขล่าสุด"}]}]};
+let activeTab = "request";
+
+function badge(om) {
+  return om === "M"
+    ? '<span class="badge badge-m">Mandatory</span>'
+    : '<span class="badge badge-o">Optional</span>';
+}
+
+function typeBadge(type) {
+  return '<span class="type-badge">' + type + '</span>';
+}
+
+function copyName(name, el) {
+  navigator.clipboard.writeText(name);
+  el.className = 'ti ti-check copy-icon';
+  el.style.color = 'var(--color-text-success)';
+  setTimeout(function () {
+    el.className = 'ti ti-copy copy-icon';
+    el.style.color = 'var(--color-text-tertiary)';
+  }, 1000);
+}
+
+function render() {
+  const groups = SCHEMA[activeTab];
+  const q = document.getElementById('search').value.trim().toLowerCase();
+  let html = '';
+
+  groups.forEach(function (g) {
+    const fields = g.fields.filter(function (f) {
+      return !q || f.name.toLowerCase().includes(q);
+    });
+    if (fields.length === 0) return;
+
+    html += '<div class="group-card"><table>';
+    html += '<tr class="group-header"><td colspan="4">' + g.group + '</td></tr>';
+    html += '<tr class="col-header"><td style="width:40%">Parameter</td><td style="width:15%">Type</td><td style="width:15%">O/M</td><td>Description</td></tr>';
+
+    fields.forEach(function (f) {
+      html += '<tr>';
+      html += '<td><span class="pname">' + f.name + '</span><i class="ti ti-copy copy-icon" onclick="copyName(\'' + f.name + '\', this)"></i></td>';
+      html += '<td>' + typeBadge(f.type) + '</td>';
+      html += '<td>' + badge(f.om) + '</td>';
+      html += '<td class="desc">' + f.desc + '</td>';
+      html += '</tr>';
+    });
+
+    html += '</table></div>';
+  });
+
+  document.getElementById('content').innerHTML = html || '<p style="color:var(--color-text-tertiary)">No matching parameters</p>';
+}
+
+function setTab(tab) {
+  activeTab = tab;
+  document.querySelectorAll('.tab').forEach(function (el) {
+    el.classList.toggle('active', el.getAttribute('data-tab') === tab);
+  });
+  render();
+}
+
+render();
+</script>
+</body>
+</html>
