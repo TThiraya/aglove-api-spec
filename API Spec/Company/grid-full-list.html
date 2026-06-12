@@ -4,7 +4,6 @@
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 <title>POST /Company/grid/full/list</title>
-<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/tabler-icons/3.1.0/iconfont/tabler-icons.min.css">
 <style>
   :root {
     --color-background-primary: #ffffff;
@@ -13,12 +12,12 @@
     --color-text-primary: #0f172a;
     --color-text-secondary: #5f5e5a;
     --color-text-tertiary: #888780;
-    --color-text-success: #0f6e56;
     --color-border-tertiary: rgba(15,23,42,.15);
     --color-border-secondary: rgba(15,23,42,.3);
     --font-sans: -apple-system, "Segoe UI", Roboto, Helvetica, Arial, sans-serif;
     --font-mono: ui-monospace, SFMono-Regular, Menlo, Consolas, monospace;
     --border-radius-md: 8px;
+    --border-radius-lg: 12px;
   }
   @media (prefers-color-scheme: dark) {
     :root {
@@ -28,7 +27,6 @@
       --color-text-primary: #f1efe8;
       --color-text-secondary: #b4b2a9;
       --color-text-tertiary: #888780;
-      --color-text-success: #5dcaa5;
       --color-border-tertiary: rgba(255,255,255,.15);
       --color-border-secondary: rgba(255,255,255,.3);
     }
@@ -49,25 +47,27 @@
   .toolbar { display: flex; align-items: center; gap: 8px; margin-bottom: 16px; }
   .tab { cursor: pointer; padding: 6px 14px; border-radius: var(--border-radius-md); border: 0.5px solid var(--color-border-tertiary); font-size: 13px; font-weight: 500; }
   .tab.active { background: var(--color-background-secondary); border-color: var(--color-border-secondary); }
-  input[type=text] {
-    padding: 6px 10px 6px 30px; border-radius: var(--border-radius-md); border: 0.5px solid var(--color-border-tertiary);
-    background: var(--color-background-primary); color: var(--color-text-primary); font-size: 13px; width: 220px;
-  }
-  .search-wrap { position: relative; }
-  .search-wrap i { position: absolute; left: 10px; top: 50%; transform: translateY(-50%); font-size: 14px; color: var(--color-text-tertiary); }
-  table { width: 100%; border-collapse: collapse; font-size: 13px; }
-  .group-card { border: 0.5px solid var(--color-border-tertiary); border-radius: var(--border-radius-md); overflow: hidden; margin-bottom: 12px; }
-  .group-header td { padding: 8px 12px; font-weight: 500; background: var(--color-background-secondary); }
-  .col-header td { padding: 4px 12px; font-size: 11px; color: var(--color-text-tertiary); }
-  td { padding: 8px 12px; border-top: 0.5px solid var(--color-border-tertiary); vertical-align: top; }
-  .group-header td, .col-header td { border-top: none; }
-  .pname { font-family: var(--font-mono); font-size: 12.5px; }
-  .copy-icon { cursor: pointer; font-size: 14px; color: var(--color-text-tertiary); margin-left: 6px; vertical-align: -2px; }
-  .badge { display: inline-block; font-size: 11px; font-weight: 500; padding: 2px 8px; border-radius: 999px; }
-  .badge-m { background: #E6F1FB; color: #0C447C; }
-  .badge-o { background: var(--color-background-secondary); color: var(--color-text-secondary); }
-  .type-badge { display: inline-block; font-size: 11px; font-weight: 500; padding: 2px 8px; border-radius: var(--border-radius-md); border: 0.5px solid var(--color-border-tertiary); color: var(--color-text-secondary); font-family: var(--font-mono); }
-  .desc { color: var(--color-text-secondary); }
+
+  .sw { padding: 1.5rem 0; font-family: var(--font-sans); }
+  .sw-label { font-size: 11px; font-weight: 500; color: var(--color-text-secondary); text-transform: uppercase; letter-spacing: .06em; margin: 0 0 12px; }
+  .tbl { width: 100%; border-collapse: collapse; border-radius: var(--border-radius-lg); overflow: hidden; border: 0.5px solid var(--color-border-tertiary); }
+  .tbl thead th { font-size: 11px; font-weight: 500; color: var(--color-text-secondary); text-transform: uppercase; letter-spacing: .06em; padding: 8px 14px; background: var(--color-background-secondary); border-bottom: 0.5px solid var(--color-border-secondary); text-align: left; }
+  .tbl tbody tr { border-bottom: 0.5px solid var(--color-border-tertiary); }
+  .tbl tbody tr:last-child { border-bottom: none; }
+  .tbl tbody tr:hover { background: var(--color-background-secondary); }
+  .tbl td { padding: 9px 14px; font-size: 13px; vertical-align: middle; }
+  .td-name { font-family: var(--font-mono); font-size: 12px; font-weight: 500; color: var(--color-text-primary); white-space: nowrap; }
+  .td-name.indent { padding-left: 28px; }
+  .td-val { font-family: var(--font-mono); font-size: 11px; color: var(--color-text-secondary); word-break: break-all; max-width: 180px; }
+  .td-val.empty { color: var(--color-text-tertiary); font-style: italic; }
+  .td-desc { color: var(--color-text-primary); font-size: 13px; }
+  .td-desc small { display: block; font-size: 11px; color: var(--color-text-secondary); margin-top: 2px; }
+  .td-om { text-align: center; white-space: nowrap; }
+  .badge { font-size: 11px; font-weight: 500; padding: 2px 8px; border-radius: 99px; }
+  .bm { background: #E6F1FB; color: #0C447C; }
+  .bo { background: #F1EFE8; color: #444441; }
+  .sec-row td { font-size: 11px; font-weight: 500; color: var(--color-text-secondary); text-transform: uppercase; letter-spacing: .04em; background: var(--color-background-secondary); padding: 6px 14px; border-bottom: 0.5px solid var(--color-border-secondary); }
+  @media (prefers-color-scheme: dark) { .bm { background: #0C447C; color: #B5D4F4; } .bo { background: #444441; color: #D3D1C7; } }
 </style>
 </head>
 <body>
@@ -80,66 +80,41 @@
   <div class="toolbar">
     <div class="tab active" data-tab="request" onclick="setTab('request')">Request</div>
     <div class="tab" data-tab="response" onclick="setTab('response')">Response</div>
-    <div style="flex:1"></div>
-    <div class="search-wrap">
-      <i class="ti ti-search"></i>
-      <input type="text" id="search" placeholder="Filter parameter..." oninput="render()">
-    </div>
   </div>
   <div id="content"></div>
 
+  <div style="display:flex;gap:16px;margin-top:12px;font-size:12px;color:var(--color-text-secondary);align-items:center">
+    <span style="display:flex;align-items:center;gap:6px"><span class="badge bm">M</span>Mandatory</span>
+    <span style="display:flex;align-items:center;gap:6px"><span class="badge bo">O</span>Optional</span>
+  </div>
+
 <script>
-const SCHEMA = {"request": [{"group": "Request Body", "fields": [{"name": "draw", "type": "int", "om": "M", "desc": "ค่าที่ client ส่งมา ระบบจะ echo กลับเหมือนเดิม ใช้ตรวจสอบ response ที่ล่าช้า"}, {"name": "start", "type": "int", "om": "M", "desc": "ตำแหน่งแถวเริ่มต้น (0-based) สำหรับการแบ่งหน้า"}, {"name": "length", "type": "int", "om": "M", "desc": "จำนวนแถวต่อหน้าที่ต้องการ (1-100, server cap ที่ 100 แถว)"}, {"name": "order", "type": "Array", "om": "M", "desc": "เงื่อนไขการเรียงลำดับแบบ DataTables"}, {"name": "columns", "type": "Array", "om": "M", "desc": "รายชื่อ column ที่ใช้อ้างอิงกับ order"}, {"name": "Filter", "type": "Array", "om": "M", "desc": "เงื่อนไขการค้นหา/กรองข้อมูล แบบ 2D array (กลุ่มนอก = AND, รายการในกลุ่ม = OR)"}]}], "response": [{"group": "Response Body", "fields": [{"name": "status", "type": "int", "om": "M", "desc": "สถานะการทำงานของ API (lowercase — เฉพาะ response สำเร็จของ endpoint นี้)"}, {"name": "draw", "type": "int", "om": "M", "desc": "ค่าที่ client ส่งมา ระบบจะ echo กลับเหมือนเดิม ใช้ตรวจสอบ response ที่ล่าช้า"}, {"name": "recordsTotal", "type": "int", "om": "M", "desc": "จำนวนแถวทั้งหมดที่ตรงกับเงื่อนไข (IsDelete=0 + Filter)"}, {"name": "recordsFiltered", "type": "int", "om": "M", "desc": "จำนวนแถวหลัง filter — มีค่าเท่ากับ recordsTotal เสมอ"}, {"name": "data", "type": "Array", "om": "M", "desc": "รายการข้อมูลบริษัทประกัน (array ของ object) หรือ \"\" (empty string) ถ้าไม่พบข้อมูล"}]}, {"group": "data[]", "fields": [{"name": "Ind", "type": "int", "om": "M", "desc": "ลำดับแถวในหน้านี้ (1-based) = start + ลำดับในหน้า"}, {"name": "ID", "type": "GUID", "om": "M", "desc": "รหัสอ้างอิง (GUID)"}, {"name": "Name", "type": "string", "om": "M", "desc": "ชื่อบริษัทประกัน (ภาษาไทย)"}, {"name": "NameEn", "type": "string", "om": "O", "desc": "ชื่อบริษัทประกัน (ภาษาอังกฤษ)"}, {"name": "FriendlyName", "type": "string", "om": "M", "desc": "ชื่อเรียกสั้น/ชื่อแสดงผลของบริษัทประกัน"}, {"name": "Code", "type": "string", "om": "M", "desc": "รหัสย่อบริษัทประกัน"}, {"name": "RefCompanyID", "type": "int", "om": "M", "desc": "รหัสอ้างอิงบริษัทประกัน (ตัวเลข)"}, {"name": "IsActive", "type": "boolean", "om": "M", "desc": "สถานะเปิด/ปิดใช้งานบริษัทประกัน"}, {"name": "IsDelete", "type": "boolean", "om": "M", "desc": "ลบรายการหรือไม่ (soft delete)"}, {"name": "CreateUser", "type": "string", "om": "M", "desc": "ผู้สร้างรายการ"}, {"name": "CreateDate", "type": "string", "om": "M", "desc": "วันที่สร้างรายการ"}, {"name": "UpdateUser", "type": "string", "om": "O", "desc": "ผู้แก้ไขล่าสุด"}, {"name": "UpdateDate", "type": "string", "om": "O", "desc": "วันที่แก้ไขล่าสุด"}]}]};
+const SCHEMA = {"request": [{"group": "Request Body", "fields": [{"name": "draw", "example": "1", "om": "M", "desc": "ค่าที่ client ส่งมา ระบบจะ echo กลับเหมือนเดิม ใช้ตรวจสอบ response ที่ล่าช้า", "remark": ""}, {"name": "start", "example": "0", "om": "M", "desc": "ตำแหน่งแถวเริ่มต้น (0-based) สำหรับการแบ่งหน้า", "remark": ""}, {"name": "length", "example": "10", "om": "M", "desc": "จำนวนแถวต่อหน้าที่ต้องการ (1-100, server cap ที่ 100 แถว)", "remark": "1-100"}, {"name": "order", "example": "[ ]", "om": "M", "desc": "เงื่อนไขการเรียงลำดับแบบ DataTables", "remark": "ส่ง [] อย่างน้อย ห้าม null/omit มิฉะนั้น error 90000999"}, {"name": "columns", "example": "[ ]", "om": "M", "desc": "รายชื่อ column ที่ใช้อ้างอิงกับ order", "remark": "ส่ง [] อย่างน้อย ห้าม null/omit มิฉะนั้น error 90000999"}, {"name": "Filter", "example": "[ ]", "om": "M", "desc": "เงื่อนไขการค้นหา/กรองข้อมูล แบบ 2D array (กลุ่มนอก = AND, รายการในกลุ่ม = OR)", "remark": "ค่า \"all\" (ไม่สนตัวพิมพ์เล็ก/ใหญ่) = ข้าม condition นั้น"}]}], "response": [{"group": "Response Body", "fields": [{"name": "status", "example": "200", "om": "M", "desc": "สถานะการทำงานของ API (lowercase — เฉพาะ response สำเร็จของ endpoint นี้)", "remark": ""}, {"name": "draw", "example": "1", "om": "M", "desc": "ค่าที่ client ส่งมา ระบบจะ echo กลับเหมือนเดิม ใช้ตรวจสอบ response ที่ล่าช้า", "remark": ""}, {"name": "recordsTotal", "example": "43", "om": "M", "desc": "จำนวนแถวทั้งหมดที่ตรงกับเงื่อนไข (IsDelete=0 + Filter)", "remark": ""}, {"name": "recordsFiltered", "example": "43", "om": "M", "desc": "จำนวนแถวหลัง filter — มีค่าเท่ากับ recordsTotal เสมอ", "remark": ""}, {"name": "data", "example": "[ ... ]", "om": "M", "desc": "รายการข้อมูลบริษัทประกัน (array ของ object) หรือ \"\" (empty string) ถ้าไม่พบข้อมูล", "remark": "เป็น \"\" เมื่อไม่มีข้อมูล (ไม่ใช่ [])"}]}, {"group": "data[]", "fields": [{"name": "Ind", "example": "1", "om": "M", "desc": "ลำดับแถวในหน้านี้ (1-based) = start + ลำดับในหน้า", "remark": ""}, {"name": "ID", "example": "032BFC85…4C0D", "om": "M", "desc": "รหัสอ้างอิง (GUID)", "remark": "GUID"}, {"name": "Name", "example": "บริษัท สยามซิตี้ประกันภัย จำกัด(มหาชน)", "om": "M", "desc": "ชื่อบริษัทประกัน (ภาษาไทย)", "remark": ""}, {"name": "NameEn", "example": "—", "om": "O", "desc": "ชื่อบริษัทประกัน (ภาษาอังกฤษ)", "remark": ""}, {"name": "FriendlyName", "example": "Siam City", "om": "M", "desc": "ชื่อเรียกสั้น/ชื่อแสดงผลของบริษัทประกัน", "remark": ""}, {"name": "Code", "example": "SIAM", "om": "M", "desc": "รหัสย่อบริษัทประกัน", "remark": "≤10 ตัวอักษร"}, {"name": "RefCompanyID", "example": "37", "om": "M", "desc": "รหัสอ้างอิงบริษัทประกัน (ตัวเลข)", "remark": ""}, {"name": "IsActive", "example": "true", "om": "M", "desc": "สถานะเปิด/ปิดใช้งานบริษัทประกัน", "remark": "true/false"}, {"name": "IsDelete", "example": "false", "om": "M", "desc": "ลบรายการหรือไม่ (soft delete)", "remark": "true/false"}, {"name": "CreateUser", "example": "System", "om": "M", "desc": "ผู้สร้างรายการ", "remark": ""}, {"name": "CreateDate", "example": "2015-01-10T10:05:14Z", "om": "M", "desc": "วันที่สร้างรายการ", "remark": "รูปแบบ yyyy-MM-ddTHH:mm:ssZ (server-local time, Z ไม่ใช่ UTC จริง)"}, {"name": "UpdateUser", "example": "—", "om": "O", "desc": "ผู้แก้ไขล่าสุด", "remark": ""}, {"name": "UpdateDate", "example": "—", "om": "O", "desc": "วันที่แก้ไขล่าสุด", "remark": "รูปแบบ yyyy-MM-ddTHH:mm:ssZ (server-local time, Z ไม่ใช่ UTC จริง)"}]}]};
 let activeTab = "request";
-
-function badge(om) {
-  return om === "M"
-    ? '<span class="badge badge-m">Mandatory</span>'
-    : '<span class="badge badge-o">Optional</span>';
-}
-
-function typeBadge(type) {
-  return '<span class="type-badge">' + type + '</span>';
-}
-
-function copyName(name, el) {
-  navigator.clipboard.writeText(name);
-  el.className = 'ti ti-check copy-icon';
-  el.style.color = 'var(--color-text-success)';
-  setTimeout(function () {
-    el.className = 'ti ti-copy copy-icon';
-    el.style.color = 'var(--color-text-tertiary)';
-  }, 1000);
-}
 
 function render() {
   const groups = SCHEMA[activeTab];
-  const q = document.getElementById('search').value.trim().toLowerCase();
-  let html = '';
+  let html = '<div class="sw"><table class="tbl"><thead><tr>';
+  html += '<th style="width:200px">Parameter</th><th style="width:180px">Example value</th><th style="width:44px;text-align:center">O/M</th><th>Description</th>';
+  html += '</tr></thead><tbody>';
 
   groups.forEach(function (g) {
-    const fields = g.fields.filter(function (f) {
-      return !q || f.name.toLowerCase().includes(q);
-    });
-    if (fields.length === 0) return;
-
-    html += '<div class="group-card"><table>';
-    html += '<tr class="group-header"><td colspan="4">' + g.group + '</td></tr>';
-    html += '<tr class="col-header"><td style="width:40%">Parameter</td><td style="width:15%">Type</td><td style="width:15%">O/M</td><td>Description</td></tr>';
-
-    fields.forEach(function (f) {
+    html += '<tr class="sec-row"><td colspan="4">' + g.group + '</td></tr>';
+    g.fields.forEach(function (f) {
+      const om = f.om === 'M' ? '<span class="badge bm">M</span>' : '<span class="badge bo">O</span>';
+      const valClass = f.example === '—' ? 'td-val empty' : 'td-val';
+      const small = f.remark ? '<small>' + f.remark + '</small>' : '';
       html += '<tr>';
-      html += '<td><span class="pname">' + f.name + '</span><i class="ti ti-copy copy-icon" onclick="copyName(\'' + f.name + '\', this)"></i></td>';
-      html += '<td>' + typeBadge(f.type) + '</td>';
-      html += '<td>' + badge(f.om) + '</td>';
-      html += '<td class="desc">' + f.desc + '</td>';
+      html += '<td class="td-name">' + f.name + '</td>';
+      html += '<td class="' + valClass + '">' + f.example + '</td>';
+      html += '<td class="td-om">' + om + '</td>';
+      html += '<td class="td-desc">' + f.desc + small + '</td>';
       html += '</tr>';
     });
-
-    html += '</table></div>';
   });
 
-  document.getElementById('content').innerHTML = html || '<p style="color:var(--color-text-tertiary)">No matching parameters</p>';
+  html += '</tbody></table></div>';
+  document.getElementById('content').innerHTML = html;
 }
 
 function setTab(tab) {
