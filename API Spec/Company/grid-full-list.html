@@ -58,8 +58,7 @@
   .tbl td { padding: 9px 14px; font-size: 13px; vertical-align: middle; }
   .td-name { font-family: var(--font-mono); font-size: 12px; font-weight: 500; color: var(--color-text-primary); white-space: nowrap; }
   .td-name.indent { padding-left: 28px; }
-  .td-val { font-family: var(--font-mono); font-size: 11px; color: var(--color-text-secondary); word-break: break-all; max-width: 180px; }
-  .td-val.empty { color: var(--color-text-tertiary); font-style: italic; }
+  .type-badge { display: inline-block; font-size: 11px; font-weight: 500; padding: 2px 8px; border-radius: var(--border-radius-md); border: 0.5px solid var(--color-border-tertiary); color: var(--color-text-secondary); font-family: var(--font-mono); }
   .td-desc { color: var(--color-text-primary); font-size: 13px; }
   .td-desc small { display: block; font-size: 11px; color: var(--color-text-secondary); margin-top: 2px; }
   .td-om { text-align: center; white-space: nowrap; }
@@ -68,6 +67,9 @@
   .bo { background: #F1EFE8; color: #444441; }
   .sec-row td { font-size: 11px; font-weight: 500; color: var(--color-text-secondary); text-transform: uppercase; letter-spacing: .04em; background: var(--color-background-secondary); padding: 6px 14px; border-bottom: 0.5px solid var(--color-border-secondary); }
   @media (prefers-color-scheme: dark) { .bm { background: #0C447C; color: #B5D4F4; } .bo { background: #444441; color: #D3D1C7; } }
+  .json-details { margin-bottom: 16px; }
+  .json-details summary { cursor: pointer; font-size: 13px; font-weight: 500; padding: 8px 14px; border-radius: var(--border-radius-md); border: 0.5px solid var(--color-border-tertiary); background: var(--color-background-secondary); }
+  .json-details pre { margin: 8px 0 0; padding: 12px 14px; border-radius: var(--border-radius-md); border: 0.5px solid var(--color-border-tertiary); background: var(--color-background-secondary); font-family: var(--font-mono); font-size: 12px; overflow-x: auto; }
 </style>
 </head>
 <body>
@@ -89,24 +91,31 @@
   </div>
 
 <script>
-const SCHEMA = {"request": [{"group": "Request Body", "fields": [{"name": "draw", "example": "1", "om": "M", "desc": "ค่าที่ client ส่งมา ระบบจะ echo กลับเหมือนเดิม ใช้ตรวจสอบ response ที่ล่าช้า", "remark": ""}, {"name": "start", "example": "0", "om": "M", "desc": "ตำแหน่งแถวเริ่มต้น (0-based) สำหรับการแบ่งหน้า", "remark": ""}, {"name": "length", "example": "10", "om": "M", "desc": "จำนวนแถวต่อหน้าที่ต้องการ (1-100, server cap ที่ 100 แถว)", "remark": "1-100"}, {"name": "order", "example": "[ ]", "om": "M", "desc": "เงื่อนไขการเรียงลำดับแบบ DataTables", "remark": "ส่ง [] อย่างน้อย ห้าม null/omit มิฉะนั้น error 90000999"}, {"name": "columns", "example": "[ ]", "om": "M", "desc": "รายชื่อ column ที่ใช้อ้างอิงกับ order", "remark": "ส่ง [] อย่างน้อย ห้าม null/omit มิฉะนั้น error 90000999"}, {"name": "Filter", "example": "[ ]", "om": "M", "desc": "เงื่อนไขการค้นหา/กรองข้อมูล แบบ 2D array (กลุ่มนอก = AND, รายการในกลุ่ม = OR)", "remark": "ค่า \"all\" (ไม่สนตัวพิมพ์เล็ก/ใหญ่) = ข้าม condition นั้น"}]}], "response": [{"group": "Response Body", "fields": [{"name": "status", "example": "200", "om": "M", "desc": "สถานะการทำงานของ API (lowercase — เฉพาะ response สำเร็จของ endpoint นี้)", "remark": ""}, {"name": "draw", "example": "1", "om": "M", "desc": "ค่าที่ client ส่งมา ระบบจะ echo กลับเหมือนเดิม ใช้ตรวจสอบ response ที่ล่าช้า", "remark": ""}, {"name": "recordsTotal", "example": "43", "om": "M", "desc": "จำนวนแถวทั้งหมดที่ตรงกับเงื่อนไข (IsDelete=0 + Filter)", "remark": ""}, {"name": "recordsFiltered", "example": "43", "om": "M", "desc": "จำนวนแถวหลัง filter — มีค่าเท่ากับ recordsTotal เสมอ", "remark": ""}, {"name": "data", "example": "[ ... ]", "om": "M", "desc": "รายการข้อมูลบริษัทประกัน (array ของ object) หรือ \"\" (empty string) ถ้าไม่พบข้อมูล", "remark": "เป็น \"\" เมื่อไม่มีข้อมูล (ไม่ใช่ [])"}]}, {"group": "data[]", "fields": [{"name": "Ind", "example": "1", "om": "M", "desc": "ลำดับแถวในหน้านี้ (1-based) = start + ลำดับในหน้า", "remark": ""}, {"name": "ID", "example": "032BFC85…4C0D", "om": "M", "desc": "รหัสอ้างอิง (GUID)", "remark": "GUID"}, {"name": "Name", "example": "บริษัท สยามซิตี้ประกันภัย จำกัด(มหาชน)", "om": "M", "desc": "ชื่อบริษัทประกัน (ภาษาไทย)", "remark": ""}, {"name": "NameEn", "example": "—", "om": "O", "desc": "ชื่อบริษัทประกัน (ภาษาอังกฤษ)", "remark": ""}, {"name": "FriendlyName", "example": "Siam City", "om": "M", "desc": "ชื่อเรียกสั้น/ชื่อแสดงผลของบริษัทประกัน", "remark": ""}, {"name": "Code", "example": "SIAM", "om": "M", "desc": "รหัสย่อบริษัทประกัน", "remark": "≤10 ตัวอักษร"}, {"name": "RefCompanyID", "example": "37", "om": "M", "desc": "รหัสอ้างอิงบริษัทประกัน (ตัวเลข)", "remark": ""}, {"name": "IsActive", "example": "true", "om": "M", "desc": "สถานะเปิด/ปิดใช้งานบริษัทประกัน", "remark": "true/false"}, {"name": "IsDelete", "example": "false", "om": "M", "desc": "ลบรายการหรือไม่ (soft delete)", "remark": "true/false"}, {"name": "CreateUser", "example": "System", "om": "M", "desc": "ผู้สร้างรายการ", "remark": ""}, {"name": "CreateDate", "example": "2015-01-10T10:05:14Z", "om": "M", "desc": "วันที่สร้างรายการ", "remark": "รูปแบบ yyyy-MM-ddTHH:mm:ssZ (server-local time, Z ไม่ใช่ UTC จริง)"}, {"name": "UpdateUser", "example": "—", "om": "O", "desc": "ผู้แก้ไขล่าสุด", "remark": ""}, {"name": "UpdateDate", "example": "—", "om": "O", "desc": "วันที่แก้ไขล่าสุด", "remark": "รูปแบบ yyyy-MM-ddTHH:mm:ssZ (server-local time, Z ไม่ใช่ UTC จริง)"}]}]};
+const SCHEMA = {"request": [{"group": "Request Body", "fields": [{"name": "draw", "type": "int", "om": "M", "desc": "ค่าที่ client ส่งมา ระบบจะ echo กลับเหมือนเดิม ใช้ตรวจสอบ response ที่ล่าช้า", "remark": ""}, {"name": "start", "type": "int", "om": "M", "desc": "ตำแหน่งแถวเริ่มต้น (0-based) สำหรับการแบ่งหน้า", "remark": ""}, {"name": "length", "type": "int", "om": "M", "desc": "จำนวนแถวต่อหน้าที่ต้องการ (1-100, server cap ที่ 100 แถว)", "remark": "1-100"}, {"name": "order", "type": "Array", "om": "M", "desc": "เงื่อนไขการเรียงลำดับแบบ DataTables", "remark": "ส่ง [] อย่างน้อย ห้าม null/omit มิฉะนั้น error 90000999"}, {"name": "columns", "type": "Array", "om": "M", "desc": "รายชื่อ column ที่ใช้อ้างอิงกับ order", "remark": "ส่ง [] อย่างน้อย ห้าม null/omit มิฉะนั้น error 90000999"}, {"name": "Filter", "type": "Array", "om": "M", "desc": "เงื่อนไขการค้นหา/กรองข้อมูล แบบ 2D array (กลุ่มนอก = AND, รายการในกลุ่ม = OR)", "remark": "ค่า \"all\" (ไม่สนตัวพิมพ์เล็ก/ใหญ่) = ข้าม condition นั้น"}]}], "response": [{"group": "Response Body", "fields": [{"name": "status", "type": "int", "om": "M", "desc": "สถานะการทำงานของ API (lowercase — เฉพาะ response สำเร็จของ endpoint นี้)", "remark": ""}, {"name": "draw", "type": "int", "om": "M", "desc": "ค่าที่ client ส่งมา ระบบจะ echo กลับเหมือนเดิม ใช้ตรวจสอบ response ที่ล่าช้า", "remark": ""}, {"name": "recordsTotal", "type": "int", "om": "M", "desc": "จำนวนแถวทั้งหมดที่ตรงกับเงื่อนไข (IsDelete=0 + Filter)", "remark": ""}, {"name": "recordsFiltered", "type": "int", "om": "M", "desc": "จำนวนแถวหลัง filter — มีค่าเท่ากับ recordsTotal เสมอ", "remark": ""}, {"name": "data", "type": "Array", "om": "M", "desc": "รายการข้อมูลบริษัทประกัน (array ของ object) หรือ \"\" (empty string) ถ้าไม่พบข้อมูล", "remark": "เป็น \"\" เมื่อไม่มีข้อมูล (ไม่ใช่ [])"}]}, {"group": "data[]", "fields": [{"name": "Ind", "type": "int", "om": "M", "desc": "ลำดับแถวในหน้านี้ (1-based) = start + ลำดับในหน้า", "remark": ""}, {"name": "ID", "type": "GUID", "om": "M", "desc": "รหัสอ้างอิง (GUID)", "remark": "GUID"}, {"name": "Name", "type": "string", "om": "M", "desc": "ชื่อบริษัทประกัน (ภาษาไทย)", "remark": ""}, {"name": "NameEn", "type": "string", "om": "O", "desc": "ชื่อบริษัทประกัน (ภาษาอังกฤษ)", "remark": ""}, {"name": "FriendlyName", "type": "string", "om": "M", "desc": "ชื่อเรียกสั้น/ชื่อแสดงผลของบริษัทประกัน", "remark": ""}, {"name": "Code", "type": "string", "om": "M", "desc": "รหัสย่อบริษัทประกัน", "remark": "≤10 ตัวอักษร"}, {"name": "RefCompanyID", "type": "int", "om": "M", "desc": "รหัสอ้างอิงบริษัทประกัน (ตัวเลข)", "remark": ""}, {"name": "IsActive", "type": "boolean", "om": "M", "desc": "สถานะเปิด/ปิดใช้งานบริษัทประกัน", "remark": "true/false"}, {"name": "IsDelete", "type": "boolean", "om": "M", "desc": "ลบรายการหรือไม่ (soft delete)", "remark": "true/false"}, {"name": "CreateUser", "type": "string", "om": "M", "desc": "ผู้สร้างรายการ", "remark": ""}, {"name": "CreateDate", "type": "string", "om": "M", "desc": "วันที่สร้างรายการ", "remark": "รูปแบบ yyyy-MM-ddTHH:mm:ssZ (server-local time, Z ไม่ใช่ UTC จริง)"}, {"name": "UpdateUser", "type": "string", "om": "O", "desc": "ผู้แก้ไขล่าสุด", "remark": ""}, {"name": "UpdateDate", "type": "string", "om": "O", "desc": "วันที่แก้ไขล่าสุด", "remark": "รูปแบบ yyyy-MM-ddTHH:mm:ssZ (server-local time, Z ไม่ใช่ UTC จริง)"}]}], "request_json": "{\n  \"draw\": 1,\n  \"start\": 0,\n  \"length\": 10,\n  \"order\": [],\n  \"columns\": [],\n  \"Filter\": []\n}", "response_json": "{\n  \"status\": 200,\n  \"draw\": 1,\n  \"recordsTotal\": 43,\n  \"recordsFiltered\": 43,\n  \"data\": [\n    {\n      \"Ind\": 1,\n      \"ID\": \"032BFC85C02440C482334466B3A34C0D\",\n      \"Name\": \"บริษัท สยามซิตี้ประกันภัย จำกัด(มหาชน)\",\n      \"NameEn\": null,\n      \"FriendlyName\": \"Siam City\",\n      \"Code\": \"SIAM\",\n      \"RefCompanyID\": 37,\n      \"IsActive\": true,\n      \"IsDelete\": false,\n      \"CreateUser\": \"System\",\n      \"CreateDate\": \"2015-01-10T10:05:14Z\",\n      \"UpdateUser\": null,\n      \"UpdateDate\": \"\"\n    }\n  ]\n}"};
 let activeTab = "request";
+
+function escapeHtml(s) {
+  return s.replace(/&/g, '&amp;').replace(/</g, '&lt;').replace(/>/g, '&gt;');
+}
 
 function render() {
   const groups = SCHEMA[activeTab];
-  let html = '<div class="sw"><table class="tbl"><thead><tr>';
-  html += '<th style="width:200px">Parameter</th><th style="width:180px">Example value</th><th style="width:44px;text-align:center">O/M</th><th>Description</th>';
+  const jsonBody = SCHEMA[activeTab + '_json'];
+
+  let html = '<details class="json-details"><summary>JSON Body</summary><pre>' + escapeHtml(jsonBody) + '</pre></details>';
+
+  html += '<div class="sw"><table class="tbl"><thead><tr>';
+  html += '<th style="width:200px">Parameter</th><th style="width:120px">Type</th><th style="width:44px;text-align:center">O/M</th><th>Description</th>';
   html += '</tr></thead><tbody>';
 
   groups.forEach(function (g) {
     html += '<tr class="sec-row"><td colspan="4">' + g.group + '</td></tr>';
     g.fields.forEach(function (f) {
       const om = f.om === 'M' ? '<span class="badge bm">M</span>' : '<span class="badge bo">O</span>';
-      const valClass = f.example === '—' ? 'td-val empty' : 'td-val';
       const small = f.remark ? '<small>' + f.remark + '</small>' : '';
       html += '<tr>';
       html += '<td class="td-name">' + f.name + '</td>';
-      html += '<td class="' + valClass + '">' + f.example + '</td>';
+      html += '<td><span class="type-badge">' + f.type + '</span></td>';
       html += '<td class="td-om">' + om + '</td>';
       html += '<td class="td-desc">' + f.desc + small + '</td>';
       html += '</tr>';
