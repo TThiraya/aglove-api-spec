@@ -47,6 +47,10 @@
   .hints p { margin: 0 0 6px; font-weight: 500; }
   .hints ul { margin: 0; padding-left: 20px; }
   .hints li { margin-bottom: 4px; color: var(--color-text-secondary); }
+  .hist-tbl { border-collapse: collapse; font-size: 12px; margin-top: 4px; }
+  .hist-tbl th, .hist-tbl td { padding: 4px 10px; text-align: left; border: 0.5px solid var(--color-border-tertiary); }
+  .hist-tbl th { font-weight: 500; color: var(--color-text-secondary); }
+  .hist-tbl td { color: var(--color-text-secondary); }
   .toolbar { display: flex; align-items: center; gap: 8px; margin-bottom: 16px; }
   .tab { cursor: pointer; padding: 6px 14px; border-radius: var(--border-radius-md); border: 0.5px solid var(--color-border-tertiary); font-size: 13px; font-weight: 500; }
   .tab.active { background: var(--color-background-secondary); border-color: var(--color-border-secondary); }
@@ -88,6 +92,7 @@
   <div class="hints">
     <p>ข้อควรรู้</p>
     <ul><li>ใช้เปิด/ปิดสถานะ IsActive ของบริษัทประกัน (Company) ทีละ 1 รายการ</li><li>Admin only — ต้องส่ง Authorization: Bearer &lt;access_token&gt; ทุก request (ไม่มี field AccessToken ใน body)</li><li>ID คือ Company.ID (nvarchar(50)) ต้องมีความยาว 1-255 ตัวอักษร และต้องมีอยู่จริงในระบบ มิฉะนั้นได้ ErrorCode 90903000 (Data does not exist)</li><li>ถ้า caller ไม่ใช่ Admin จะได้ ErrorCode เป็น null (literal JSON null) พร้อม ErrorMessage "Access denie." (typo จาก source)</li></ul>
+    <p style="margin-top:10px">ประวัติการสร้าง/อัปเดต Spec</p><table class="hist-tbl"><tr><th>ครั้งที่</th><th>วันที่</th><th>รายละเอียด</th></tr><tr><td>1</td><td>12/06/2026</td><td>Create</td></tr></table>
   </div>
   <div class="toolbar">
     <div class="tab active" data-tab="request" onclick="setTab('request')">Request</div>
@@ -106,7 +111,7 @@
   </div>
 
 <script>
-const SCHEMA = {"request": [{"group": "Request Body", "fields": [{"name": "ID", "type": "GUID", "om": "M", "desc": "รหัสอ้างอิง (GUID)", "remark": "GUID"}, {"name": "IsActive", "type": "boolean", "om": "M", "desc": "สถานะเปิด/ปิดใช้งานบริษัทประกันที่ต้องการตั้งค่า", "remark": "true/false"}]}], "response": [{"group": "Response Body", "fields": [{"name": "Status", "type": "int", "om": "M", "desc": "สถานะการทำงานของ API / สถานะรายการ", "remark": ""}, {"name": "Message", "type": "string", "om": "O", "desc": "ข้อความตอบกลับจากระบบ", "remark": ""}, {"name": "ErrorCode", "type": "string", "om": "O", "desc": "รหัสข้อผิดพลาด", "remark": ""}, {"name": "ErrorMessage", "type": "string", "om": "O", "desc": "รายละเอียดข้อผิดพลาด", "remark": ""}, {"name": "Data", "type": "Object", "om": "M", "desc": "ข้อมูลผลลัพธ์", "remark": ""}, {"name": "Options", "type": "string", "om": "O", "desc": "ข้อมูลเพิ่มเติมของระบบ", "remark": ""}]}, {"group": "Data", "fields": [{"name": "ID", "type": "GUID", "om": "M", "desc": "รหัสอ้างอิง (GUID)", "remark": "GUID"}]}], "request_json": "{\n  \"ID\": \"08A90A857563437FA75323ADF65D51A6\",\n  \"IsActive\": true\n}", "response_json": "{\n  \"Status\": 200,\n  \"Message\": \"\",\n  \"ErrorCode\": \"\",\n  \"ErrorMessage\": \"\",\n  \"Data\": {\n    \"ID\": \"08A90A857563437FA75323ADF65D51A6\"\n  },\n  \"Options\": null\n}"};
+const SCHEMA = {"request": [{"group": "Request Body", "fields": [{"name": "ID", "type": "GUID", "om": "M", "desc": "รหัสอ้างอิง (GUID)", "remark": "GUID"}, {"name": "IsActive", "type": "boolean", "om": "M", "desc": "สถานะเปิด/ปิดใช้งานบริษัทประกันที่ต้องการตั้งค่า", "remark": "true/false"}]}], "response": [{"group": "Response Body", "fields": [{"name": "Status", "type": "int", "om": "M", "desc": "สถานะการทำงานของ API / สถานะรายการ", "remark": ""}, {"name": "Message", "type": "string", "om": "O", "desc": "ข้อความตอบกลับจากระบบ", "remark": ""}, {"name": "ErrorCode", "type": "string", "om": "O", "desc": "รหัสข้อผิดพลาด", "remark": ""}, {"name": "ErrorMessage", "type": "string", "om": "O", "desc": "รายละเอียดข้อผิดพลาด", "remark": ""}, {"name": "Data", "type": "Object", "om": "M", "desc": "ข้อมูลผลลัพธ์", "remark": ""}, {"name": "Options", "type": "string", "om": "O", "desc": "ข้อมูลเพิ่มเติมของระบบ", "remark": ""}]}, {"group": "Data", "fields": [{"name": "ID", "type": "GUID", "om": "M", "desc": "รหัสอ้างอิง (GUID)", "remark": "GUID"}]}], "request_json": "{\n  \"ID\": \"08A90A857563437FA75323ADF65D51A6\",\n  \"IsActive\": true\n}", "response_json": "{\n  \"Status\": 200,\n  \"Message\": \"\",\n  \"ErrorCode\": \"\",\n  \"ErrorMessage\": \"\",\n  \"Data\": {\n    \"ID\": \"08A90A857563437FA75323ADF65D51A6\"\n  },\n  \"Options\": null\n}", "history": [{"no": 1, "date": "12/06/2026", "desc": "Create"}]};
 let activeTab = "request";
 
 function escapeHtml(s) {
