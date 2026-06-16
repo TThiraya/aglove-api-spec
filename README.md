@@ -9,6 +9,10 @@
 - [POST /Company/active](https://tthiraya.github.io/aglove-api-spec/API%20Spec/Company/active.html)
 - [POST /Company/grid/full/list](https://tthiraya.github.io/aglove-api-spec/API%20Spec/Company/grid-full-list.html)
 
+## Master
+
+- [POST /Master/occupation-type/sk-register/list](https://tthiraya.github.io/aglove-api-spec/API%20Spec/Master/occupation-type-sk-register-list.html)
+
 ## Package
 
 - [POST /Package/pa/list](https://tthiraya.github.io/aglove-api-spec/API%20Spec/Package/pa-list.html)
@@ -17,3 +21,4 @@
 
 - [POST /SKRegisterBackEnd/register/save](https://tthiraya.github.io/aglove-api-spec/API%20Spec/SKRegisterBackEnd/register-save.html)
 - [POST /SKRegisterBackEnd/register/summary/get](https://tthiraya.github.io/aglove-api-spec/API%20Spec/SKRegisterBackEnd/register-summary-get.html)
+
