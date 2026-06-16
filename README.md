@@ -21,4 +21,5 @@
 
 - [POST /SKRegisterBackEnd/register/save](https://tthiraya.github.io/aglove-api-spec/API%20Spec/SKRegisterBackEnd/register-save.html)
 - [POST /SKRegisterBackEnd/register/summary/get](https://tthiraya.github.io/aglove-api-spec/API%20Spec/SKRegisterBackEnd/register-summary-get.html)
+- [POST /SKRegisterBackEnd/sk/approve/send](https://tthiraya.github.io/aglove-api-spec/API%20Spec/SKRegisterBackEnd/sk-approve-send.html)
 
