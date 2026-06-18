@@ -21,6 +21,7 @@
 
 - [POST /OrderBackEnd/status/group/get](https://tthiraya.github.io/aglove-api-spec/API%20Spec/OrderBackEnd/status-group-get.html)
 - [POST /OrderBackEnd/document/list](https://tthiraya.github.io/aglove-api-spec/API%20Spec/OrderBackEnd/document-list.html)
+- [POST /OrderBackEnd/details/get](https://tthiraya.github.io/aglove-api-spec/API%20Spec/OrderBackEnd/details-get.html)
 
 ## SKRegisterBackEnd
 
