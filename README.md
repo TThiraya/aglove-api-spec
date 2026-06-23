@@ -27,6 +27,10 @@
 - [POST /OrderBackEnd/document/list](https://tthiraya.github.io/aglove-api-spec/API%20Spec/OrderBackEnd/document-list.html)
 - [POST /OrderBackEnd/details/get](https://tthiraya.github.io/aglove-api-spec/API%20Spec/OrderBackEnd/details-get.html)
 
+## Payment
+
+- [POST /Payment/v1/confirm](https://tthiraya.github.io/aglove-api-spec/API%20Spec/Payment/v1-confirm.html)
+
 ## SKRegisterBackEnd
 
 - [POST /SKRegisterBackEnd/register/save](https://tthiraya.github.io/aglove-api-spec/API%20Spec/SKRegisterBackEnd/register-save.html)
