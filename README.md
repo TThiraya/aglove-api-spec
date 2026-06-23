@@ -41,3 +41,9 @@
 
 - [POST /SKRegister/v1/register/payment/confirm](https://tthiraya.github.io/aglove-api-spec/API%20Spec/SKRegister/v1-register-payment-confirm.html)
 
+## JobApproveBackEnd
+
+- [POST /JobApproveBackEnd/assign](https://tthiraya.github.io/aglove-api-spec/API%20Spec/JobApproveBackEnd/assign.html)
+- [POST /JobApproveBackEnd/sk-register/get](https://tthiraya.github.io/aglove-api-spec/API%20Spec/JobApproveBackEnd/sk-register-get.html)
+- [POST /JobApproveBackEnd/v1/sk-register/approve](https://tthiraya.github.io/aglove-api-spec/API%20Spec/JobApproveBackEnd/v1-sk-register-approve.html)
+
