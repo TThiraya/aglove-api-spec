@@ -17,6 +17,10 @@
 
 - [POST /Package/pa/list](https://tthiraya.github.io/aglove-api-spec/API%20Spec/Package/pa-list.html)
 
+## OrderCMI
+
+- [POST /OrderCMI/v2/summary/get](https://tthiraya.github.io/aglove-api-spec/API%20Spec/OrderCMI/v2-summary-get.html)
+
 ## OrderBackEnd
 
 - [POST /OrderBackEnd/status/group/get](https://tthiraya.github.io/aglove-api-spec/API%20Spec/OrderBackEnd/status-group-get.html)
