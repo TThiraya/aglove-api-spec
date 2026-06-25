@@ -3,7 +3,7 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>POST /SKRegister/v1/register/payment/confirm</title>
+<title>POST /SKRegister/idcard/check</title>
 <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/tabler-icons/3.35.0/tabler-icons.min.css">
 <style>
   :root {
@@ -88,11 +88,11 @@
 </style>
 </head>
 <body>
-  <h1>POST /SKRegister/v1/register/payment/confirm</h1>
-  <p class="endpoint"><span class="method">POST</span>/SKRegister/v1/register/payment/confirm</p>
+  <h1>POST /SKRegister/idcard/check</h1>
+  <p class="endpoint"><span class="method">POST</span>/SKRegister/idcard/check</p>
   <div class="hints">
     <p>ข้อควรรู้</p>
-    <ul><li>ยืนยันการชำระเงินของ order — สร้างรายการ QR Payment รอชำระ (PaymentStatus=Pending) พร้อม QRCodeText สำหรับสแกนจ่ายจริงผ่าน test payment gateway</li><li>ต้องเรียก /register/payment/calculate ก่อนเพื่อทราบยอดที่ถูกต้อง</li><li>IsConsent ต้องเป็น true จึงจะยืนยันสำเร็จ</li></ul>
+    <ul><li>ตรวจสอบว่าเลขบัตรประชาชนนี้เคยสมัคร/ยืนยัน OTP ในระบบ SKRegister มาก่อนหรือไม่</li><li>ถ้าเคยยืนยัน OTP แล้ว ระบบตอบ ErrorCode EA01209 พร้อม Options="OTP_VERIFY" (เบอร์โทรที่ผูกไว้จะถูก mask ส่งกลับมาใน Message)</li></ul>
     <p style="margin-top:10px">ประวัติการสร้าง/อัปเดต Spec</p><table class="hist-tbl"><tr><th>ครั้งที่</th><th>วันที่</th><th>รายละเอียด</th></tr><tr><td>1</td><td>25/06/2026</td><td>Create</td></tr></table>
   </div>
   <div class="toolbar">
@@ -113,7 +113,7 @@
   </div>
 
 <script>
-const SCHEMA = {"request": [{"group": "Request Body", "fields": [{"name": "OrderNo", "type": "string", "om": "M", "desc": "เลขที่คำสั่งซื้อ", "remark": "", "new": false}, {"name": "PaymentType", "type": "string", "om": "M", "desc": "ประเภทการชำระเงิน", "remark": "เช่น \"BILL_PAYMENT\"", "new": false}, {"name": "IsConsent", "type": "boolean", "om": "M", "desc": "สถานะการยินยอม (Consent)", "remark": "true/false", "new": false}]}], "response": [{"group": "Response Body", "fields": [{"name": "Status", "type": "int", "om": "M", "desc": "สถานะการทำงานของ API / สถานะรายการ", "remark": "", "new": false}, {"name": "Message", "type": "string", "om": "O", "desc": "ข้อความตอบกลับจากระบบ", "remark": "", "new": false}, {"name": "ErrorCode", "type": "string", "om": "O", "desc": "รหัสข้อผิดพลาด", "remark": "", "new": false}, {"name": "ErrorMessage", "type": "string", "om": "O", "desc": "รายละเอียดข้อผิดพลาด", "remark": "", "new": false}, {"name": "Data", "type": "Array", "om": "M", "desc": "ข้อมูลผลลัพธ์", "remark": "", "new": false}, {"name": "Options", "type": "string", "om": "O", "desc": "ข้อมูลเพิ่มเติมของระบบ", "remark": "", "new": false}]}, {"group": "Data[]", "fields": [{"name": "PaymentType", "type": "string", "om": "M", "desc": "ประเภทการชำระเงิน", "remark": "เช่น \"BILL_PAYMENT\"", "new": false}, {"name": "PaymentStatus", "type": "string", "om": "M", "desc": "สถานะการชำระเงิน (Pending/Success/...)", "remark": "", "new": false}, {"name": "GrandAmount", "type": "number", "om": "M", "desc": "จำนวนเงินรวมที่ต้องชำระ", "remark": "หน่วยเป็นบาท", "new": false}, {"name": "PaymentNo", "type": "string", "om": "M", "desc": "เลขที่รายการชำระเงิน", "remark": "", "new": false}, {"name": "OrderNo", "type": "string", "om": "M", "desc": "เลขที่คำสั่งซื้อ", "remark": "", "new": false}, {"name": "CreateDate", "type": "DateTime", "om": "M", "desc": "วันที่สร้างรายการ", "remark": "DateTime", "new": false}, {"name": "QRCodeNo", "type": "string", "om": "M", "desc": "เลขที่ QR Code", "remark": "", "new": false}, {"name": "QRCodeText", "type": "string", "om": "M", "desc": "ลิงก์/ข้อมูล QR Code สำหรับชำระเงิน", "remark": "", "new": false}, {"name": "SKRefNo", "type": "string", "om": "M", "desc": "เลขอ้างอิงฝั่ง Srikrung Broker", "remark": "", "new": false}, {"name": "QRGenerateDate", "type": "DateTime", "om": "M", "desc": "วันที่สร้าง QR Code", "remark": "DateTime", "new": false}]}], "request_json": "{\n  \"OrderNo\": \"SKO2606000018\",\n  \"PaymentType\": \"BILL_PAYMENT\",\n  \"IsConsent\": true\n}", "response_json": "{\n  \"Status\": 200,\n  \"Message\": \"\",\n  \"ErrorCode\": \"\",\n  \"ErrorMessage\": \"\",\n  \"Data\": [\n    {\n      \"PaymentType\": \"BILL_PAYMENT\",\n      \"PaymentStatus\": \"Pending\",\n      \"GrandAmount\": 500.0,\n      \"PaymentNo\": \"SKP2606000047\",\n      \"OrderNo\": \"SKO2606000018\",\n      \"CreateDate\": \"2026-06-25T13:35:46Z\",\n      \"QRCodeNo\": \"QR690625000004\",\n      \"QRCodeText\": \"https://testpaymentgatewaysk.srikrungbroker.co.th/TestQRCodePayment?QRCodeNo=QR690625000004\",\n      \"SKRefNo\": \"ANPG6906000020\",\n      \"QRGenerateDate\": \"2026-06-25T13:35:47Z\"\n    }\n  ],\n  \"Options\": null\n}", "history": [{"no": 1, "date": "25/06/2026", "desc": "Create"}]};
+const SCHEMA = {"request": [{"group": "Request Body", "fields": [{"name": "IDCard", "type": "string", "om": "M", "desc": "เลขบัตรประชาชน", "remark": "13 หลัก", "new": false}]}], "response": [{"group": "Response Body", "fields": [{"name": "Status", "type": "int", "om": "M", "desc": "สถานะการทำงานของ API / สถานะรายการ", "remark": "", "new": false}, {"name": "Message", "type": "string", "om": "M", "desc": "ข้อความตอบกลับจากระบบ", "remark": "", "new": false}, {"name": "ErrorCode", "type": "string", "om": "M", "desc": "รหัสข้อผิดพลาด", "remark": "", "new": false}, {"name": "ErrorMessage", "type": "string", "om": "M", "desc": "รายละเอียดข้อผิดพลาด", "remark": "", "new": false}, {"name": "Data", "type": "string", "om": "O", "desc": "ข้อมูลผลลัพธ์", "remark": "", "new": false}, {"name": "Options", "type": "string", "om": "M", "desc": "ข้อมูลเพิ่มเติมของระบบ", "remark": "", "new": false}]}], "request_json": "{\n  \"IDCard\": \"1711640658680\"\n}", "response_json": "{\n  \"Status\": 400,\n  \"Message\": \"092xxxxx44\",\n  \"ErrorCode\": \"EA01209\",\n  \"ErrorMessage\": \"ID Card is already verify by OTP.\",\n  \"Data\": null,\n  \"Options\": \"OTP_VERIFY\"\n}", "history": [{"no": 1, "date": "25/06/2026", "desc": "Create"}]};
 let activeTab = "request";
 
 function escapeHtml(s) {

@@ -39,6 +39,10 @@
 
 ## SKRegister
 
+- [POST /SKRegister/idcard/check](https://tthiraya.github.io/aglove-api-spec/API%20Spec/SKRegister/idcard-check.html)
+- [POST /SKRegister/register/summary/get](https://tthiraya.github.io/aglove-api-spec/API%20Spec/SKRegister/register-summary-get.html)
+- [POST /SKRegister/register/save](https://tthiraya.github.io/aglove-api-spec/API%20Spec/SKRegister/register-save.html)
+- [POST /SKRegister/register/payment/calculate](https://tthiraya.github.io/aglove-api-spec/API%20Spec/SKRegister/register-payment-calculate.html)
 - [POST /SKRegister/v1/register/payment/confirm](https://tthiraya.github.io/aglove-api-spec/API%20Spec/SKRegister/v1-register-payment-confirm.html)
 
 ## JobApproveBackEnd
