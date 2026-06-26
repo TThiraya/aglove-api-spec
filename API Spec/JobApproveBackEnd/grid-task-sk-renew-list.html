@@ -1,0 +1,179 @@
+<!DOCTYPE html>
+<html lang="th">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>POST /JobApproveBackEnd/grid/task/sk-renew/list</title>
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/tabler-icons/3.35.0/tabler-icons.min.css">
+<style>
+  :root {
+    --color-background-primary: #ffffff;
+    --color-background-secondary: #f4f3ef;
+    --color-background-tertiary: #ebe9e1;
+    --color-text-primary: #0f172a;
+    --color-text-secondary: #5f5e5a;
+    --color-text-tertiary: #888780;
+    --color-text-success: #0f6e56;
+    --color-border-tertiary: rgba(15,23,42,.15);
+    --color-border-secondary: rgba(15,23,42,.3);
+    --font-sans: -apple-system, "Segoe UI", Roboto, Helvetica, Arial, sans-serif;
+    --font-mono: ui-monospace, SFMono-Regular, Menlo, Consolas, monospace;
+    --border-radius-md: 8px;
+    --border-radius-lg: 12px;
+  }
+  @media (prefers-color-scheme: dark) {
+    :root {
+      --color-background-primary: #1c1c1a;
+      --color-background-secondary: #2c2c2a;
+      --color-background-tertiary: #383836;
+      --color-text-primary: #f1efe8;
+      --color-text-secondary: #b4b2a9;
+      --color-text-tertiary: #888780;
+      --color-text-success: #5dcaa5;
+      --color-border-tertiary: rgba(255,255,255,.15);
+      --color-border-secondary: rgba(255,255,255,.3);
+    }
+  }
+  * { box-sizing: border-box; }
+  body {
+    margin: 0; padding: 24px; font-family: var(--font-sans);
+    background: var(--color-background-primary); color: var(--color-text-primary);
+    font-size: 14px; line-height: 1.6;
+  }
+  h1 { font-size: 20px; font-weight: 500; margin: 0 0 4px; }
+  .endpoint { font-family: var(--font-mono); font-size: 14px; color: var(--color-text-secondary); margin: 0 0 16px; }
+  .method { display: inline-block; font-size: 12px; font-weight: 500; padding: 2px 8px; border-radius: var(--border-radius-md); background: #E6F1FB; color: #0C447C; font-family: var(--font-mono); margin-right: 8px; }
+  .hints { background: var(--color-background-secondary); border-radius: var(--border-radius-md); padding: 12px 16px; margin-bottom: 20px; font-size: 13px; }
+  .hints p { margin: 0 0 6px; font-weight: 500; }
+  .hints ul { margin: 0; padding-left: 20px; }
+  .hints li { margin-bottom: 4px; color: var(--color-text-secondary); }
+  .hist-tbl { border-collapse: collapse; font-size: 12px; margin-top: 4px; }
+  .hist-tbl th, .hist-tbl td { padding: 4px 10px; text-align: left; border: 0.5px solid var(--color-border-tertiary); }
+  .hist-tbl th { font-weight: 500; color: var(--color-text-secondary); }
+  .hist-tbl td { color: var(--color-text-secondary); }
+  .toolbar { display: flex; align-items: center; gap: 8px; margin-bottom: 16px; }
+  .tab { cursor: pointer; padding: 6px 14px; border-radius: var(--border-radius-md); border: 0.5px solid var(--color-border-tertiary); font-size: 13px; font-weight: 500; }
+  .tab.active { background: var(--color-background-secondary); border-color: var(--color-border-secondary); }
+  input[type=text] {
+    padding: 6px 10px 6px 30px; border-radius: var(--border-radius-md); border: 0.5px solid var(--color-border-tertiary);
+    background: var(--color-background-primary); color: var(--color-text-primary); font-size: 13px; width: 220px;
+  }
+  .search-wrap { position: relative; }
+  .search-wrap i { position: absolute; left: 10px; top: 50%; transform: translateY(-50%); font-size: 14px; color: var(--color-text-tertiary); }
+
+  .sw { padding: 1.5rem 0; font-family: var(--font-sans); }
+  .sw-label { font-size: 11px; font-weight: 500; color: var(--color-text-secondary); text-transform: uppercase; letter-spacing: .06em; margin: 0 0 12px; }
+  .tbl { width: 100%; border-collapse: collapse; border-radius: var(--border-radius-lg); overflow: hidden; border: 0.5px solid var(--color-border-tertiary); }
+  .tbl thead th { font-size: 11px; font-weight: 500; color: var(--color-text-secondary); text-transform: uppercase; letter-spacing: .06em; padding: 8px 14px; background: var(--color-background-secondary); border-bottom: 0.5px solid var(--color-border-secondary); text-align: left; }
+  .tbl tbody tr { border-bottom: 0.5px solid var(--color-border-tertiary); }
+  .tbl tbody tr:last-child { border-bottom: none; }
+  .tbl tbody tr:hover { background: var(--color-background-secondary); }
+  .tbl td { padding: 9px 14px; font-size: 13px; vertical-align: middle; }
+  .td-name { font-family: var(--font-mono); font-size: 12px; font-weight: 500; color: var(--color-text-primary); white-space: nowrap; }
+  .td-name.indent { padding-left: 28px; }
+  .copy-icon { cursor: pointer; font-size: 14px; color: var(--color-text-tertiary); margin-left: 6px; vertical-align: -2px; }
+  .type-badge { display: inline-block; font-size: 11px; font-weight: 500; padding: 2px 8px; border-radius: var(--border-radius-md); border: 0.5px solid var(--color-border-tertiary); color: var(--color-text-secondary); font-family: var(--font-mono); }
+  .td-desc { color: var(--color-text-primary); font-size: 13px; }
+  .td-desc small { display: block; font-size: 11px; color: var(--color-text-secondary); margin-top: 2px; }
+  .td-om { text-align: center; white-space: nowrap; }
+  .badge { font-size: 11px; font-weight: 500; padding: 2px 8px; border-radius: 99px; }
+  .bm { background: #E6F1FB; color: #0C447C; }
+  .bo { background: #F1EFE8; color: #444441; }
+  .bn { background: #FCE8D6; color: #9A4B0C; margin-left: 6px; }
+  .sec-row td { font-size: 11px; font-weight: 500; color: var(--color-text-secondary); text-transform: uppercase; letter-spacing: .04em; background: var(--color-background-secondary); padding: 6px 14px; border-bottom: 0.5px solid var(--color-border-secondary); }
+  @media (prefers-color-scheme: dark) { .bm { background: #0C447C; color: #B5D4F4; } .bo { background: #444441; color: #D3D1C7; } .bn { background: #5C3317; color: #FFD9B3; } }
+  .json-details { margin-bottom: 16px; }
+  .json-details summary { cursor: pointer; font-size: 13px; font-weight: 500; padding: 8px 14px; border-radius: var(--border-radius-md); border: 0.5px solid var(--color-border-tertiary); background: var(--color-background-secondary); }
+  .json-details pre { margin: 8px 0 0; padding: 12px 14px; border-radius: var(--border-radius-md); border: 0.5px solid var(--color-border-tertiary); background: var(--color-background-secondary); font-family: var(--font-mono); font-size: 12px; overflow-x: auto; }
+</style>
+</head>
+<body>
+  <h1>POST /JobApproveBackEnd/grid/task/sk-renew/list</h1>
+  <p class="endpoint"><span class="method">POST</span>/JobApproveBackEnd/grid/task/sk-renew/list</p>
+  <div class="hints">
+    <p>ข้อควรรู้</p>
+    <ul><li>ใช้ดึงรายการงานรออนุมัติ (Task) ประเภทต่ออายุสมาชิกศรีกรุงฟรี (SRIKRUNG_MEMBER_RENEW_FREE) แบบ DataTables server-side (draw/start/length)</li><li>ฟิลด์ Filter ต้องเป็น flat array ของ object {field, type, value} เท่านั้น ห้ามห่อ item ใดด้วย array ซ้อนอีกชั้น มิฉะนั้น API จะ error 400 (ErrorCode AA10999: JArray does not contain a definition for 'type')</li><li>ต้องส่ง Authorization: Bearer <access_token> มิฉะนั้นจะได้ ErrorCode 90000991 (Authorization header is missing or empty)</li></ul>
+    <p style="margin-top:10px">ประวัติการสร้าง/อัปเดต Spec</p><table class="hist-tbl"><tr><th>ครั้งที่</th><th>วันที่</th><th>รายละเอียด</th></tr><tr><td>1</td><td>26/06/2026</td><td>Create</td></tr></table>
+  </div>
+  <div class="toolbar">
+    <div class="tab active" data-tab="request" onclick="setTab('request')">Request</div>
+    <div class="tab" data-tab="response" onclick="setTab('response')">Response</div>
+    <div style="flex:1"></div>
+    <div class="search-wrap">
+      <i class="ti ti-search"></i>
+      <input type="text" id="search" placeholder="Filter parameter..." oninput="render()">
+    </div>
+  </div>
+  <div id="content"></div>
+
+  <div style="display:flex;gap:16px;margin-top:12px;font-size:12px;color:var(--color-text-secondary);align-items:center">
+    <span style="display:flex;align-items:center;gap:6px"><span class="badge bm">M</span>Mandatory</span>
+    <span style="display:flex;align-items:center;gap:6px"><span class="badge bo">O</span>Optional</span>
+    <span style="display:flex;align-items:center;gap:6px"><span class="badge bn">New</span>Field ที่เพิ่มใหม่จากเวอร์ชันก่อนหน้า</span>
+  </div>
+
+<script>
+const SCHEMA = {"request": [{"group": "Request Body", "fields": [{"name": "draw", "type": "int", "om": "M", "desc": "ตัวเลขสำหรับ DataTables ใช้ตรวจสอบลำดับ request/response", "remark": "", "new": false}, {"name": "start", "type": "int", "om": "M", "desc": "ลำดับเริ่มต้นของ record (สำหรับ pagination)", "remark": "", "new": false}, {"name": "length", "type": "int", "om": "M", "desc": "จำนวน record ต่อหน้า", "remark": "", "new": false}, {"name": "search", "type": "Object", "om": "M", "desc": "คำค้นหาแบบ global (DataTables)", "remark": "", "new": false}, {"name": "order", "type": "Array", "om": "M", "desc": "ลำดับการ sort (column index + direction)", "remark": "", "new": false}, {"name": "columns", "type": "Array", "om": "M", "desc": "รายการคอลัมน์ที่ใช้แสดง/sort/search ในตาราง", "remark": "", "new": false}, {"name": "URL", "type": "string", "om": "M", "desc": "Endpoint path อ้างอิง (ใช้ภายใน)", "remark": "", "new": false}, {"name": "Filter", "type": "Array", "om": "M", "desc": "เงื่อนไขกรองข้อมูล แต่ละ item เป็น object {field, type, value} เรียงต่อกันแบบ flat array", "remark": "", "new": false}]}, {"group": "search", "fields": [{"name": "value", "type": "string", "om": "O", "desc": "ค่าที่ใช้กรอง", "remark": "", "new": false}, {"name": "regex", "type": "boolean", "om": "M", "desc": "ค้นหาด้วย regular expression หรือไม่", "remark": "true/false", "new": false}]}, {"group": "order[]", "fields": [{"name": "column", "type": "int", "om": "M", "desc": "ลำดับ index ของคอลัมน์ที่ใช้เรียงลำดับ", "remark": "", "new": false}, {"name": "dir", "type": "string", "om": "M", "desc": "ทิศทางการเรียงลำดับ (asc/desc)", "remark": "", "new": false}]}, {"group": "columns[]", "fields": [{"name": "data", "type": "string", "om": "M", "desc": "data", "remark": "", "new": false}, {"name": "name", "type": "string", "om": "O", "desc": "name", "remark": "", "new": false}, {"name": "searchable", "type": "boolean", "om": "M", "desc": "คอลัมน์นี้ค้นหาได้หรือไม่", "remark": "true/false", "new": false}, {"name": "orderable", "type": "boolean", "om": "M", "desc": "คอลัมน์นี้เรียงลำดับได้หรือไม่", "remark": "true/false", "new": false}, {"name": "search", "type": "Object", "om": "M", "desc": "คำค้นหาแบบ global (DataTables)", "remark": "", "new": false}]}, {"group": "search", "fields": [{"name": "value", "type": "string", "om": "O", "desc": "ค่าที่ใช้กรอง", "remark": "", "new": false}, {"name": "regex", "type": "boolean", "om": "M", "desc": "ค้นหาด้วย regular expression หรือไม่", "remark": "true/false", "new": false}]}, {"group": "Filter[]", "fields": [{"name": "field", "type": "string", "om": "M", "desc": "ชื่อฟิลด์ที่ต้องการกรอง", "remark": "", "new": false}, {"name": "type", "type": "string", "om": "M", "desc": "ประเภทการเปรียบเทียบ เช่น LIKE, DATE_LTE, BOOLEAN", "remark": "", "new": false}, {"name": "value", "type": "string", "om": "M", "desc": "ค่าที่ใช้กรอง", "remark": "", "new": false}]}], "response": [{"group": "Response Body", "fields": [{"name": "status", "type": "int", "om": "M", "desc": "status", "remark": "", "new": false}, {"name": "draw", "type": "int", "om": "M", "desc": "ตัวเลขสำหรับ DataTables ใช้ตรวจสอบลำดับ request/response", "remark": "", "new": false}, {"name": "recordsTotal", "type": "int", "om": "M", "desc": "จำนวน record ทั้งหมดที่ตรงเงื่อนไข", "remark": "", "new": false}, {"name": "recordsFiltered", "type": "int", "om": "M", "desc": "จำนวน record หลังกรอง (เท่ากับ recordsTotal ในกรณีนี้)", "remark": "", "new": false}, {"name": "data", "type": "Array", "om": "M", "desc": "data", "remark": "", "new": false}]}, {"group": "data[]", "fields": [{"name": "Ind", "type": "int", "om": "M", "desc": "ลำดับแถวในหน้านี้", "remark": "", "new": false}, {"name": "ID", "type": "GUID", "om": "M", "desc": "รหัสอ้างอิง (GUID)", "remark": "GUID", "new": false}, {"name": "JobApplicationID", "type": "GUID", "om": "M", "desc": "รหัสงาน (Job Application)", "remark": "GUID", "new": false}, {"name": "UserID", "type": "GUID", "om": "M", "desc": "รหัสผู้ใช้งาน (GUID)", "remark": "GUID", "new": false}, {"name": "ReferenceID", "type": "GUID", "om": "M", "desc": "รหัสอ้างอิงของงาน", "remark": "GUID", "new": false}, {"name": "ParamValue1", "type": "GUID", "om": "M", "desc": "พารามิเตอร์อ้างอิงที่ 1 (มักซ้ำกับ ReferenceID)", "remark": "GUID", "new": false}, {"name": "ParamValue2", "type": "string", "om": "O", "desc": "ค่าพารามิเตอร์ที่ 2 ของงาน", "remark": "", "new": false}, {"name": "ParamValue3", "type": "string", "om": "O", "desc": "ค่าพารามิเตอร์ที่ 3 ของงาน", "remark": "", "new": false}, {"name": "Remark", "type": "string", "om": "M", "desc": "หมายเหตุ", "remark": "", "new": false}, {"name": "RemarkSystem", "type": "string", "om": "M", "desc": "หมายเหตุที่ระบบ generate อัตโนมัติ", "remark": "", "new": false}, {"name": "IsWorking", "type": "boolean", "om": "M", "desc": "มีผู้กำลังดำเนินการ/รับงานนี้อยู่หรือไม่", "remark": "true/false", "new": false}, {"name": "IsApprove", "type": "boolean", "om": "M", "desc": "อนุมัติรายการแล้วหรือไม่", "remark": "true/false", "new": false}, {"name": "IsReject", "type": "boolean", "om": "M", "desc": "ปฏิเสธรายการหรือไม่", "remark": "true/false", "new": false}, {"name": "IsDelete", "type": "boolean", "om": "M", "desc": "ลบรายการหรือไม่ (soft delete)", "remark": "true/false", "new": false}, {"name": "Name", "type": "string", "om": "M", "desc": "ชื่อที่อยู่ (Current/Delivery)", "remark": "", "new": false}, {"name": "NameEn", "type": "string", "om": "O", "desc": "ชื่อ (ภาษาอังกฤษ)", "remark": "", "new": false}, {"name": "DurationDay", "type": "int", "om": "M", "desc": "จำนวนวันที่ใช้พิจารณางานนี้", "remark": "", "new": false}, {"name": "ApproveUrl", "type": "string", "om": "O", "desc": "URL สำหรับอนุมัติงาน (ถ้ามี)", "remark": "", "new": false}, {"name": "CallbackUrl", "type": "string", "om": "O", "desc": "URL callback หลังอนุมัติ/ปฏิเสธ", "remark": "", "new": false}, {"name": "IsForceApprove", "type": "boolean", "om": "M", "desc": "บังคับอนุมัติอัตโนมัติหรือไม่", "remark": "true/false", "new": false}, {"name": "IsCanTransfer", "type": "boolean", "om": "M", "desc": "โอนงานให้ผู้อื่นได้หรือไม่", "remark": "true/false", "new": false}, {"name": "IsActive", "type": "boolean", "om": "M", "desc": "เปิดใช้งานหรือไม่", "remark": "true/false", "new": false}, {"name": "UserName", "type": "string", "om": "M", "desc": "ชื่อผู้ใช้งาน (username)", "remark": "", "new": false}, {"name": "FirstName", "type": "string", "om": "M", "desc": "ชื่อ", "remark": "", "new": false}, {"name": "LastName", "type": "string", "om": "M", "desc": "นามสกุล", "remark": "", "new": false}, {"name": "ApproveFirstName", "type": "string", "om": "O", "desc": "ชื่อผู้อนุมัติ", "remark": "", "new": false}, {"name": "ApproveLastName", "type": "string", "om": "O", "desc": "นามสกุลผู้อนุมัติ", "remark": "", "new": false}, {"name": "RejectFirstName", "type": "string", "om": "M", "desc": "ชื่อผู้ปฏิเสธ", "remark": "", "new": false}, {"name": "RejectLastName", "type": "string", "om": "M", "desc": "นามสกุลผู้ปฏิเสธ", "remark": "", "new": false}, {"name": "ReceiveFirstName", "type": "string", "om": "M", "desc": "ชื่อผู้รับงาน", "remark": "", "new": false}, {"name": "ReceiveLastName", "type": "string", "om": "M", "desc": "นามสกุลผู้รับงาน", "remark": "", "new": false}, {"name": "SKROrderNo", "type": "string", "om": "M", "desc": "เลขที่คำสั่งซื้อของศรีกรุง", "remark": "", "new": false}, {"name": "SKRAgentCode", "type": "string", "om": "M", "desc": "รหัสตัวแทนศรีกรุง", "remark": "", "new": false}, {"name": "SKRFirstName", "type": "string", "om": "M", "desc": "ชื่อผู้ลงทะเบียน (Srikrung)", "remark": "", "new": false}, {"name": "SKRLastName", "type": "string", "om": "M", "desc": "นามสกุลผู้ลงทะเบียน (Srikrung)", "remark": "", "new": false}, {"name": "SKRModelAgent", "type": "string", "om": "M", "desc": "โมเดลตัวแทนศรีกรุง", "remark": "", "new": false}, {"name": "SKRSrikrungStartDate", "type": "DateTime", "om": "M", "desc": "วันเริ่มต้นกรมธรรม์ศรีกรุง", "remark": "DateTime", "new": false}, {"name": "SKRSrikrungEndDate", "type": "DateTime", "om": "M", "desc": "วันสิ้นสุดกรมธรรม์ศรีกรุง", "remark": "DateTime", "new": false}, {"name": "SKRPAAmount", "type": "number", "om": "M", "desc": "เบี้ย PA ที่ต้องชำระสำหรับการต่ออายุ", "remark": "", "new": false}, {"name": "SKRPAPackageCode", "type": "string", "om": "M", "desc": "รหัสแพ็กเกจ PA", "remark": "", "new": false}, {"name": "SKRGrandOutstandingAmount", "type": "number", "om": "M", "desc": "ยอดค้างชำระรวม", "remark": "", "new": false}, {"name": "Type", "type": "string", "om": "M", "desc": "ประเภทที่อยู่ (CURRENT/DELIVERY)", "remark": "เช่น \"CURRENT\", \"DELIVERY\"", "new": false}, {"name": "PassTimeSeconds", "type": "number", "om": "M", "desc": "เวลาที่ผ่านไปแล้ว (วินาที) นับจาก CreateDate", "remark": "", "new": false}, {"name": "PassTime", "type": "string", "om": "O", "desc": "เวลาที่ผ่านไปแล้ว แสดงเป็นข้อความ", "remark": "", "new": false}, {"name": "ReminderTimeSeconds", "type": "number", "om": "M", "desc": "เวลาที่เหลือก่อนถึง ReminderDate (วินาที)", "remark": "", "new": false}, {"name": "ReminderDate", "type": "DateTime", "om": "M", "desc": "วันที่ครบกำหนดเตือน", "remark": "DateTime", "new": false}, {"name": "ReceiveDate", "type": "DateTime", "om": "M", "desc": "วันที่รับงาน", "remark": "DateTime", "new": false}, {"name": "ReceiveUser", "type": "string", "om": "M", "desc": "ผู้ใช้ที่รับงาน", "remark": "", "new": false}, {"name": "ApproveDate", "type": "DateTime", "om": "O", "desc": "วันที่อนุมัติรายการ", "remark": "DateTime", "new": false}, {"name": "ApproveUser", "type": "string", "om": "O", "desc": "ผู้อนุมัติรายการ", "remark": "", "new": false}, {"name": "RejectDate", "type": "DateTime", "om": "M", "desc": "วันที่ปฏิเสธงาน", "remark": "DateTime", "new": false}, {"name": "RejectUser", "type": "string", "om": "M", "desc": "ผู้ใช้ที่ปฏิเสธงาน", "remark": "", "new": false}, {"name": "CreateDate", "type": "DateTime", "om": "M", "desc": "วันที่สร้างรายการ", "remark": "DateTime", "new": false}, {"name": "CreateUser", "type": "string", "om": "M", "desc": "ผู้สร้างรายการ", "remark": "", "new": false}, {"name": "UpdateDate", "type": "DateTime", "om": "M", "desc": "วันที่แก้ไขล่าสุด", "remark": "DateTime", "new": false}, {"name": "UpdateUser", "type": "string", "om": "M", "desc": "ผู้แก้ไขล่าสุด", "remark": "", "new": false}]}], "request_json": "{\n  \"draw\": 1,\n  \"start\": 0,\n  \"length\": 10,\n  \"search\": {\n    \"value\": \"\",\n    \"regex\": false\n  },\n  \"order\": [\n    {\n      \"column\": 3,\n      \"dir\": \"asc\"\n    }\n  ],\n  \"columns\": [\n    {\n      \"data\": \"CreateDate\",\n      \"name\": \"\",\n      \"searchable\": true,\n      \"orderable\": true,\n      \"search\": {\n        \"value\": \"\",\n        \"regex\": false\n      }\n    },\n    {\n      \"data\": \"SKRFirstName\",\n      \"name\": \"\",\n      \"searchable\": true,\n      \"orderable\": true,\n      \"search\": {\n        \"value\": \"\",\n        \"regex\": false\n      }\n    },\n    {\n      \"data\": \"SKRAgentCode\",\n      \"name\": \"\",\n      \"searchable\": true,\n      \"orderable\": true,\n      \"search\": {\n        \"value\": \"\",\n        \"regex\": false\n      }\n    },\n    {\n      \"data\": \"ReminderDate\",\n      \"name\": \"\",\n      \"searchable\": true,\n      \"orderable\": true,\n      \"search\": {\n        \"value\": \"\",\n        \"regex\": false\n      }\n    },\n    {\n      \"data\": \"SKRPAAmount\",\n      \"name\": \"\",\n      \"searchable\": true,\n      \"orderable\": true,\n      \"search\": {\n        \"value\": \"\",\n        \"regex\": false\n      }\n    },\n    {\n      \"data\": \"SKRGrandOutstandingAmount\",\n      \"name\": \"\",\n      \"searchable\": true,\n      \"orderable\": true,\n      \"search\": {\n        \"value\": \"\",\n        \"regex\": false\n      }\n    },\n    {\n      \"data\": \"IsReject\",\n      \"name\": \"\",\n      \"searchable\": true,\n      \"orderable\": true,\n      \"search\": {\n        \"value\": \"\",\n        \"regex\": false\n      }\n    },\n    {\n      \"data\": \"ApproveDate\",\n      \"name\": \"\",\n      \"searchable\": true,\n      \"orderable\": true,\n      \"search\": {\n        \"value\": \"\",\n        \"regex\": false\n      }\n    }\n  ],\n  \"URL\": \"/JobApproveBackEnd/grid/task/sk-renew/list\",\n  \"Filter\": [\n    {\n      \"field\": \"Type\",\n      \"type\": \"LIKE\",\n      \"value\": \"SRIKRUNG_MEMBER_RENEW_FREE\"\n    },\n    {\n      \"field\": \"ReminderDate\",\n      \"type\": \"DATE_LTE\",\n      \"value\": \"2026-08-10\"\n    },\n    {\n      \"field\": \"IsApprove\",\n      \"type\": \"BOOLEAN\",\n      \"value\": 0\n    },\n    {\n      \"field\": \"IsWorking\",\n      \"type\": \"BOOLEAN\",\n      \"value\": 0\n    }\n  ]\n}", "response_json": "{\n  \"status\": 200,\n  \"draw\": 1,\n  \"recordsTotal\": 5,\n  \"recordsFiltered\": 5,\n  \"data\": [\n    {\n      \"Ind\": 1,\n      \"ID\": \"31485E9885FE4F21B7487C0A46C3EDB1\",\n      \"JobApplicationID\": \"994A68AEED4044969EF53DA7E4297AEA\",\n      \"UserID\": \"E09C16210C61453784328995A9CC4EDC\",\n      \"ReferenceID\": \"955520DE27E7430782706A0714365197\",\n      \"ParamValue1\": \"955520DE27E7430782706A0714365197\",\n      \"ParamValue2\": \"\",\n      \"ParamValue3\": \"\",\n      \"Remark\": \"ทดสอบไม่อนุมัติ\",\n      \"RemarkSystem\": \"ต่ออายุสมาชิกศรีกรุงจากการสมัครสมาชิก 724 Affiliate (มีส่วนลด PA)\",\n      \"IsWorking\": false,\n      \"IsApprove\": false,\n      \"IsReject\": true,\n      \"IsDelete\": false,\n      \"Name\": \"ต่ออายุศรีกรุงฟรี\",\n      \"NameEn\": \"\",\n      \"DurationDay\": 3,\n      \"ApproveUrl\": \"\",\n      \"CallbackUrl\": \"\",\n      \"IsForceApprove\": false,\n      \"IsCanTransfer\": true,\n      \"IsActive\": true,\n      \"UserName\": \"noi\",\n      \"FirstName\": \"ฐิรญา\",\n      \"LastName\": \"ศิริปี\",\n      \"ApproveFirstName\": null,\n      \"ApproveLastName\": null,\n      \"RejectFirstName\": \"ฐิรญา\",\n      \"RejectLastName\": \"ศิริปี\",\n      \"ReceiveFirstName\": \"ฐิรญา\",\n      \"ReceiveLastName\": \"ศิริปี\",\n      \"SKROrderNo\": \"OA2410000009\",\n      \"SKRAgentCode\": \"AM00058698\",\n      \"SKRFirstName\": \"ชาตรี\",\n      \"SKRLastName\": \"ขำรักษา\",\n      \"SKRModelAgent\": \"4\",\n      \"SKRSrikrungStartDate\": \"2024-08-22T00:00:00Z\",\n      \"SKRSrikrungEndDate\": \"2025-08-22T00:00:00Z\",\n      \"SKRPAAmount\": 250.0,\n      \"SKRPAPackageCode\": \"PA-STY-0021\",\n      \"SKRGrandOutstandingAmount\": 0.0,\n      \"Type\": \"SRIKRUNG_MEMBER_RENEW_FREE\",\n      \"PassTimeSeconds\": 4677541.44,\n      \"PassTime\": \"\",\n      \"ReminderTimeSeconds\": 0.0,\n      \"ReminderDate\": \"2024-05-25T00:00:00Z\",\n      \"ReceiveDate\": \"2024-11-26T14:38:59Z\",\n      \"ReceiveUser\": \"noi\",\n      \"ApproveDate\": \"\",\n      \"ApproveUser\": null,\n      \"RejectDate\": \"2024-11-26T14:39:43Z\",\n      \"RejectUser\": \"noi\",\n      \"CreateDate\": \"2024-10-03T11:20:42Z\",\n      \"CreateUser\": \"System\",\n      \"UpdateDate\": \"2024-11-26T14:39:43Z\",\n      \"UpdateUser\": \"noi\"\n    }\n  ]\n}", "history": [{"no": 1, "date": "26/06/2026", "desc": "Create"}]};
+let activeTab = "request";
+
+function escapeHtml(s) {
+  return s.replace(/&/g, '&amp;').replace(/</g, '&lt;').replace(/>/g, '&gt;');
+}
+
+function copyName(name, el) {
+  navigator.clipboard.writeText(name);
+  el.className = 'ti ti-check copy-icon';
+  el.style.color = 'var(--color-text-success)';
+  setTimeout(function () {
+    el.className = 'ti ti-copy copy-icon';
+    el.style.color = 'var(--color-text-tertiary)';
+  }, 1000);
+}
+
+function render() {
+  const groups = SCHEMA[activeTab];
+  const jsonBody = SCHEMA[activeTab + '_json'];
+  const q = document.getElementById('search').value.trim().toLowerCase();
+
+  let html = '<details class="json-details"><summary>JSON Body</summary><pre>' + escapeHtml(jsonBody) + '</pre></details>';
+
+  html += '<div class="sw"><table class="tbl"><thead><tr>';
+  html += '<th style="width:200px">Parameter</th><th style="width:120px">Type</th><th style="width:44px;text-align:center">O/M</th><th>Description</th>';
+  html += '</tr></thead><tbody>';
+
+  groups.forEach(function (g) {
+    const fields = g.fields.filter(function (f) {
+      return !q || f.name.toLowerCase().includes(q);
+    });
+    if (fields.length === 0) return;
+
+    html += '<tr class="sec-row"><td colspan="4">' + g.group + '</td></tr>';
+    fields.forEach(function (f) {
+      const om = f.om === 'M' ? '<span class="badge bm">M</span>' : '<span class="badge bo">O</span>';
+      const small = f.remark ? '<small>' + f.remark + '</small>' : '';
+      const newBadge = f.new ? '<span class="badge bn">New</span>' : '';
+      html += '<tr>';
+      html += '<td class="td-name">' + f.name + '<i class="ti ti-copy copy-icon" onclick="copyName(\'' + f.name + '\', this)"></i>' + newBadge + '</td>';
+      html += '<td><span class="type-badge">' + f.type + '</span></td>';
+      html += '<td class="td-om">' + om + '</td>';
+      html += '<td class="td-desc">' + f.desc + small + '</td>';
+      html += '</tr>';
+    });
+  });
+
+  html += '</tbody></table></div>';
+  document.getElementById('content').innerHTML = html || '<p style="color:var(--color-text-tertiary)">No matching parameters</p>';
+}
+
+function setTab(tab) {
+  activeTab = tab;
+  document.querySelectorAll('.tab').forEach(function (el) {
+    el.classList.toggle('active', el.getAttribute('data-tab') === tab);
+  });
+  render();
+}
+
+render();
+</script>
+</body>
+</html>
