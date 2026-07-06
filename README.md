@@ -6,6 +6,7 @@
 
 ## Challenge
 
+- [POST /Challenge/list](https://tthiraya.github.io/aglove-api-spec/API%20Spec/Challenge/list.html)
 - [POST /Challenge/quest/list](https://tthiraya.github.io/aglove-api-spec/API%20Spec/Challenge/quest-list.html)
 
 ## Company
