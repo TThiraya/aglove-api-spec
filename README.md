@@ -14,6 +14,10 @@
 - [POST /Company/active](https://tthiraya.github.io/aglove-api-spec/API%20Spec/Company/active.html)
 - [POST /Company/grid/full/list](https://tthiraya.github.io/aglove-api-spec/API%20Spec/Company/grid-full-list.html)
 
+## ComparePrice
+
+- [POST /ComparePrice/package/ext/search](https://tthiraya.github.io/aglove-api-spec/API%20Spec/ComparePrice/package-ext-search.html)
+
 ## Master
 
 - [POST /Master/occupation-type/sk-register/list](https://tthiraya.github.io/aglove-api-spec/API%20Spec/Master/occupation-type-sk-register-list.html)
