@@ -2,7 +2,7 @@
 <title>Flow บันทึกข้อมูลใบอนุญาต หลังแสดงข้อมูลสำเร็จ (ทุก Case)</title>
 <desc>แผนภาพแสดงขั้นตอนหลังจากแสดงข้อมูลใบอนุญาตสำเร็จไม่ว่าจะมาจาก Case ไหนก็ตาม ผู้ใช้กดปุ่มบันทึกข้อมูล ระบบจะเรียก API สร้างหรือบันทึกใบอนุญาตตามสถานะ แล้วปิด Dialog พร้อมรีเฟรชสถานะใหม่</desc>
 <style>
-  text{font-family:"TH Sarabun New",Thonburi,-apple-system,"Segoe UI",Roboto,Helvetica,Arial,sans-serif;fill:#0f172a;}
+  text{font-family:Ayuthaya,"TH Sarabun New",Thonburi,-apple-system,"Segoe UI",Roboto,Helvetica,Arial,sans-serif;fill:#0f172a;}
   .t{font-size:14px;}
   .ts{font-size:12px;fill:#5f5e5a;}
   .th{font-size:14px;font-weight:500;}

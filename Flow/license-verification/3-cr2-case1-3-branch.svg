@@ -2,7 +2,7 @@
 <title>CR-2 Flow ใหม่ — Case 1 ถึง Case 3 (หาแหล่งที่มาของเลขที่ใบอนุญาต)</title>
 <desc>แผนภาพแสดง fallback ที่เพิ่มเข้าไปใน checkAgentCard เมื่อ OIC license check ไม่มีข้อมูล ระบบจะไปเช็ค Agent profile license get หา LicenseID ที่ IsActive true ถ้าไม่เจอจะเปิด popup ให้กรอกเลขที่บัตรนายหน้าเอง ทั้งสองทางไปต่อที่การเรียก by-licenseno check</desc>
 <style>
-  text{font-family:"TH Sarabun New",Thonburi,-apple-system,"Segoe UI",Roboto,Helvetica,Arial,sans-serif;fill:#0f172a;}
+  text{font-family:Ayuthaya,"TH Sarabun New",Thonburi,-apple-system,"Segoe UI",Roboto,Helvetica,Arial,sans-serif;fill:#0f172a;}
   .t{font-size:14px;}
   .ts{font-size:12px;fill:#5f5e5a;}
   .th{font-size:14px;font-weight:500;}
