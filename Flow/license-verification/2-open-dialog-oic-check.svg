@@ -2,7 +2,7 @@
 <title>Flow เช็คใบอนุญาต OIC เมื่อผู้ใช้เปิด Dialog</title>
 <desc>แผนภาพแสดงขั้นตอนเมื่อผู้ใช้กดปุ่มยืนยันใบอนุญาต ระบบเปิด dialog และเรียก OIC license check เพื่อตรวจสอบข้อมูลใบอนุญาตของตัวเองจากเซสชัน แล้วแยกผลเป็นเจอหรือไม่เจอข้อมูล (พฤติกรรมเดิมก่อนเพิ่ม fallback)</desc>
 <style>
-  text{font-family:-apple-system,"Segoe UI",Roboto,Helvetica,Arial,sans-serif;fill:#0f172a;}
+  text{font-family:"TH Sarabun New",Thonburi,-apple-system,"Segoe UI",Roboto,Helvetica,Arial,sans-serif;fill:#0f172a;}
   .t{font-size:14px;}
   .ts{font-size:12px;fill:#5f5e5a;}
   .th{font-size:14px;font-weight:500;}
