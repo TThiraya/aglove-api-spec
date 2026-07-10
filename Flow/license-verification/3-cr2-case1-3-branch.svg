@@ -23,11 +23,12 @@
  <text class="ts" x="340" y="76" text-anchor="middle" dominant-baseline="central">มีข้อมูลไหม</text>
 </g>
 
-<path d="M 470 68 L 530 68 L 530 106" class="arr" marker-end="url(#arrow3)"/>
+<path d="M 470 68 L 530 68 L 530 100" class="arr" marker-end="url(#arrow3)"/>
 <text class="ts" x="500" y="58" text-anchor="middle" dominant-baseline="central">มี</text>
 <g class="c-teal">
- <rect x="430" y="106" width="200" height="44" rx="8"/>
- <text class="th" x="530" y="128" text-anchor="middle" dominant-baseline="central">แสดงข้อมูล · จบ</text>
+ <rect x="420" y="100" width="220" height="56" rx="8"/>
+ <text class="th" x="530" y="118" text-anchor="middle" dominant-baseline="central">แสดงข้อมูล</text>
+ <text class="ts" x="530" y="136" text-anchor="middle" dominant-baseline="central">ไปต่อที่บันทึก</text>
 </g>
 
 <line x1="340" y1="96" x2="340" y2="166" class="arr" marker-end="url(#arrow3)"/>

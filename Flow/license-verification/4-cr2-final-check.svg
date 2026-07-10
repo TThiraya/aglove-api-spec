@@ -38,8 +38,9 @@
 <text class="ts" x="418" y="228" text-anchor="middle" dominant-baseline="central">ไม่เจอ</text>
 
 <g class="c-teal">
- <rect x="90" y="280" width="210" height="44" rx="8"/>
- <text class="th" x="195" y="302" text-anchor="middle" dominant-baseline="central">แสดงข้อมูล · จบ</text>
+ <rect x="90" y="280" width="210" height="56" rx="8"/>
+ <text class="th" x="195" y="298" text-anchor="middle" dominant-baseline="central">แสดงข้อมูล</text>
+ <text class="ts" x="195" y="316" text-anchor="middle" dominant-baseline="central">ไปต่อที่บันทึก</text>
 </g>
 
 <g class="c-coral">
