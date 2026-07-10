@@ -1,0 +1,73 @@
+<svg width="680" height="600" viewBox="0 0 680 600" xmlns="http://www.w3.org/2000/svg" role="img">
+<title>CR-2 Flow ใหม่ — Case 1 ถึง Case 3 (หาแหล่งที่มาของเลขที่ใบอนุญาต)</title>
+<desc>แผนภาพแสดง fallback ที่เพิ่มเข้าไปใน checkAgentCard เมื่อ OIC license check ไม่มีข้อมูล ระบบจะไปเช็ค Agent profile license get หา LicenseID ที่ IsActive true ถ้าไม่เจอจะเปิด popup ให้กรอกเลขที่บัตรนายหน้าเอง ทั้งสองทางไปต่อที่การเรียก by-licenseno check</desc>
+<style>
+  text{font-family:-apple-system,"Segoe UI",Roboto,Helvetica,Arial,sans-serif;fill:#0f172a;}
+  .t{font-size:14px;}
+  .ts{font-size:12px;fill:#5f5e5a;}
+  .th{font-size:14px;font-weight:500;}
+  .arr{stroke:#5f5e5a;stroke-width:1.5;fill:none;}
+  .c-gray rect{fill:#F1EFE8;stroke:#888780;}
+  .c-gray text{fill:#2C2C2A;}
+  .c-blue rect{fill:#E6F1FB;stroke:#378ADD;}
+  .c-blue .th{fill:#0C447C;}
+  .c-blue .ts{fill:#185FA5;}
+  .c-teal rect{fill:#E1F5EE;stroke:#1D9E75;}
+  .c-teal .th{fill:#085041;}
+</style>
+<defs><marker id="arrow3" viewBox="0 0 10 10" refX="8" refY="5" markerWidth="6" markerHeight="6" orient="auto-start-reverse"><path d="M2 1L8 5L2 9" fill="none" stroke="#5f5e5a" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/></marker></defs>
+
+<g class="c-gray">
+ <rect x="210" y="40" width="260" height="56" rx="8"/>
+ <text class="th" x="340" y="58" text-anchor="middle" dominant-baseline="central">Case 1: /OIC/license/check</text>
+ <text class="ts" x="340" y="76" text-anchor="middle" dominant-baseline="central">มีข้อมูลไหม</text>
+</g>
+
+<path d="M 470 68 L 530 68 L 530 106" class="arr" marker-end="url(#arrow3)"/>
+<text class="ts" x="500" y="58" text-anchor="middle" dominant-baseline="central">มี</text>
+<g class="c-teal">
+ <rect x="430" y="106" width="200" height="44" rx="8"/>
+ <text class="th" x="530" y="128" text-anchor="middle" dominant-baseline="central">แสดงข้อมูล · จบ</text>
+</g>
+
+<line x1="340" y1="96" x2="340" y2="166" class="arr" marker-end="url(#arrow3)"/>
+<text class="ts" x="300" y="130" text-anchor="middle" dominant-baseline="central">ไม่มี</text>
+
+<g class="c-blue">
+ <rect x="210" y="166" width="260" height="56" rx="8"/>
+ <text class="th" x="340" y="184" text-anchor="middle" dominant-baseline="central">Case 2: เรียก</text>
+ <text class="ts" x="340" y="202" text-anchor="middle" dominant-baseline="central">/Agent/profile/license/get</text>
+</g>
+<line x1="340" y1="222" x2="340" y2="292" class="arr" marker-end="url(#arrow3)"/>
+
+<g class="c-gray">
+ <rect x="210" y="292" width="260" height="44" rx="8"/>
+ <text class="th" x="340" y="314" text-anchor="middle" dominant-baseline="central">เจอ IsActive: true ไหม</text>
+</g>
+
+<path d="M 340 336 L 340 366 L 195 366 L 195 406" class="arr" marker-end="url(#arrow3)"/>
+<path d="M 340 336 L 340 366 L 495 366 L 495 406" class="arr" marker-end="url(#arrow3)"/>
+<text class="ts" x="268" y="354" text-anchor="middle" dominant-baseline="central">เจอ</text>
+<text class="ts" x="418" y="354" text-anchor="middle" dominant-baseline="central">ไม่เจอ</text>
+
+<g class="c-blue">
+ <rect x="90" y="406" width="210" height="56" rx="8"/>
+ <text class="th" x="195" y="424" text-anchor="middle" dominant-baseline="central">ดึง LicenseID</text>
+ <text class="ts" x="195" y="442" text-anchor="middle" dominant-baseline="central">จาก item ที่ Active</text>
+</g>
+
+<g class="c-gray">
+ <rect x="390" y="406" width="210" height="56" rx="8"/>
+ <text class="th" x="495" y="424" text-anchor="middle" dominant-baseline="central">Case 3: เปิด Popup</text>
+ <text class="ts" x="495" y="442" text-anchor="middle" dominant-baseline="central">กรอกเลขบัตรนายหน้าเอง</text>
+</g>
+
+<path d="M 195 462 L 195 482 L 340 482 L 340 502" class="arr" marker-end="url(#arrow3)"/>
+<path d="M 495 462 L 495 482 L 340 482 L 340 502" class="arr" marker-end="url(#arrow3)"/>
+
+<g class="c-gray">
+ <rect x="210" y="502" width="260" height="56" rx="8" stroke-dasharray="4 3"/>
+ <text class="ts" x="340" y="520" text-anchor="middle" dominant-baseline="central">ไปต่อที่</text>
+ <text class="ts" x="340" y="538" text-anchor="middle" dominant-baseline="central">/OIC/license/by-licenseno/check</text>
+</g>
+</svg>
