@@ -1,0 +1,179 @@
+<!DOCTYPE html>
+<html lang="th">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>POST /Customer/grid/customer/by-owner/list</title>
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/tabler-icons/3.35.0/tabler-icons.min.css">
+<style>
+  :root {
+    --color-background-primary: #ffffff;
+    --color-background-secondary: #f4f3ef;
+    --color-background-tertiary: #ebe9e1;
+    --color-text-primary: #0f172a;
+    --color-text-secondary: #5f5e5a;
+    --color-text-tertiary: #888780;
+    --color-text-success: #0f6e56;
+    --color-border-tertiary: rgba(15,23,42,.15);
+    --color-border-secondary: rgba(15,23,42,.3);
+    --font-sans: -apple-system, "Segoe UI", Roboto, Helvetica, Arial, sans-serif;
+    --font-mono: ui-monospace, SFMono-Regular, Menlo, Consolas, monospace;
+    --border-radius-md: 8px;
+    --border-radius-lg: 12px;
+  }
+  @media (prefers-color-scheme: dark) {
+    :root {
+      --color-background-primary: #1c1c1a;
+      --color-background-secondary: #2c2c2a;
+      --color-background-tertiary: #383836;
+      --color-text-primary: #f1efe8;
+      --color-text-secondary: #b4b2a9;
+      --color-text-tertiary: #888780;
+      --color-text-success: #5dcaa5;
+      --color-border-tertiary: rgba(255,255,255,.15);
+      --color-border-secondary: rgba(255,255,255,.3);
+    }
+  }
+  * { box-sizing: border-box; }
+  body {
+    margin: 0; padding: 24px; font-family: var(--font-sans);
+    background: var(--color-background-primary); color: var(--color-text-primary);
+    font-size: 14px; line-height: 1.6;
+  }
+  h1 { font-size: 20px; font-weight: 500; margin: 0 0 4px; }
+  .endpoint { font-family: var(--font-mono); font-size: 14px; color: var(--color-text-secondary); margin: 0 0 16px; }
+  .method { display: inline-block; font-size: 12px; font-weight: 500; padding: 2px 8px; border-radius: var(--border-radius-md); background: #E6F1FB; color: #0C447C; font-family: var(--font-mono); margin-right: 8px; }
+  .hints { background: var(--color-background-secondary); border-radius: var(--border-radius-md); padding: 12px 16px; margin-bottom: 20px; font-size: 13px; }
+  .hints p { margin: 0 0 6px; font-weight: 500; }
+  .hints ul { margin: 0; padding-left: 20px; }
+  .hints li { margin-bottom: 4px; color: var(--color-text-secondary); }
+  .hist-tbl { border-collapse: collapse; font-size: 12px; margin-top: 4px; }
+  .hist-tbl th, .hist-tbl td { padding: 4px 10px; text-align: left; border: 0.5px solid var(--color-border-tertiary); }
+  .hist-tbl th { font-weight: 500; color: var(--color-text-secondary); }
+  .hist-tbl td { color: var(--color-text-secondary); }
+  .toolbar { display: flex; align-items: center; gap: 8px; margin-bottom: 16px; }
+  .tab { cursor: pointer; padding: 6px 14px; border-radius: var(--border-radius-md); border: 0.5px solid var(--color-border-tertiary); font-size: 13px; font-weight: 500; }
+  .tab.active { background: var(--color-background-secondary); border-color: var(--color-border-secondary); }
+  input[type=text] {
+    padding: 6px 10px 6px 30px; border-radius: var(--border-radius-md); border: 0.5px solid var(--color-border-tertiary);
+    background: var(--color-background-primary); color: var(--color-text-primary); font-size: 13px; width: 220px;
+  }
+  .search-wrap { position: relative; }
+  .search-wrap i { position: absolute; left: 10px; top: 50%; transform: translateY(-50%); font-size: 14px; color: var(--color-text-tertiary); }
+
+  .sw { padding: 1.5rem 0; font-family: var(--font-sans); }
+  .sw-label { font-size: 11px; font-weight: 500; color: var(--color-text-secondary); text-transform: uppercase; letter-spacing: .06em; margin: 0 0 12px; }
+  .tbl { width: 100%; border-collapse: collapse; border-radius: var(--border-radius-lg); overflow: hidden; border: 0.5px solid var(--color-border-tertiary); }
+  .tbl thead th { font-size: 11px; font-weight: 500; color: var(--color-text-secondary); text-transform: uppercase; letter-spacing: .06em; padding: 8px 14px; background: var(--color-background-secondary); border-bottom: 0.5px solid var(--color-border-secondary); text-align: left; }
+  .tbl tbody tr { border-bottom: 0.5px solid var(--color-border-tertiary); }
+  .tbl tbody tr:last-child { border-bottom: none; }
+  .tbl tbody tr:hover { background: var(--color-background-secondary); }
+  .tbl td { padding: 9px 14px; font-size: 13px; vertical-align: middle; }
+  .td-name { font-family: var(--font-mono); font-size: 12px; font-weight: 500; color: var(--color-text-primary); white-space: nowrap; }
+  .td-name.indent { padding-left: 28px; }
+  .copy-icon { cursor: pointer; font-size: 14px; color: var(--color-text-tertiary); margin-left: 6px; vertical-align: -2px; }
+  .type-badge { display: inline-block; font-size: 11px; font-weight: 500; padding: 2px 8px; border-radius: var(--border-radius-md); border: 0.5px solid var(--color-border-tertiary); color: var(--color-text-secondary); font-family: var(--font-mono); }
+  .td-desc { color: var(--color-text-primary); font-size: 13px; }
+  .td-desc small { display: block; font-size: 11px; color: var(--color-text-secondary); margin-top: 2px; }
+  .td-om { text-align: center; white-space: nowrap; }
+  .badge { font-size: 11px; font-weight: 500; padding: 2px 8px; border-radius: 99px; }
+  .bm { background: #E6F1FB; color: #0C447C; }
+  .bo { background: #F1EFE8; color: #444441; }
+  .bn { background: #FCE8D6; color: #9A4B0C; margin-left: 6px; }
+  .sec-row td { font-size: 11px; font-weight: 500; color: var(--color-text-secondary); text-transform: uppercase; letter-spacing: .04em; background: var(--color-background-secondary); padding: 6px 14px; border-bottom: 0.5px solid var(--color-border-secondary); }
+  @media (prefers-color-scheme: dark) { .bm { background: #0C447C; color: #B5D4F4; } .bo { background: #444441; color: #D3D1C7; } .bn { background: #5C3317; color: #FFD9B3; } }
+  .json-details { margin-bottom: 16px; }
+  .json-details summary { cursor: pointer; font-size: 13px; font-weight: 500; padding: 8px 14px; border-radius: var(--border-radius-md); border: 0.5px solid var(--color-border-tertiary); background: var(--color-background-secondary); }
+  .json-details pre { margin: 8px 0 0; padding: 12px 14px; border-radius: var(--border-radius-md); border: 0.5px solid var(--color-border-tertiary); background: var(--color-background-secondary); font-family: var(--font-mono); font-size: 12px; overflow-x: auto; }
+</style>
+</head>
+<body>
+  <h1>POST /Customer/grid/customer/by-owner/list</h1>
+  <p class="endpoint"><span class="method">POST</span>/Customer/grid/customer/by-owner/list</p>
+  <div class="hints">
+    <p>ข้อควรรู้</p>
+    <ul><li>Grid API (DataTables-style) สำหรับดึงรายชื่อลูกค้าตามเจ้าของ (Owner) — ใช้ Bearer token จาก AGLove API Auth</li><li>Filter รองรับโครงสร้าง array ซ้อน 2 ชั้น [[ {Field, Operator, Value} ]] เพื่อจัดกลุ่มเงื่อนไข</li><li>columns.data ต้องตรงกับชื่อ field ฝั่ง response (เช่น ID, CustomerID, IDCard, FirstName, LastName, ProvinceName) เพื่อใช้ map คอลัมน์/เรียงลำดับ</li><li>CustomerType: I = นิติบุคคล (บริษัท), P = บุคคลธรรมดา</li><li>แต่ละแถวมีข้อมูลที่อยู่ปัจจุบัน (AddressType=CURRENT) และข้อมูลคำสั่งซื้อ/กรมธรรม์ล่าสุดของลูกค้าคนนั้นแนบมาด้วย (OrderNo, OrderType, CarLicense, PackageCode)</li></ul>
+    <p style="margin-top:10px">ประวัติการสร้าง/อัปเดต Spec</p><table class="hist-tbl"><tr><th>ครั้งที่</th><th>วันที่</th><th>รายละเอียด</th></tr><tr><td>1</td><td>14/07/2026</td><td>Create</td></tr></table>
+  </div>
+  <div class="toolbar">
+    <div class="tab active" data-tab="request" onclick="setTab('request')">Request</div>
+    <div class="tab" data-tab="response" onclick="setTab('response')">Response</div>
+    <div style="flex:1"></div>
+    <div class="search-wrap">
+      <i class="ti ti-search"></i>
+      <input type="text" id="search" placeholder="Filter parameter..." oninput="render()">
+    </div>
+  </div>
+  <div id="content"></div>
+
+  <div style="display:flex;gap:16px;margin-top:12px;font-size:12px;color:var(--color-text-secondary);align-items:center">
+    <span style="display:flex;align-items:center;gap:6px"><span class="badge bm">M</span>Mandatory</span>
+    <span style="display:flex;align-items:center;gap:6px"><span class="badge bo">O</span>Optional</span>
+    <span style="display:flex;align-items:center;gap:6px"><span class="badge bn">New</span>Field ที่เพิ่มใหม่จากเวอร์ชันก่อนหน้า</span>
+  </div>
+
+<script>
+const SCHEMA = {"request": [{"group": "Request Body", "fields": [{"name": "draw", "type": "int", "om": "M", "desc": "ตัวเลขนับรอบ request ของ DataTables (server จะส่งค่าเดิมกลับมาเพื่อตรวจสอบ)", "remark": "", "new": false}, {"name": "start", "type": "int", "om": "M", "desc": "ตำแหน่งแถวเริ่มต้น (สำหรับ pagination)", "remark": "", "new": false}, {"name": "length", "type": "int", "om": "M", "desc": "จำนวนรายการต่อหน้า", "remark": "", "new": false}, {"name": "order", "type": "Array", "om": "M", "desc": "เงื่อนไขการเรียงลำดับของตาราง", "remark": "", "new": false}, {"name": "columns", "type": "Array", "om": "M", "desc": "รายการคอลัมน์ของตาราง (DataTables)", "remark": "", "new": false}, {"name": "Filter", "type": "Array", "om": "M", "desc": "เงื่อนไขกรองข้อมูลของตาราง (array ของเงื่อนไข)", "remark": "", "new": false}]}, {"group": "order[]", "fields": [{"name": "column", "type": "int", "om": "M", "desc": "ลำดับ index ของคอลัมน์ที่ใช้เรียงลำดับ", "remark": "", "new": false}, {"name": "dir", "type": "string", "om": "M", "desc": "ทิศทางการเรียงลำดับ (asc/desc)", "remark": "", "new": false}]}, {"group": "columns[]", "fields": [{"name": "data", "type": "string", "om": "M", "desc": "ชื่อฟิลด์ของคอลัมน์ (ใช้คู่กับ columns)", "remark": "", "new": false}]}, {"group": "Filter[]", "fields": [{"name": "Field", "type": "string", "om": "M", "desc": "ชื่อฟิลด์ที่ต้องการกรอง", "remark": "", "new": false}, {"name": "Operator", "type": "string", "om": "M", "desc": "ตัวดำเนินการเปรียบเทียบ (เช่น =, LIKE)", "remark": "", "new": false}, {"name": "Value", "type": "string", "om": "M", "desc": "ค่าที่ใช้กรอง", "remark": "", "new": false}]}], "response": [{"group": "Response Body", "fields": [{"name": "status", "type": "int", "om": "M", "desc": "status", "remark": "", "new": false}, {"name": "draw", "type": "int", "om": "M", "desc": "ตัวเลขนับรอบ request ของ DataTables (server จะส่งค่าเดิมกลับมาเพื่อตรวจสอบ)", "remark": "", "new": false}, {"name": "recordsTotal", "type": "int", "om": "M", "desc": "จำนวนรายการทั้งหมดในตาราง", "remark": "", "new": false}, {"name": "recordsFiltered", "type": "int", "om": "M", "desc": "จำนวนรายการหลังกรองเงื่อนไข", "remark": "", "new": false}, {"name": "data", "type": "Array", "om": "M", "desc": "ชื่อฟิลด์ของคอลัมน์ (ใช้คู่กับ columns)", "remark": "", "new": false}]}, {"group": "data[]", "fields": [{"name": "Ind", "type": "int", "om": "M", "desc": "ลำดับแถวในผลลัพธ์ (Index)", "remark": "", "new": false}, {"name": "ID", "type": "GUID", "om": "M", "desc": "รหัสอ้างอิง (GUID)", "remark": "GUID", "new": false}, {"name": "CustomerID", "type": "GUID", "om": "M", "desc": "รหัสลูกค้า (GUID)", "remark": "GUID", "new": false}, {"name": "CustomerType", "type": "string", "om": "M", "desc": "ประเภทลูกค้า (I=นิติบุคคล, P=บุคคลธรรมดา)", "remark": "", "new": false}, {"name": "PrefixID", "type": "GUID", "om": "M", "desc": "รหัสคำนำหน้าชื่อ", "remark": "GUID", "new": false}, {"name": "PrefixCode", "type": "string", "om": "M", "desc": "รหัสคำนำหน้า (Code)", "remark": "", "new": false}, {"name": "PrefixName", "type": "string", "om": "M", "desc": "ชื่อคำนำหน้า", "remark": "", "new": false}, {"name": "FirstName", "type": "string", "om": "M", "desc": "ชื่อ", "remark": "", "new": false}, {"name": "MidName", "type": "string", "om": "O", "desc": "ชื่อกลาง", "remark": "", "new": false}, {"name": "LastName", "type": "string", "om": "M", "desc": "นามสกุล", "remark": "", "new": false}, {"name": "FirstNameEn", "type": "string", "om": "O", "desc": "ชื่อ (ภาษาอังกฤษ)", "remark": "", "new": false}, {"name": "MidNameEn", "type": "string", "om": "O", "desc": "ชื่อกลาง (ภาษาอังกฤษ)", "remark": "", "new": false}, {"name": "LastNameEn", "type": "string", "om": "O", "desc": "นามสกุล (ภาษาอังกฤษ)", "remark": "", "new": false}, {"name": "IDCard", "type": "string", "om": "M", "desc": "เลขบัตรประชาชน", "remark": "13 หลัก", "new": false}, {"name": "Passport", "type": "string", "om": "O", "desc": "เลขที่หนังสือเดินทาง", "remark": "", "new": false}, {"name": "Tel1", "type": "string", "om": "M", "desc": "เบอร์โทรศัพท์หลัก", "remark": "", "new": false}, {"name": "Tel2", "type": "string", "om": "O", "desc": "เบอร์โทรศัพท์สำรอง", "remark": "", "new": false}, {"name": "Tel3", "type": "string", "om": "O", "desc": "เบอร์โทรศัพท์สำรอง 2", "remark": "", "new": false}, {"name": "Email", "type": "string", "om": "M", "desc": "อีเมล", "remark": "", "new": false}, {"name": "BirthDate", "type": "DateTime", "om": "O", "desc": "วันเกิด", "remark": "รูปแบบ DateTime", "new": false}, {"name": "Gender", "type": "string", "om": "O", "desc": "เพศ (M/F)", "remark": "", "new": false}, {"name": "NationalityID", "type": "GUID", "om": "O", "desc": "รหัสสัญชาติ (GUID) — resolve จาก Master nationality", "remark": "GUID", "new": false}, {"name": "NationalityCode", "type": "string", "om": "O", "desc": "รหัสสัญชาติ (Code)", "remark": "", "new": false}, {"name": "ProvinceID", "type": "GUID", "om": "M", "desc": "รหัสจังหวัด (GUID) — resolve จาก POST /Master/province/List", "remark": "GUID", "new": false}, {"name": "DistrictID", "type": "GUID", "om": "M", "desc": "รหัสอำเภอ (GUID) — resolve จาก POST /Master/v1/district/list", "remark": "GUID", "new": false}, {"name": "SubDistrictID", "type": "GUID", "om": "M", "desc": "รหัสตำบล (GUID) — resolve จาก POST /Master/v1/subdistrict/list", "remark": "GUID", "new": false}, {"name": "ProvinceCode", "type": "string", "om": "M", "desc": "รหัสจังหวัด (Code)", "remark": "", "new": false}, {"name": "DistrictCode", "type": "string", "om": "M", "desc": "รหัสอำเภอ (Code)", "remark": "", "new": false}, {"name": "SubDistrictCode", "type": "string", "om": "M", "desc": "รหัสตำบล (Code)", "remark": "", "new": false}, {"name": "ZipCode", "type": "string", "om": "M", "desc": "รหัสไปรษณีย์ — ระบบ derive จาก SubDistrictID อัตโนมัติ", "remark": "", "new": false}, {"name": "PVCODE", "type": "string", "om": "M", "desc": "รหัสรวมตำบล (Province+SubDistrict Code)", "remark": "", "new": false}, {"name": "ProvinceName", "type": "string", "om": "M", "desc": "ชื่อจังหวัด", "remark": "", "new": false}, {"name": "DistrictName", "type": "string", "om": "M", "desc": "ชื่ออำเภอ", "remark": "", "new": false}, {"name": "SubDistrictName", "type": "string", "om": "M", "desc": "ชื่อตำบล", "remark": "", "new": false}, {"name": "No", "type": "string", "om": "M", "desc": "บ้านเลขที่", "remark": "", "new": false}, {"name": "Moo", "type": "string", "om": "O", "desc": "หมู่", "remark": "", "new": false}, {"name": "Alley", "type": "string", "om": "M", "desc": "ซอย", "remark": "", "new": false}, {"name": "Road", "type": "string", "om": "M", "desc": "ถนน", "remark": "", "new": false}, {"name": "Building", "type": "string", "om": "M", "desc": "อาคาร", "remark": "", "new": false}, {"name": "Floor", "type": "string", "om": "M", "desc": "ชั้น", "remark": "", "new": false}, {"name": "Room", "type": "string", "om": "O", "desc": "ห้อง", "remark": "", "new": false}, {"name": "Place", "type": "string", "om": "O", "desc": "หมู่บ้าน/สถานที่", "remark": "", "new": false}, {"name": "Branch", "type": "string", "om": "M", "desc": "สาขา", "remark": "", "new": false}, {"name": "AddressLine1", "type": "string", "om": "O", "desc": "ที่อยู่บรรทัดที่ 1", "remark": "", "new": false}, {"name": "AddressLine2", "type": "string", "om": "O", "desc": "ที่อยู่บรรทัดที่ 2", "remark": "", "new": false}, {"name": "AddressText", "type": "string", "om": "O", "desc": "ที่อยู่แบบข้อความเต็ม", "remark": "", "new": false}, {"name": "AddressName", "type": "string", "om": "M", "desc": "ชื่อที่อยู่ (เช่น CURRENT)", "remark": "", "new": false}, {"name": "AddressType", "type": "string", "om": "M", "desc": "ประเภทที่อยู่ (CURRENT/DELIVERY)", "remark": "", "new": false}, {"name": "AddressPhoneNumber", "type": "string", "om": "M", "desc": "เบอร์โทรศัพท์ประจำที่อยู่นี้", "remark": "", "new": false}, {"name": "OrderNo", "type": "string", "om": "M", "desc": "เลขที่คำสั่งซื้อ", "remark": "", "new": false}, {"name": "OrderType", "type": "string", "om": "M", "desc": "ประเภทคำสั่งซื้อ (เช่น COMPULSORY)", "remark": "", "new": false}, {"name": "CarLicense", "type": "string", "om": "M", "desc": "ทะเบียนรถ", "remark": "", "new": false}, {"name": "PackageCode", "type": "string", "om": "O", "desc": "รหัสแพ็กเกจ", "remark": "", "new": false}]}], "request_json": "{\n  \"draw\": 1,\n  \"start\": 0,\n  \"length\": 2,\n  \"order\": [\n    {\n      \"column\": 5,\n      \"dir\": \"asc\"\n    }\n  ],\n  \"columns\": [\n    {\n      \"data\": \"ID\"\n    },\n    {\n      \"data\": \"CustomerID\"\n    },\n    {\n      \"data\": \"IDCard\"\n    },\n    {\n      \"data\": \"FirstName\"\n    },\n    {\n      \"data\": \"LastName\"\n    },\n    {\n      \"data\": \"ProvinceName\"\n    }\n  ],\n  \"Filter\": [\n    [\n      {\n        \"Field\": \"IDCard\",\n        \"Operator\": \"=\",\n        \"Value\": \"1100400284852\"\n      }\n    ]\n  ]\n}", "response_json": "{\n  \"status\": 200,\n  \"draw\": 1,\n  \"recordsTotal\": 102,\n  \"recordsFiltered\": 102,\n  \"data\": [\n    {\n      \"Ind\": 1,\n      \"ID\": \"FE035A9F7A90445F935EFAB593F2A3F6\",\n      \"CustomerID\": \"9E2B6F296D884B728350F0CE9EB57727\",\n      \"CustomerType\": \"I\",\n      \"PrefixID\": \"52FF86FFBBAB4C7C80D56EC3893D0D99\",\n      \"PrefixCode\": \"900\",\n      \"PrefixName\": \"บริษัทจำกัด\",\n      \"FirstName\": \"กิจการ\",\n      \"MidName\": \"\",\n      \"LastName\": \"จำกัด\",\n      \"FirstNameEn\": \"\",\n      \"MidNameEn\": \"\",\n      \"LastNameEn\": \"\",\n      \"IDCard\": \"0000000000001\",\n      \"Passport\": \"\",\n      \"Tel1\": \"0812345678\",\n      \"Tel2\": \"\",\n      \"Tel3\": \"\",\n      \"Email\": \"Somchai@gmail.com\",\n      \"BirthDate\": \"\",\n      \"Gender\": \"\",\n      \"NationalityID\": null,\n      \"NationalityCode\": \"\",\n      \"ProvinceID\": \"580AEA9CA5BD4210BFA83B6AA4CF357B\",\n      \"DistrictID\": \"016D19BAACB147F289955BA15319E1E0\",\n      \"SubDistrictID\": \"46B7475469DA4FB3B1FB02867EAA7153\",\n      \"ProvinceCode\": \"01\",\n      \"DistrictCode\": \"02\",\n      \"SubDistrictCode\": \"0102\",\n      \"ZipCode\": \"81120\",\n      \"PVCODE\": \"0102\",\n      \"ProvinceName\": \"กระบี่\",\n      \"DistrictName\": \"อำเภอเกาะลันตา\",\n      \"SubDistrictName\": \"ตำบลคลองยาง\",\n      \"No\": \"200\",\n      \"Moo\": \"\",\n      \"Alley\": \"ซอย\",\n      \"Road\": \"ถนน\",\n      \"Building\": \"ตึก\",\n      \"Floor\": \"ชั้น\",\n      \"Room\": null,\n      \"Place\": null,\n      \"Branch\": \"ตรอก\",\n      \"AddressLine1\": \"\",\n      \"AddressLine2\": \"\",\n      \"AddressText\": \"\",\n      \"AddressName\": \"CURRENT\",\n      \"AddressType\": \"CURRENT\",\n      \"AddressPhoneNumber\": \"0812345678\",\n      \"OrderNo\": \"AMC2602000021\",\n      \"OrderType\": \"COMPULSORY\",\n      \"CarLicense\": \"1กข-1234\",\n      \"PackageCode\": null\n    },\n    {\n      \"Ind\": 2,\n      \"ID\": \"0BAA55BDAB484868BA1E5DD893179BAF\",\n      \"CustomerID\": \"A2EFB08D2A174AA49B77E7269E9B16CB\",\n      \"CustomerType\": \"P\",\n      \"PrefixID\": \"F3975B7444CE453A810DA8F92260CAB9\",\n      \"PrefixCode\": \"001\",\n      \"PrefixName\": \"นาย\",\n      \"FirstName\": \"สมชาย\",\n      \"MidName\": \"\",\n      \"LastName\": \"ใจดี\",\n      \"FirstNameEn\": \"\",\n      \"MidNameEn\": \"\",\n      \"LastNameEn\": \"\",\n      \"IDCard\": \"0000000000001\",\n      \"Passport\": null,\n      \"Tel1\": \"0812345678\",\n      \"Tel2\": \"\",\n      \"Tel3\": \"\",\n      \"Email\": \"\",\n      \"BirthDate\": \"1997-02-01T00:00:00Z\",\n      \"Gender\": \"M\",\n      \"NationalityID\": \"62ED0829703B4E589A2A63C740B88155\",\n      \"NationalityCode\": \"36\",\n      \"ProvinceID\": \"74A02FB676204F39941587CA1EA14093\",\n      \"DistrictID\": \"9B609F20AB0B46419AC65E92A257EADC\",\n      \"SubDistrictID\": \"50BED14A92A341A8B256230DE407E956\",\n      \"ProvinceCode\": \"00\",\n      \"DistrictCode\": \"25\",\n      \"SubDistrictCode\": \"0057\",\n      \"ZipCode\": \"10110\",\n      \"PVCODE\": \"0057\",\n      \"ProvinceName\": \"กรุงเทพมหานคร\",\n      \"DistrictName\": \"เขตคลองเตย\",\n      \"SubDistrictName\": \"แขวงคลองตัน\",\n      \"No\": \"200\",\n      \"Moo\": \"\",\n      \"Alley\": \"ซอย\",\n      \"Road\": \" ถนน\",\n      \"Building\": \"คอนโด/อาคาร\",\n      \"Floor\": \"ชั้น\",\n      \"Room\": null,\n      \"Place\": null,\n      \"Branch\": \"ตรอก/แยก\",\n      \"AddressLine1\": \"\",\n      \"AddressLine2\": \"\",\n      \"AddressText\": \"\",\n      \"AddressName\": \"CURRENT\",\n      \"AddressType\": \"CURRENT\",\n      \"AddressPhoneNumber\": \"0812345678\",\n      \"OrderNo\": \"AMC2602000042\",\n      \"OrderType\": \"COMPULSORY\",\n      \"CarLicense\": \"1กข-1234\",\n      \"PackageCode\": null\n    }\n  ]\n}", "history": [{"no": 1, "date": "14/07/2026", "desc": "Create"}]};
+let activeTab = "request";
+
+function escapeHtml(s) {
+  return s.replace(/&/g, '&amp;').replace(/</g, '&lt;').replace(/>/g, '&gt;');
+}
+
+function copyName(name, el) {
+  navigator.clipboard.writeText(name);
+  el.className = 'ti ti-check copy-icon';
+  el.style.color = 'var(--color-text-success)';
+  setTimeout(function () {
+    el.className = 'ti ti-copy copy-icon';
+    el.style.color = 'var(--color-text-tertiary)';
+  }, 1000);
+}
+
+function render() {
+  const groups = SCHEMA[activeTab];
+  const jsonBody = SCHEMA[activeTab + '_json'];
+  const q = document.getElementById('search').value.trim().toLowerCase();
+
+  let html = '<details class="json-details"><summary>JSON Body</summary><pre>' + escapeHtml(jsonBody) + '</pre></details>';
+
+  html += '<div class="sw"><table class="tbl"><thead><tr>';
+  html += '<th style="width:200px">Parameter</th><th style="width:120px">Type</th><th style="width:44px;text-align:center">O/M</th><th>Description</th>';
+  html += '</tr></thead><tbody>';
+
+  groups.forEach(function (g) {
+    const fields = g.fields.filter(function (f) {
+      return !q || f.name.toLowerCase().includes(q);
+    });
+    if (fields.length === 0) return;
+
+    html += '<tr class="sec-row"><td colspan="4">' + g.group + '</td></tr>';
+    fields.forEach(function (f) {
+      const om = f.om === 'M' ? '<span class="badge bm">M</span>' : '<span class="badge bo">O</span>';
+      const small = f.remark ? '<small>' + f.remark + '</small>' : '';
+      const newBadge = f.new ? '<span class="badge bn">New</span>' : '';
+      html += '<tr>';
+      html += '<td class="td-name">' + f.name + '<i class="ti ti-copy copy-icon" onclick="copyName(\'' + f.name + '\', this)"></i>' + newBadge + '</td>';
+      html += '<td><span class="type-badge">' + f.type + '</span></td>';
+      html += '<td class="td-om">' + om + '</td>';
+      html += '<td class="td-desc">' + f.desc + small + '</td>';
+      html += '</tr>';
+    });
+  });
+
+  html += '</tbody></table></div>';
+  document.getElementById('content').innerHTML = html || '<p style="color:var(--color-text-tertiary)">No matching parameters</p>';
+}
+
+function setTab(tab) {
+  activeTab = tab;
+  document.querySelectorAll('.tab').forEach(function (el) {
+    el.classList.toggle('active', el.getAttribute('data-tab') === tab);
+  });
+  render();
+}
+
+render();
+</script>
+</body>
+</html>

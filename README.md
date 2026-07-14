@@ -18,6 +18,10 @@
 
 - [POST /ComparePrice/package/ext/search](https://tthiraya.github.io/aglove-api-spec/API%20Spec/ComparePrice/package-ext-search.html)
 
+## Customer
+
+- [POST /Customer/grid/customer/by-owner/list](https://tthiraya.github.io/aglove-api-spec/API%20Spec/Customer/grid-customer-by-owner-list.html)
+
 ## Master
 
 - [POST /Master/occupation-type/sk-register/list](https://tthiraya.github.io/aglove-api-spec/API%20Spec/Master/occupation-type-sk-register-list.html)
