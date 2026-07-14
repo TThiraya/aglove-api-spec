@@ -21,6 +21,7 @@
 ## Customer
 
 - [POST /Customer/grid/customer/by-owner/list](https://tthiraya.github.io/aglove-api-spec/API%20Spec/Customer/grid-customer-by-owner-list.html)
+- [POST /Customer/search](https://tthiraya.github.io/aglove-api-spec/API%20Spec/Customer/search.html)
 
 ## Master
 
