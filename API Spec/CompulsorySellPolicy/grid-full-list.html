@@ -1,0 +1,179 @@
+<!DOCTYPE html>
+<html lang="th">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>POST /CompulsorySellPolicy/grid/full/list</title>
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/tabler-icons/3.35.0/tabler-icons.min.css">
+<style>
+  :root {
+    --color-background-primary: #ffffff;
+    --color-background-secondary: #f4f3ef;
+    --color-background-tertiary: #ebe9e1;
+    --color-text-primary: #0f172a;
+    --color-text-secondary: #5f5e5a;
+    --color-text-tertiary: #888780;
+    --color-text-success: #0f6e56;
+    --color-border-tertiary: rgba(15,23,42,.15);
+    --color-border-secondary: rgba(15,23,42,.3);
+    --font-sans: -apple-system, "Segoe UI", Roboto, Helvetica, Arial, sans-serif;
+    --font-mono: ui-monospace, SFMono-Regular, Menlo, Consolas, monospace;
+    --border-radius-md: 8px;
+    --border-radius-lg: 12px;
+  }
+  @media (prefers-color-scheme: dark) {
+    :root {
+      --color-background-primary: #1c1c1a;
+      --color-background-secondary: #2c2c2a;
+      --color-background-tertiary: #383836;
+      --color-text-primary: #f1efe8;
+      --color-text-secondary: #b4b2a9;
+      --color-text-tertiary: #888780;
+      --color-text-success: #5dcaa5;
+      --color-border-tertiary: rgba(255,255,255,.15);
+      --color-border-secondary: rgba(255,255,255,.3);
+    }
+  }
+  * { box-sizing: border-box; }
+  body {
+    margin: 0; padding: 24px; font-family: var(--font-sans);
+    background: var(--color-background-primary); color: var(--color-text-primary);
+    font-size: 14px; line-height: 1.6;
+  }
+  h1 { font-size: 20px; font-weight: 500; margin: 0 0 4px; }
+  .endpoint { font-family: var(--font-mono); font-size: 14px; color: var(--color-text-secondary); margin: 0 0 16px; }
+  .method { display: inline-block; font-size: 12px; font-weight: 500; padding: 2px 8px; border-radius: var(--border-radius-md); background: #E6F1FB; color: #0C447C; font-family: var(--font-mono); margin-right: 8px; }
+  .hints { background: var(--color-background-secondary); border-radius: var(--border-radius-md); padding: 12px 16px; margin-bottom: 20px; font-size: 13px; }
+  .hints p { margin: 0 0 6px; font-weight: 500; }
+  .hints ul { margin: 0; padding-left: 20px; }
+  .hints li { margin-bottom: 4px; color: var(--color-text-secondary); }
+  .hist-tbl { border-collapse: collapse; font-size: 12px; margin-top: 4px; }
+  .hist-tbl th, .hist-tbl td { padding: 4px 10px; text-align: left; border: 0.5px solid var(--color-border-tertiary); }
+  .hist-tbl th { font-weight: 500; color: var(--color-text-secondary); }
+  .hist-tbl td { color: var(--color-text-secondary); }
+  .toolbar { display: flex; align-items: center; gap: 8px; margin-bottom: 16px; }
+  .tab { cursor: pointer; padding: 6px 14px; border-radius: var(--border-radius-md); border: 0.5px solid var(--color-border-tertiary); font-size: 13px; font-weight: 500; }
+  .tab.active { background: var(--color-background-secondary); border-color: var(--color-border-secondary); }
+  input[type=text] {
+    padding: 6px 10px 6px 30px; border-radius: var(--border-radius-md); border: 0.5px solid var(--color-border-tertiary);
+    background: var(--color-background-primary); color: var(--color-text-primary); font-size: 13px; width: 220px;
+  }
+  .search-wrap { position: relative; }
+  .search-wrap i { position: absolute; left: 10px; top: 50%; transform: translateY(-50%); font-size: 14px; color: var(--color-text-tertiary); }
+
+  .sw { padding: 1.5rem 0; font-family: var(--font-sans); }
+  .sw-label { font-size: 11px; font-weight: 500; color: var(--color-text-secondary); text-transform: uppercase; letter-spacing: .06em; margin: 0 0 12px; }
+  .tbl { width: 100%; border-collapse: collapse; border-radius: var(--border-radius-lg); overflow: hidden; border: 0.5px solid var(--color-border-tertiary); }
+  .tbl thead th { font-size: 11px; font-weight: 500; color: var(--color-text-secondary); text-transform: uppercase; letter-spacing: .06em; padding: 8px 14px; background: var(--color-background-secondary); border-bottom: 0.5px solid var(--color-border-secondary); text-align: left; }
+  .tbl tbody tr { border-bottom: 0.5px solid var(--color-border-tertiary); }
+  .tbl tbody tr:last-child { border-bottom: none; }
+  .tbl tbody tr:hover { background: var(--color-background-secondary); }
+  .tbl td { padding: 9px 14px; font-size: 13px; vertical-align: middle; }
+  .td-name { font-family: var(--font-mono); font-size: 12px; font-weight: 500; color: var(--color-text-primary); white-space: nowrap; }
+  .td-name.indent { padding-left: 28px; }
+  .copy-icon { cursor: pointer; font-size: 14px; color: var(--color-text-tertiary); margin-left: 6px; vertical-align: -2px; }
+  .type-badge { display: inline-block; font-size: 11px; font-weight: 500; padding: 2px 8px; border-radius: var(--border-radius-md); border: 0.5px solid var(--color-border-tertiary); color: var(--color-text-secondary); font-family: var(--font-mono); }
+  .td-desc { color: var(--color-text-primary); font-size: 13px; }
+  .td-desc small { display: block; font-size: 11px; color: var(--color-text-secondary); margin-top: 2px; }
+  .td-om { text-align: center; white-space: nowrap; }
+  .badge { font-size: 11px; font-weight: 500; padding: 2px 8px; border-radius: 99px; }
+  .bm { background: #E6F1FB; color: #0C447C; }
+  .bo { background: #F1EFE8; color: #444441; }
+  .bn { background: #FCE8D6; color: #9A4B0C; margin-left: 6px; }
+  .sec-row td { font-size: 11px; font-weight: 500; color: var(--color-text-secondary); text-transform: uppercase; letter-spacing: .04em; background: var(--color-background-secondary); padding: 6px 14px; border-bottom: 0.5px solid var(--color-border-secondary); }
+  @media (prefers-color-scheme: dark) { .bm { background: #0C447C; color: #B5D4F4; } .bo { background: #444441; color: #D3D1C7; } .bn { background: #5C3317; color: #FFD9B3; } }
+  .json-details { margin-bottom: 16px; }
+  .json-details summary { cursor: pointer; font-size: 13px; font-weight: 500; padding: 8px 14px; border-radius: var(--border-radius-md); border: 0.5px solid var(--color-border-tertiary); background: var(--color-background-secondary); }
+  .json-details pre { margin: 8px 0 0; padding: 12px 14px; border-radius: var(--border-radius-md); border: 0.5px solid var(--color-border-tertiary); background: var(--color-background-secondary); font-family: var(--font-mono); font-size: 12px; overflow-x: auto; }
+</style>
+</head>
+<body>
+  <h1>POST /CompulsorySellPolicy/grid/full/list</h1>
+  <p class="endpoint"><span class="method">POST</span>/CompulsorySellPolicy/grid/full/list</p>
+  <div class="hints">
+    <p>ข้อควรรู้</p>
+    <ul><li>หน้าที่เรียก endpoint นี้: https://ag-office.724insure.net/compulsory/sell-policy (กำหนดการเปิด-ปิดรหัสรถยนต์การออก พ.ร.บ.)</li><li>Envelope เต็ม (status/draw/recordsTotal/recordsFiltered/data) ยืนยันจากเอกสาร source-derived เดิมของทีม (AGNEW docapi: docs/API Spec/CompulsorySellPolicy/) — ไม่ใช่ ApiEnvelope ทั่วไปของ AgentLove, เป็น DataTables shape เฉพาะของ endpoint นี้ ถ้าไม่มีแถวตรงเงื่อนไข data จะเป็น string ว่าง "" ไม่ใช่ []</li><li>IsGovernment และ IsOverrideCompanyActive ยังไม่มีอยู่ใน row projection จริงของ endpoint นี้ ณ ตอนที่ทำเอกสารนี้ (เป็น field ที่ขอเพิ่มใหม่ตาม AGNEW-Office issue #14) — ตัวอย่างข้างล่างแสดงรูปร่างเป้าหมายหลัง CR นี้เสร็จ ไม่ใช่ response จริงปัจจุบัน</li><li>field IsGovernment (เมื่อเพิ่มแล้ว) จะถูกใช้เป็นต้นทางข้อมูลให้ /Policy/package/list และ /Policy/v1/package/list กรองผลลัพธ์ (ผ่าน request field IsGovernment ของสอง endpoint นั้น)</li></ul>
+    <p style="margin-top:10px">ประวัติการสร้าง/อัปเดต Spec</p><table class="hist-tbl"><tr><th>ครั้งที่</th><th>วันที่</th><th>รายละเอียด</th></tr><tr><td>1</td><td>21/07/2026</td><td>Create</td></tr></table>
+  </div>
+  <div class="toolbar">
+    <div class="tab active" data-tab="request" onclick="setTab('request')">Request</div>
+    <div class="tab" data-tab="response" onclick="setTab('response')">Response</div>
+    <div style="flex:1"></div>
+    <div class="search-wrap">
+      <i class="ti ti-search"></i>
+      <input type="text" id="search" placeholder="Filter parameter..." oninput="render()">
+    </div>
+  </div>
+  <div id="content"></div>
+
+  <div style="display:flex;gap:16px;margin-top:12px;font-size:12px;color:var(--color-text-secondary);align-items:center">
+    <span style="display:flex;align-items:center;gap:6px"><span class="badge bm">M</span>Mandatory</span>
+    <span style="display:flex;align-items:center;gap:6px"><span class="badge bo">O</span>Optional</span>
+    <span style="display:flex;align-items:center;gap:6px"><span class="badge bn">New</span>Field ที่เพิ่มใหม่จากเวอร์ชันก่อนหน้า</span>
+  </div>
+
+<script>
+const SCHEMA = {"request": [{"group": "Request Body", "fields": [{"name": "URL", "type": "string", "om": "M", "desc": "path ปลายทางของ API (มักใส่มาเพื่อ debug ฝั่ง client)", "remark": "", "new": false}, {"name": "draw", "type": "int", "om": "M", "desc": "ตัวเลขนับรอบ request ของ DataTables (server จะส่งค่าเดิมกลับมาเพื่อตรวจสอบ)", "remark": "", "new": false}, {"name": "start", "type": "int", "om": "M", "desc": "ตำแหน่งแถวเริ่มต้น (สำหรับ pagination)", "remark": "", "new": false}, {"name": "length", "type": "int", "om": "M", "desc": "จำนวนรายการต่อหน้า", "remark": "", "new": false}, {"name": "columns", "type": "Array", "om": "M", "desc": "รายการคอลัมน์ของตาราง (DataTables)", "remark": "", "new": false}, {"name": "order", "type": "Array", "om": "M", "desc": "เงื่อนไขการเรียงลำดับของตาราง", "remark": "", "new": false}, {"name": "search", "type": "Object", "om": "M", "desc": "เงื่อนไขค้นหาข้อความของตาราง (DataTables)", "remark": "", "new": false}, {"name": "Filter", "type": "Array", "om": "M", "desc": "เงื่อนไขกรองข้อมูลของตาราง (array ของเงื่อนไข)", "remark": "", "new": false}]}, {"group": "columns[]", "fields": [{"name": "data", "type": "string", "om": "M", "desc": "รายการผลลัพธ์ (array ของแถว) หรือ string ว่าง \"\" ถ้าไม่มีแถวตรงเงื่อนไข", "remark": "", "new": false}, {"name": "name", "type": "string", "om": "O", "desc": "ชื่อคอลัมน์ (DataTables) — มักเป็นค่าว่าง ไม่ได้ใช้งานจริง", "remark": "", "new": false}, {"name": "searchable", "type": "boolean", "om": "M", "desc": "คอลัมน์นี้ค้นหาได้หรือไม่", "remark": "true/false", "new": false}, {"name": "orderable", "type": "boolean", "om": "M", "desc": "คอลัมน์นี้เรียงลำดับได้หรือไม่", "remark": "true/false", "new": false}, {"name": "search", "type": "Object", "om": "M", "desc": "เงื่อนไขค้นหาข้อความของตาราง (DataTables)", "remark": "", "new": false}]}, {"group": "search", "fields": [{"name": "value", "type": "string", "om": "O", "desc": "ค่าที่ใช้ค้นหา/กรอง", "remark": "", "new": false}, {"name": "regex", "type": "boolean", "om": "M", "desc": "ค้นหาด้วย regular expression หรือไม่", "remark": "true/false", "new": false}]}, {"group": "order[]", "fields": [{"name": "column", "type": "int", "om": "M", "desc": "ลำดับ index ของคอลัมน์ที่ใช้เรียงลำดับ", "remark": "", "new": false}, {"name": "dir", "type": "string", "om": "M", "desc": "ทิศทางการเรียงลำดับ (asc/desc)", "remark": "", "new": false}]}, {"group": "search", "fields": [{"name": "value", "type": "string", "om": "O", "desc": "ค่าที่ใช้ค้นหา/กรอง", "remark": "", "new": false}, {"name": "regex", "type": "boolean", "om": "M", "desc": "ค้นหาด้วย regular expression หรือไม่", "remark": "true/false", "new": false}]}], "response": [{"group": "Response Body", "fields": [{"name": "status", "type": "int", "om": "M", "desc": "สถานะการทำงานของ API (ตัวพิมพ์เล็ก เฉพาะ endpoint นี้ที่ตอบกลับแบบ DataTables shape)", "remark": "", "new": false}, {"name": "draw", "type": "int", "om": "M", "desc": "ตัวเลขนับรอบ request ของ DataTables (server จะส่งค่าเดิมกลับมาเพื่อตรวจสอบ)", "remark": "", "new": false}, {"name": "recordsTotal", "type": "int", "om": "M", "desc": "จำนวนรายการทั้งหมดในตาราง", "remark": "", "new": false}, {"name": "recordsFiltered", "type": "int", "om": "M", "desc": "จำนวนรายการหลังกรองเงื่อนไข", "remark": "", "new": false}, {"name": "data", "type": "Array", "om": "M", "desc": "รายการผลลัพธ์ (array ของแถว) หรือ string ว่าง \"\" ถ้าไม่มีแถวตรงเงื่อนไข", "remark": "", "new": false}]}, {"group": "data[]", "fields": [{"name": "Ind", "type": "int", "om": "M", "desc": "ลำดับแถวในผลลัพธ์ (Index)", "remark": "", "new": false}, {"name": "ID", "type": "GUID", "om": "M", "desc": "รหัสอ้างอิง (GUID)", "remark": "GUID", "new": false}, {"name": "CompanyCode", "type": "string", "om": "M", "desc": "รหัสบริษัทประกัน (short code)", "remark": "", "new": false}, {"name": "CompanyFriendlyName", "type": "string", "om": "M", "desc": "ชื่อเรียกบริษัทประกันแบบสั้น (แสดงผล)", "remark": "", "new": false}, {"name": "CompanyName", "type": "string", "om": "M", "desc": "ชื่อบริษัทประกัน", "remark": "", "new": false}, {"name": "CompanyNameEn", "type": "string", "om": "O", "desc": "ชื่อบริษัทประกัน (ภาษาอังกฤษ)", "remark": "", "new": false}, {"name": "CarCategoryCode", "type": "string", "om": "M", "desc": "รหัสหมวดรถ พ.ร.บ. เช่น 1.10, 1.40, 1.50", "remark": "", "new": false}, {"name": "CreateDate", "type": "DateTime", "om": "M", "desc": "วันที่สร้างรายการ", "remark": "รูปแบบ DateTime", "new": false}, {"name": "CreateUser", "type": "string", "om": "M", "desc": "ผู้สร้างรายการ", "remark": "", "new": false}, {"name": "IsActive", "type": "boolean", "om": "M", "desc": "เปิดใช้งานหรือไม่", "remark": "true/false", "new": false}, {"name": "IsCarTax", "type": "boolean", "om": "M", "desc": "เปิดให้ต่อภาษีรถพร้อมกันหรือไม่", "remark": "true/false", "new": false}, {"name": "IsForceVoluntary", "type": "boolean", "om": "M", "desc": "บังคับพ่วงซื้อประกันภาคสมัครใจหรือไม่", "remark": "true/false", "new": false}, {"name": "IsGovernment", "type": "boolean", "om": "M", "desc": "กรองเฉพาะแพ็คเกจที่เปิดขายสำหรับทะเบียนรถราชการหรือไม่ (ค่าเริ่มต้น false)", "remark": "true/false", "new": false}, {"name": "IsOnline", "type": "boolean", "om": "M", "desc": "เปิดขายผ่านช่องทางออนไลน์หรือไม่", "remark": "true/false", "new": false}, {"name": "IsOverrideCompanyActive", "type": "boolean", "om": "M", "desc": "บังคับเปิดขายแม้บริษัทจะถูกตั้งสถานะปิดการขาย (IsActive=false) หรือไม่", "remark": "true/false", "new": false}, {"name": "IsSell", "type": "boolean", "om": "M", "desc": "เปิดขายคู่ Company+CarCategoryCode นี้หรือไม่", "remark": "true/false", "new": false}, {"name": "UpdateDate", "type": "DateTime", "om": "O", "desc": "วันที่แก้ไขล่าสุด", "remark": "รูปแบบ DateTime", "new": false}, {"name": "UpdateUser", "type": "string", "om": "O", "desc": "ผู้แก้ไขล่าสุด", "remark": "", "new": false}]}], "request_json": "{\n  \"URL\": \"/CompulsorySellPolicy/grid/full/list\",\n  \"draw\": 1,\n  \"start\": 0,\n  \"length\": 5000,\n  \"columns\": [\n    {\n      \"data\": \"CompanyCode\",\n      \"name\": \"\",\n      \"searchable\": true,\n      \"orderable\": true,\n      \"search\": {\n        \"value\": \"\",\n        \"regex\": false\n      }\n    },\n    {\n      \"data\": \"CarCategoryCode\",\n      \"name\": \"\",\n      \"searchable\": true,\n      \"orderable\": true,\n      \"search\": {\n        \"value\": \"\",\n        \"regex\": false\n      }\n    }\n  ],\n  \"order\": [\n    {\n      \"column\": 0,\n      \"dir\": \"asc\"\n    }\n  ],\n  \"search\": {\n    \"value\": \"\",\n    \"regex\": false\n  },\n  \"Filter\": []\n}", "response_json": "{\n  \"status\": 200,\n  \"draw\": 1,\n  \"recordsTotal\": 1,\n  \"recordsFiltered\": 1,\n  \"data\": [\n    {\n      \"Ind\": 30,\n      \"ID\": \"7F66B657E02B44F6B288B79EE3996864\",\n      \"CompanyCode\": \"ABI\",\n      \"CompanyFriendlyName\": \"ไอโออิ\",\n      \"CompanyName\": \"บริษัท ไอโออิ กรุงเทพประกันภัย จำกัด (มหาชน)\",\n      \"CompanyNameEn\": null,\n      \"CarCategoryCode\": \"1.50\",\n      \"CreateDate\": \"2024-07-04T00:00:00Z\",\n      \"CreateUser\": \"System\",\n      \"IsActive\": true,\n      \"IsCarTax\": false,\n      \"IsForceVoluntary\": false,\n      \"IsGovernment\": false,\n      \"IsOnline\": false,\n      \"IsOverrideCompanyActive\": false,\n      \"IsSell\": false,\n      \"UpdateDate\": \"\",\n      \"UpdateUser\": null\n    }\n  ]\n}", "history": [{"no": 1, "date": "21/07/2026", "desc": "Create"}]};
+let activeTab = "request";
+
+function escapeHtml(s) {
+  return s.replace(/&/g, '&amp;').replace(/</g, '&lt;').replace(/>/g, '&gt;');
+}
+
+function copyName(name, el) {
+  navigator.clipboard.writeText(name);
+  el.className = 'ti ti-check copy-icon';
+  el.style.color = 'var(--color-text-success)';
+  setTimeout(function () {
+    el.className = 'ti ti-copy copy-icon';
+    el.style.color = 'var(--color-text-tertiary)';
+  }, 1000);
+}
+
+function render() {
+  const groups = SCHEMA[activeTab];
+  const jsonBody = SCHEMA[activeTab + '_json'];
+  const q = document.getElementById('search').value.trim().toLowerCase();
+
+  let html = '<details class="json-details"><summary>JSON Body</summary><pre>' + escapeHtml(jsonBody) + '</pre></details>';
+
+  html += '<div class="sw"><table class="tbl"><thead><tr>';
+  html += '<th style="width:200px">Parameter</th><th style="width:120px">Type</th><th style="width:44px;text-align:center">O/M</th><th>Description</th>';
+  html += '</tr></thead><tbody>';
+
+  groups.forEach(function (g) {
+    const fields = g.fields.filter(function (f) {
+      return !q || f.name.toLowerCase().includes(q);
+    });
+    if (fields.length === 0) return;
+
+    html += '<tr class="sec-row"><td colspan="4">' + g.group + '</td></tr>';
+    fields.forEach(function (f) {
+      const om = f.om === 'M' ? '<span class="badge bm">M</span>' : '<span class="badge bo">O</span>';
+      const small = f.remark ? '<small>' + f.remark + '</small>' : '';
+      const newBadge = f.new ? '<span class="badge bn">New</span>' : '';
+      html += '<tr>';
+      html += '<td class="td-name">' + f.name + '<i class="ti ti-copy copy-icon" onclick="copyName(\'' + f.name + '\', this)"></i>' + newBadge + '</td>';
+      html += '<td><span class="type-badge">' + f.type + '</span></td>';
+      html += '<td class="td-om">' + om + '</td>';
+      html += '<td class="td-desc">' + f.desc + small + '</td>';
+      html += '</tr>';
+    });
+  });
+
+  html += '</tbody></table></div>';
+  document.getElementById('content').innerHTML = html || '<p style="color:var(--color-text-tertiary)">No matching parameters</p>';
+}
+
+function setTab(tab) {
+  activeTab = tab;
+  document.querySelectorAll('.tab').forEach(function (el) {
+    el.classList.toggle('active', el.getAttribute('data-tab') === tab);
+  });
+  render();
+}
+
+render();
+</script>
+</body>
+</html>

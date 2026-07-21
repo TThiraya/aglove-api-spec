@@ -1,0 +1,179 @@
+<!DOCTYPE html>
+<html lang="th">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>POST /Policy/package/list</title>
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/tabler-icons/3.35.0/tabler-icons.min.css">
+<style>
+  :root {
+    --color-background-primary: #ffffff;
+    --color-background-secondary: #f4f3ef;
+    --color-background-tertiary: #ebe9e1;
+    --color-text-primary: #0f172a;
+    --color-text-secondary: #5f5e5a;
+    --color-text-tertiary: #888780;
+    --color-text-success: #0f6e56;
+    --color-border-tertiary: rgba(15,23,42,.15);
+    --color-border-secondary: rgba(15,23,42,.3);
+    --font-sans: -apple-system, "Segoe UI", Roboto, Helvetica, Arial, sans-serif;
+    --font-mono: ui-monospace, SFMono-Regular, Menlo, Consolas, monospace;
+    --border-radius-md: 8px;
+    --border-radius-lg: 12px;
+  }
+  @media (prefers-color-scheme: dark) {
+    :root {
+      --color-background-primary: #1c1c1a;
+      --color-background-secondary: #2c2c2a;
+      --color-background-tertiary: #383836;
+      --color-text-primary: #f1efe8;
+      --color-text-secondary: #b4b2a9;
+      --color-text-tertiary: #888780;
+      --color-text-success: #5dcaa5;
+      --color-border-tertiary: rgba(255,255,255,.15);
+      --color-border-secondary: rgba(255,255,255,.3);
+    }
+  }
+  * { box-sizing: border-box; }
+  body {
+    margin: 0; padding: 24px; font-family: var(--font-sans);
+    background: var(--color-background-primary); color: var(--color-text-primary);
+    font-size: 14px; line-height: 1.6;
+  }
+  h1 { font-size: 20px; font-weight: 500; margin: 0 0 4px; }
+  .endpoint { font-family: var(--font-mono); font-size: 14px; color: var(--color-text-secondary); margin: 0 0 16px; }
+  .method { display: inline-block; font-size: 12px; font-weight: 500; padding: 2px 8px; border-radius: var(--border-radius-md); background: #E6F1FB; color: #0C447C; font-family: var(--font-mono); margin-right: 8px; }
+  .hints { background: var(--color-background-secondary); border-radius: var(--border-radius-md); padding: 12px 16px; margin-bottom: 20px; font-size: 13px; }
+  .hints p { margin: 0 0 6px; font-weight: 500; }
+  .hints ul { margin: 0; padding-left: 20px; }
+  .hints li { margin-bottom: 4px; color: var(--color-text-secondary); }
+  .hist-tbl { border-collapse: collapse; font-size: 12px; margin-top: 4px; }
+  .hist-tbl th, .hist-tbl td { padding: 4px 10px; text-align: left; border: 0.5px solid var(--color-border-tertiary); }
+  .hist-tbl th { font-weight: 500; color: var(--color-text-secondary); }
+  .hist-tbl td { color: var(--color-text-secondary); }
+  .toolbar { display: flex; align-items: center; gap: 8px; margin-bottom: 16px; }
+  .tab { cursor: pointer; padding: 6px 14px; border-radius: var(--border-radius-md); border: 0.5px solid var(--color-border-tertiary); font-size: 13px; font-weight: 500; }
+  .tab.active { background: var(--color-background-secondary); border-color: var(--color-border-secondary); }
+  input[type=text] {
+    padding: 6px 10px 6px 30px; border-radius: var(--border-radius-md); border: 0.5px solid var(--color-border-tertiary);
+    background: var(--color-background-primary); color: var(--color-text-primary); font-size: 13px; width: 220px;
+  }
+  .search-wrap { position: relative; }
+  .search-wrap i { position: absolute; left: 10px; top: 50%; transform: translateY(-50%); font-size: 14px; color: var(--color-text-tertiary); }
+
+  .sw { padding: 1.5rem 0; font-family: var(--font-sans); }
+  .sw-label { font-size: 11px; font-weight: 500; color: var(--color-text-secondary); text-transform: uppercase; letter-spacing: .06em; margin: 0 0 12px; }
+  .tbl { width: 100%; border-collapse: collapse; border-radius: var(--border-radius-lg); overflow: hidden; border: 0.5px solid var(--color-border-tertiary); }
+  .tbl thead th { font-size: 11px; font-weight: 500; color: var(--color-text-secondary); text-transform: uppercase; letter-spacing: .06em; padding: 8px 14px; background: var(--color-background-secondary); border-bottom: 0.5px solid var(--color-border-secondary); text-align: left; }
+  .tbl tbody tr { border-bottom: 0.5px solid var(--color-border-tertiary); }
+  .tbl tbody tr:last-child { border-bottom: none; }
+  .tbl tbody tr:hover { background: var(--color-background-secondary); }
+  .tbl td { padding: 9px 14px; font-size: 13px; vertical-align: middle; }
+  .td-name { font-family: var(--font-mono); font-size: 12px; font-weight: 500; color: var(--color-text-primary); white-space: nowrap; }
+  .td-name.indent { padding-left: 28px; }
+  .copy-icon { cursor: pointer; font-size: 14px; color: var(--color-text-tertiary); margin-left: 6px; vertical-align: -2px; }
+  .type-badge { display: inline-block; font-size: 11px; font-weight: 500; padding: 2px 8px; border-radius: var(--border-radius-md); border: 0.5px solid var(--color-border-tertiary); color: var(--color-text-secondary); font-family: var(--font-mono); }
+  .td-desc { color: var(--color-text-primary); font-size: 13px; }
+  .td-desc small { display: block; font-size: 11px; color: var(--color-text-secondary); margin-top: 2px; }
+  .td-om { text-align: center; white-space: nowrap; }
+  .badge { font-size: 11px; font-weight: 500; padding: 2px 8px; border-radius: 99px; }
+  .bm { background: #E6F1FB; color: #0C447C; }
+  .bo { background: #F1EFE8; color: #444441; }
+  .bn { background: #FCE8D6; color: #9A4B0C; margin-left: 6px; }
+  .sec-row td { font-size: 11px; font-weight: 500; color: var(--color-text-secondary); text-transform: uppercase; letter-spacing: .04em; background: var(--color-background-secondary); padding: 6px 14px; border-bottom: 0.5px solid var(--color-border-secondary); }
+  @media (prefers-color-scheme: dark) { .bm { background: #0C447C; color: #B5D4F4; } .bo { background: #444441; color: #D3D1C7; } .bn { background: #5C3317; color: #FFD9B3; } }
+  .json-details { margin-bottom: 16px; }
+  .json-details summary { cursor: pointer; font-size: 13px; font-weight: 500; padding: 8px 14px; border-radius: var(--border-radius-md); border: 0.5px solid var(--color-border-tertiary); background: var(--color-background-secondary); }
+  .json-details pre { margin: 8px 0 0; padding: 12px 14px; border-radius: var(--border-radius-md); border: 0.5px solid var(--color-border-tertiary); background: var(--color-background-secondary); font-family: var(--font-mono); font-size: 12px; overflow-x: auto; }
+</style>
+</head>
+<body>
+  <h1>POST /Policy/package/list</h1>
+  <p class="endpoint"><span class="method">POST</span>/Policy/package/list</p>
+  <div class="hints">
+    <p>ข้อควรรู้</p>
+    <ul><li>อ้างอิงจาก IOM.API.Client.AgentLove.Controllers.PolicyController — เอกสารนี้สร้างจากการอ่าน source code จริง (ไม่ใช่ผลจากการยิง API ทดสอบเอง) ผู้ใช้ยืนยันแล้วว่าเชื่อถือได้</li><li>ต้องมี Bearer token ที่ถูกต้อง (ไม่ต้องมี Admin role) และผู้เรียกต้องมี Agent record ผูกกับ session ไม่เช่นนั้นจะได้ 90903000</li><li>ExpireDate ถูก parse ก่อนตรวจ validation เสมอ — ต่อให้ EffectiveType เป็น FULLYEAR (ที่ business rule ไม่บังคับ ExpireDate) การไม่ส่ง ExpireDate ก็จะทำให้เกิด error C601999 (UNKNOWN) แทนที่จะเป็น error ฟิลด์ที่ชัดเจน</li><li>ถ้าการดึงแพ็คเกจฝั่ง upstream (Service724) ล้มเหลวหรือไม่มีแพ็คเกจ ระบบจะตอบ 200 OK พร้อม Data เป็น null/[] แทนที่จะเป็น error — client แยกไม่ออกระหว่าง "ไม่มีแพ็คเกจจริงๆ" กับ "upstream error"</li><li>IsGovernment=true จะกรองเฉพาะแพ็คเกจที่ฝั่ง CompulsorySellPolicy ตั้ง IsGovernment=1 (ยังต้องผ่านเงื่อนไข IsOverrideCompanyActive=1 OR IsActive=1 ด้วย) ถูกรวมอยู่ใน cache key จึงได้ cache แยกกันระหว่าง true/false (cache TTL คงที่ 6 ชั่วโมง)</li><li>Paging.SortBy/SortDirection รับค่าได้แต่ไม่มีผล — ระบบ sort ตาม ComissionAgent (มาก→น้อย) แล้วตาม CompanyName เสมอ</li></ul>
+    <p style="margin-top:10px">ประวัติการสร้าง/อัปเดต Spec</p><table class="hist-tbl"><tr><th>ครั้งที่</th><th>วันที่</th><th>รายละเอียด</th></tr><tr><td>1</td><td>21/07/2026</td><td>Create</td></tr></table>
+  </div>
+  <div class="toolbar">
+    <div class="tab active" data-tab="request" onclick="setTab('request')">Request</div>
+    <div class="tab" data-tab="response" onclick="setTab('response')">Response</div>
+    <div style="flex:1"></div>
+    <div class="search-wrap">
+      <i class="ti ti-search"></i>
+      <input type="text" id="search" placeholder="Filter parameter..." oninput="render()">
+    </div>
+  </div>
+  <div id="content"></div>
+
+  <div style="display:flex;gap:16px;margin-top:12px;font-size:12px;color:var(--color-text-secondary);align-items:center">
+    <span style="display:flex;align-items:center;gap:6px"><span class="badge bm">M</span>Mandatory</span>
+    <span style="display:flex;align-items:center;gap:6px"><span class="badge bo">O</span>Optional</span>
+    <span style="display:flex;align-items:center;gap:6px"><span class="badge bn">New</span>Field ที่เพิ่มใหม่จากเวอร์ชันก่อนหน้า</span>
+  </div>
+
+<script>
+const SCHEMA = {"request": [{"group": "Request Body", "fields": [{"name": "Paging", "type": "Object", "om": "M", "desc": "เงื่อนไขการแบ่งหน้า (Page/Length)", "remark": "", "new": false}, {"name": "CompanyCode", "type": "string", "om": "O", "desc": "รหัสบริษัทประกัน (short code)", "remark": "", "new": false}, {"name": "UseCarCode", "type": "string", "om": "M", "desc": "รหัสประเภทการใช้รถ", "remark": "", "new": false}, {"name": "CarTypeCode", "type": "string", "om": "M", "desc": "รหัสประเภทรถ", "remark": "", "new": false}, {"name": "CarCategoryID", "type": "GUID", "om": "M", "desc": "รหัสหมวดรถ (GUID)", "remark": "GUID", "new": false}, {"name": "CarSalesYear", "type": "string", "om": "M", "desc": "ปีรถ", "remark": "", "new": false}, {"name": "CarBrandID", "type": "GUID", "om": "M", "desc": "รหัสยี่ห้อรถ (GUID)", "remark": "GUID", "new": false}, {"name": "CarModelID", "type": "string", "om": "M", "desc": "รหัสรุ่นรถ (GUID)", "remark": "GUID", "new": false}, {"name": "SubCarModelID", "type": "string", "om": "O", "desc": "รหัสรุ่นย่อยของรถ (GUID)", "remark": "GUID", "new": false}, {"name": "EffectiveType", "type": "string", "om": "M", "desc": "ประเภทวันที่เริ่มคุ้มครอง (FULLYEAR/NOTFULLYEAR)", "remark": "", "new": false}, {"name": "EffectiveDate", "type": "DateTime", "om": "M", "desc": "วันที่เริ่มคุ้มครองกรมธรรม์", "remark": "รูปแบบ Date (yyyy-MM-dd) ในคำขอ / DateTime ในผลลัพธ์", "new": false}, {"name": "ExpireDate", "type": "DateTime", "om": "M", "desc": "วันสิ้นสุดความคุ้มครองกรมธรรม์", "remark": "รูปแบบ Date (yyyy-MM-dd) ในคำขอ / DateTime ในผลลัพธ์", "new": false}, {"name": "LicenseProvinceID", "type": "string", "om": "O", "desc": "รหัสจังหวัดที่จดทะเบียนรถ (GUID) — ใช้กรองแพ็คเกจตามเงื่อนไขที่บริษัทกำหนดไว้ต่อจังหวัด", "remark": "GUID", "new": false}, {"name": "IsGovernment", "type": "boolean", "om": "M", "desc": "กรองเฉพาะแพ็คเกจที่เปิดขายสำหรับทะเบียนรถราชการหรือไม่ (ค่าเริ่มต้น false)", "remark": "true/false", "new": false}]}, {"group": "Paging", "fields": [{"name": "Page", "type": "int", "om": "M", "desc": "หมายเลขหน้าที่ต้องการ (เริ่มที่ 1)", "remark": "", "new": false}, {"name": "Length", "type": "int", "om": "M", "desc": "จำนวนรายการต่อหน้า", "remark": "", "new": false}]}], "response": [{"group": "Response Body", "fields": [{"name": "Status", "type": "int", "om": "M", "desc": "สถานะการทำงานของ API / สถานะรายการ", "remark": "", "new": false}, {"name": "Message", "type": "string", "om": "O", "desc": "ข้อความตอบกลับจากระบบ", "remark": "", "new": false}, {"name": "ErrorCode", "type": "string", "om": "O", "desc": "รหัสข้อผิดพลาด", "remark": "", "new": false}, {"name": "ErrorMessage", "type": "string", "om": "O", "desc": "รายละเอียดข้อผิดพลาด", "remark": "", "new": false}, {"name": "Data", "type": "Array", "om": "M", "desc": "ข้อมูลผลลัพธ์", "remark": "", "new": false}, {"name": "Pagination", "type": "Object", "om": "M", "desc": "ข้อมูลการแบ่งหน้าของผลลัพธ์", "remark": "", "new": false}, {"name": "Options", "type": "string", "om": "O", "desc": "ข้อมูลเพิ่มเติมของระบบ", "remark": "", "new": false}]}, {"group": "Data[]", "fields": [{"name": "RefCompanyID", "type": "string", "om": "M", "desc": "รหัสอ้างอิงบริษัทประกัน", "remark": "", "new": false}, {"name": "CompanyCode", "type": "string", "om": "M", "desc": "รหัสบริษัทประกัน (short code)", "remark": "", "new": false}, {"name": "CompanyName", "type": "string", "om": "M", "desc": "ชื่อบริษัทประกัน", "remark": "", "new": false}, {"name": "CarTypeName", "type": "string", "om": "M", "desc": "ชื่อประเภทรถ", "remark": "", "new": false}, {"name": "DayPolicy", "type": "int", "om": "M", "desc": "จำนวนวันคุ้มครองของกรมธรรม์", "remark": "", "new": false}, {"name": "DayWholeYear", "type": "int", "om": "M", "desc": "จำนวนวันคุ้มครองเต็มปี", "remark": "", "new": false}, {"name": "Rate", "type": "int", "om": "M", "desc": "อัตราค่าคอมมิชชั่น/อากร", "remark": "", "new": false}, {"name": "Cost", "type": "number", "om": "M", "desc": "ต้นทุนเบี้ยประกัน (ก่อนรวมภาษี/อากร)", "remark": "หน่วยเป็นบาท", "new": false}, {"name": "Vat", "type": "number", "om": "M", "desc": "ภาษีมูลค่าเพิ่ม", "remark": "หน่วยเป็นบาท", "new": false}, {"name": "Duty", "type": "number", "om": "M", "desc": "อากรแสตมป์", "remark": "หน่วยเป็นบาท", "new": false}, {"name": "IsOnlineActive", "type": "boolean", "om": "M", "desc": "เปิดขายออนไลน์สำหรับแพ็คเกจนี้หรือไม่", "remark": "true/false", "new": false}, {"name": "IsTaxInclude", "type": "boolean", "om": "M", "desc": "รวมภาษีมูลค่าเพิ่มในราคาแล้วหรือไม่ (ฝั่งนี้ถูก force เป็น false เสมอหลัง fetch)", "remark": "true/false", "new": false}, {"name": "CountOfPolicy", "type": "int", "om": "M", "desc": "จำนวนกรมธรรม์ที่ขายไปแล้วของแพ็คเกจนี้", "remark": "", "new": false}, {"name": "Price", "type": "number", "om": "M", "desc": "ราคาขายรวมที่ลูกค้าต้องชำระ", "remark": "หน่วยเป็นบาท", "new": false}, {"name": "Paper", "type": "string", "om": "O", "desc": "ข้อมูลยอดกระดาษ พ.ร.บ. คงเหลือของบริษัทนี้ (null ถ้าไม่มี)", "remark": "", "new": false}, {"name": "PackageResult", "type": "Array", "om": "M", "desc": "รายละเอียดแพ็คเกจย่อย/ราคาตามรถที่เลือก", "remark": "", "new": false}, {"name": "Remark", "type": "string", "om": "O", "desc": "หมายเหตุ", "remark": "", "new": false}]}, {"group": "PackageResult[]", "fields": [{"name": "EffectiveDate", "type": "DateTime", "om": "M", "desc": "วันที่เริ่มคุ้มครองกรมธรรม์", "remark": "รูปแบบ Date (yyyy-MM-dd) ในคำขอ / DateTime ในผลลัพธ์", "new": false}, {"name": "ExpireDate", "type": "DateTime", "om": "M", "desc": "วันสิ้นสุดความคุ้มครองกรมธรรม์", "remark": "รูปแบบ Date (yyyy-MM-dd) ในคำขอ / DateTime ในผลลัพธ์", "new": false}, {"name": "UseCarName", "type": "string", "om": "M", "desc": "ชื่อประเภทการใช้รถ", "remark": "", "new": false}, {"name": "CarBrandName", "type": "string", "om": "M", "desc": "ชื่อยี่ห้อรถ", "remark": "", "new": false}, {"name": "CarModelName", "type": "string", "om": "M", "desc": "ชื่อรุ่นรถ", "remark": "", "new": false}, {"name": "CarSalesYear", "type": "int", "om": "M", "desc": "ปีรถ", "remark": "", "new": false}, {"name": "OnlineCarTypeID", "type": "string", "om": "M", "desc": "รหัสประเภทรถสำหรับขายออนไลน์", "remark": "", "new": false}, {"name": "OnlineCarTypeName", "type": "string", "om": "M", "desc": "ชื่อประเภทรถสำหรับขายออนไลน์", "remark": "", "new": false}, {"name": "PriceACT", "type": "number", "om": "M", "desc": "ราคาขาย พ.ร.บ. ก่อนหักส่วนลด", "remark": "หน่วยเป็นบาท", "new": false}, {"name": "PriceACTDiscount", "type": "number", "om": "M", "desc": "ส่วนลดราคา พ.ร.บ.", "remark": "หน่วยเป็นบาท", "new": false}, {"name": "NetACT", "type": "number", "om": "M", "desc": "เบี้ยสุทธิ พ.ร.บ.", "remark": "หน่วยเป็นบาท", "new": false}, {"name": "CostACT", "type": "number", "om": "M", "desc": "ต้นทุนเบี้ย พ.ร.บ.", "remark": "หน่วยเป็นบาท", "new": false}, {"name": "VatACT", "type": "number", "om": "M", "desc": "ภาษีมูลค่าเพิ่ม พ.ร.บ.", "remark": "หน่วยเป็นบาท", "new": false}, {"name": "DutyACT", "type": "number", "om": "M", "desc": "อากรแสตมป์ พ.ร.บ.", "remark": "หน่วยเป็นบาท", "new": false}, {"name": "CompanyID", "type": "int", "om": "M", "desc": "รหัสบริษัทประกัน (เลข)", "remark": "", "new": false}, {"name": "CompanyName", "type": "string", "om": "M", "desc": "ชื่อบริษัทประกัน", "remark": "", "new": false}, {"name": "CompanyID_SK", "type": "string", "om": "M", "desc": "รหัสบริษัทประกัน (short code)", "remark": "", "new": false}, {"name": "CompanyImage", "type": "string", "om": "M", "desc": "ชื่อไฟล์โลโก้บริษัทประกัน", "remark": "", "new": false}, {"name": "CarID", "type": "int", "om": "M", "desc": "รหัสรถ (legacy field มักเป็น 0)", "remark": "", "new": false}, {"name": "ComissionAgent", "type": "number", "om": "M", "desc": "อัตราค่าคอมมิชชั่นตัวแทน (%)", "remark": "", "new": false}, {"name": "AgentComDiscount", "type": "number", "om": "M", "desc": "ส่วนลดค่าคอมมิชชั่นตัวแทน", "remark": "", "new": false}, {"name": "ComOnlineDiscount", "type": "int", "om": "M", "desc": "ส่วนลดค่าคอมมิชชั่นสำหรับช่องทางออนไลน์", "remark": "", "new": false}, {"name": "ComOnlineRate", "type": "int", "om": "M", "desc": "อัตราค่าคอมมิชชั่นสำหรับช่องทางออนไลน์", "remark": "", "new": false}]}, {"group": "Pagination", "fields": [{"name": "Paging", "type": "Object", "om": "M", "desc": "เงื่อนไขการแบ่งหน้า (Page/Length)", "remark": "", "new": false}]}, {"group": "Paging", "fields": [{"name": "Page", "type": "int", "om": "M", "desc": "หมายเลขหน้าที่ต้องการ (เริ่มที่ 1)", "remark": "", "new": false}, {"name": "Length", "type": "int", "om": "M", "desc": "จำนวนรายการต่อหน้า", "remark": "", "new": false}, {"name": "TotalRecord", "type": "int", "om": "M", "desc": "จำนวนรายการทั้งหมด", "remark": "", "new": false}]}], "request_json": "{\n  \"Paging\": {\n    \"Page\": 1,\n    \"Length\": 10\n  },\n  \"CompanyCode\": \"\",\n  \"UseCarCode\": \"CAR001\",\n  \"CarTypeCode\": \"110\",\n  \"CarCategoryID\": \"5F6A7B8C9D0E1F2A3B4C5D6E7F8A9B0C\",\n  \"CarSalesYear\": \"2026\",\n  \"CarBrandID\": \"1A2B3C4D5E6F70819203A4B5C6D7E8F9\",\n  \"CarModelID\": \"9F8E7D6C5B4A392817263544536271\",\n  \"SubCarModelID\": \"\",\n  \"EffectiveType\": \"FULLYEAR\",\n  \"EffectiveDate\": \"2026-08-01\",\n  \"ExpireDate\": \"2026-08-01\",\n  \"LicenseProvinceID\": \"\",\n  \"IsGovernment\": false\n}", "response_json": "{\n  \"Status\": 200,\n  \"Message\": \"\",\n  \"ErrorCode\": \"\",\n  \"ErrorMessage\": \"\",\n  \"Data\": [\n    {\n      \"RefCompanyID\": \"12\",\n      \"CompanyCode\": \"VIB\",\n      \"CompanyName\": \"วิริยะประกันภัย\",\n      \"CarTypeName\": \"รถเก๋ง\",\n      \"DayPolicy\": 365,\n      \"DayWholeYear\": 365,\n      \"Rate\": 100,\n      \"Cost\": 645.21,\n      \"Vat\": 45.16,\n      \"Duty\": 2.58,\n      \"IsOnlineActive\": true,\n      \"IsTaxInclude\": false,\n      \"CountOfPolicy\": 0,\n      \"Price\": 692.95,\n      \"Paper\": null,\n      \"PackageResult\": [\n        {\n          \"EffectiveDate\": \"2026-08-01T00:00:00\",\n          \"ExpireDate\": \"2027-08-01T00:00:00\",\n          \"UseCarName\": \"รถเก๋ง\",\n          \"CarBrandName\": \"TOYOTA\",\n          \"CarModelName\": \"YARIS\",\n          \"CarSalesYear\": 2026,\n          \"OnlineCarTypeID\": \"110\",\n          \"OnlineCarTypeName\": \"รถเก๋ง\",\n          \"PriceACT\": 692.95,\n          \"PriceACTDiscount\": 34.65,\n          \"NetACT\": 645.21,\n          \"CostACT\": 645.21,\n          \"VatACT\": 45.16,\n          \"DutyACT\": 2.58,\n          \"CompanyID\": 12,\n          \"CompanyName\": \"วิริยะประกันภัย\",\n          \"CompanyID_SK\": \"VIB\",\n          \"CompanyImage\": \"LOGO_VIB.png\",\n          \"CarID\": 0,\n          \"ComissionAgent\": 15.0,\n          \"AgentComDiscount\": 96.78,\n          \"ComOnlineDiscount\": 0,\n          \"ComOnlineRate\": 0\n        }\n      ],\n      \"Remark\": \"\"\n    }\n  ],\n  \"Pagination\": {\n    \"Paging\": {\n      \"Page\": 1,\n      \"Length\": 10,\n      \"TotalRecord\": 1\n    }\n  },\n  \"Options\": null\n}", "history": [{"no": 1, "date": "21/07/2026", "desc": "Create"}]};
+let activeTab = "request";
+
+function escapeHtml(s) {
+  return s.replace(/&/g, '&amp;').replace(/</g, '&lt;').replace(/>/g, '&gt;');
+}
+
+function copyName(name, el) {
+  navigator.clipboard.writeText(name);
+  el.className = 'ti ti-check copy-icon';
+  el.style.color = 'var(--color-text-success)';
+  setTimeout(function () {
+    el.className = 'ti ti-copy copy-icon';
+    el.style.color = 'var(--color-text-tertiary)';
+  }, 1000);
+}
+
+function render() {
+  const groups = SCHEMA[activeTab];
+  const jsonBody = SCHEMA[activeTab + '_json'];
+  const q = document.getElementById('search').value.trim().toLowerCase();
+
+  let html = '<details class="json-details"><summary>JSON Body</summary><pre>' + escapeHtml(jsonBody) + '</pre></details>';
+
+  html += '<div class="sw"><table class="tbl"><thead><tr>';
+  html += '<th style="width:200px">Parameter</th><th style="width:120px">Type</th><th style="width:44px;text-align:center">O/M</th><th>Description</th>';
+  html += '</tr></thead><tbody>';
+
+  groups.forEach(function (g) {
+    const fields = g.fields.filter(function (f) {
+      return !q || f.name.toLowerCase().includes(q);
+    });
+    if (fields.length === 0) return;
+
+    html += '<tr class="sec-row"><td colspan="4">' + g.group + '</td></tr>';
+    fields.forEach(function (f) {
+      const om = f.om === 'M' ? '<span class="badge bm">M</span>' : '<span class="badge bo">O</span>';
+      const small = f.remark ? '<small>' + f.remark + '</small>' : '';
+      const newBadge = f.new ? '<span class="badge bn">New</span>' : '';
+      html += '<tr>';
+      html += '<td class="td-name">' + f.name + '<i class="ti ti-copy copy-icon" onclick="copyName(\'' + f.name + '\', this)"></i>' + newBadge + '</td>';
+      html += '<td><span class="type-badge">' + f.type + '</span></td>';
+      html += '<td class="td-om">' + om + '</td>';
+      html += '<td class="td-desc">' + f.desc + small + '</td>';
+      html += '</tr>';
+    });
+  });
+
+  html += '</tbody></table></div>';
+  document.getElementById('content').innerHTML = html || '<p style="color:var(--color-text-tertiary)">No matching parameters</p>';
+}
+
+function setTab(tab) {
+  activeTab = tab;
+  document.querySelectorAll('.tab').forEach(function (el) {
+    el.classList.toggle('active', el.getAttribute('data-tab') === tab);
+  });
+  render();
+}
+
+render();
+</script>
+</body>
+</html>

@@ -70,3 +70,12 @@
 - [POST /JobApproveBackEnd/v1/sk-register/approve](https://tthiraya.github.io/aglove-api-spec/API%20Spec/JobApproveBackEnd/v1-sk-register-approve.html)
 - [POST /JobApproveBackEnd/grid/task/sk-renew/list](https://tthiraya.github.io/aglove-api-spec/API%20Spec/JobApproveBackEnd/grid-task-sk-renew-list.html)
 
+## CompulsorySellPolicy
+
+- [POST /CompulsorySellPolicy/grid/full/list](https://tthiraya.github.io/aglove-api-spec/API%20Spec/CompulsorySellPolicy/grid-full-list.html)
+
+## Policy
+
+- [POST /Policy/package/list](https://tthiraya.github.io/aglove-api-spec/API%20Spec/Policy/package-list.html)
+- [POST /Policy/v1/package/list](https://tthiraya.github.io/aglove-api-spec/API%20Spec/Policy/v1-package-list.html)
+
