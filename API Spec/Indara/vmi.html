@@ -1,0 +1,179 @@
+<!DOCTYPE html>
+<html lang="th">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>POST https://wsapidev.indara.co.th/pogtws_sit/service.asmx?op=CallTHI  (rpcNumber=103 · VMI ออกภาคสมัครใจ)</title>
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/tabler-icons/3.35.0/tabler-icons.min.css">
+<style>
+  :root {
+    --color-background-primary: #ffffff;
+    --color-background-secondary: #f4f3ef;
+    --color-background-tertiary: #ebe9e1;
+    --color-text-primary: #0f172a;
+    --color-text-secondary: #5f5e5a;
+    --color-text-tertiary: #888780;
+    --color-text-success: #0f6e56;
+    --color-border-tertiary: rgba(15,23,42,.15);
+    --color-border-secondary: rgba(15,23,42,.3);
+    --font-sans: -apple-system, "Segoe UI", Roboto, Helvetica, Arial, sans-serif;
+    --font-mono: ui-monospace, SFMono-Regular, Menlo, Consolas, monospace;
+    --border-radius-md: 8px;
+    --border-radius-lg: 12px;
+  }
+  @media (prefers-color-scheme: dark) {
+    :root {
+      --color-background-primary: #1c1c1a;
+      --color-background-secondary: #2c2c2a;
+      --color-background-tertiary: #383836;
+      --color-text-primary: #f1efe8;
+      --color-text-secondary: #b4b2a9;
+      --color-text-tertiary: #888780;
+      --color-text-success: #5dcaa5;
+      --color-border-tertiary: rgba(255,255,255,.15);
+      --color-border-secondary: rgba(255,255,255,.3);
+    }
+  }
+  * { box-sizing: border-box; }
+  body {
+    margin: 0; padding: 24px; font-family: var(--font-sans);
+    background: var(--color-background-primary); color: var(--color-text-primary);
+    font-size: 14px; line-height: 1.6;
+  }
+  h1 { font-size: 20px; font-weight: 500; margin: 0 0 4px; }
+  .endpoint { font-family: var(--font-mono); font-size: 14px; color: var(--color-text-secondary); margin: 0 0 16px; }
+  .method { display: inline-block; font-size: 12px; font-weight: 500; padding: 2px 8px; border-radius: var(--border-radius-md); background: #E6F1FB; color: #0C447C; font-family: var(--font-mono); margin-right: 8px; }
+  .hints { background: var(--color-background-secondary); border-radius: var(--border-radius-md); padding: 12px 16px; margin-bottom: 20px; font-size: 13px; }
+  .hints p { margin: 0 0 6px; font-weight: 500; }
+  .hints ul { margin: 0; padding-left: 20px; }
+  .hints li { margin-bottom: 4px; color: var(--color-text-secondary); }
+  .hist-tbl { border-collapse: collapse; font-size: 12px; margin-top: 4px; }
+  .hist-tbl th, .hist-tbl td { padding: 4px 10px; text-align: left; border: 0.5px solid var(--color-border-tertiary); }
+  .hist-tbl th { font-weight: 500; color: var(--color-text-secondary); }
+  .hist-tbl td { color: var(--color-text-secondary); }
+  .toolbar { display: flex; align-items: center; gap: 8px; margin-bottom: 16px; }
+  .tab { cursor: pointer; padding: 6px 14px; border-radius: var(--border-radius-md); border: 0.5px solid var(--color-border-tertiary); font-size: 13px; font-weight: 500; }
+  .tab.active { background: var(--color-background-secondary); border-color: var(--color-border-secondary); }
+  input[type=text] {
+    padding: 6px 10px 6px 30px; border-radius: var(--border-radius-md); border: 0.5px solid var(--color-border-tertiary);
+    background: var(--color-background-primary); color: var(--color-text-primary); font-size: 13px; width: 220px;
+  }
+  .search-wrap { position: relative; }
+  .search-wrap i { position: absolute; left: 10px; top: 50%; transform: translateY(-50%); font-size: 14px; color: var(--color-text-tertiary); }
+
+  .sw { padding: 1.5rem 0; font-family: var(--font-sans); }
+  .sw-label { font-size: 11px; font-weight: 500; color: var(--color-text-secondary); text-transform: uppercase; letter-spacing: .06em; margin: 0 0 12px; }
+  .tbl { width: 100%; border-collapse: collapse; border-radius: var(--border-radius-lg); overflow: hidden; border: 0.5px solid var(--color-border-tertiary); }
+  .tbl thead th { font-size: 11px; font-weight: 500; color: var(--color-text-secondary); text-transform: uppercase; letter-spacing: .06em; padding: 8px 14px; background: var(--color-background-secondary); border-bottom: 0.5px solid var(--color-border-secondary); text-align: left; }
+  .tbl tbody tr { border-bottom: 0.5px solid var(--color-border-tertiary); }
+  .tbl tbody tr:last-child { border-bottom: none; }
+  .tbl tbody tr:hover { background: var(--color-background-secondary); }
+  .tbl td { padding: 9px 14px; font-size: 13px; vertical-align: middle; }
+  .td-name { font-family: var(--font-mono); font-size: 12px; font-weight: 500; color: var(--color-text-primary); white-space: nowrap; }
+  .td-name.indent { padding-left: 28px; }
+  .copy-icon { cursor: pointer; font-size: 14px; color: var(--color-text-tertiary); margin-left: 6px; vertical-align: -2px; }
+  .type-badge { display: inline-block; font-size: 11px; font-weight: 500; padding: 2px 8px; border-radius: var(--border-radius-md); border: 0.5px solid var(--color-border-tertiary); color: var(--color-text-secondary); font-family: var(--font-mono); }
+  .td-desc { color: var(--color-text-primary); font-size: 13px; }
+  .td-desc small { display: block; font-size: 11px; color: var(--color-text-secondary); margin-top: 2px; }
+  .td-om { text-align: center; white-space: nowrap; }
+  .badge { font-size: 11px; font-weight: 500; padding: 2px 8px; border-radius: 99px; }
+  .bm { background: #E6F1FB; color: #0C447C; }
+  .bo { background: #F1EFE8; color: #444441; }
+  .bn { background: #FCE8D6; color: #9A4B0C; margin-left: 6px; }
+  .sec-row td { font-size: 11px; font-weight: 500; color: var(--color-text-secondary); text-transform: uppercase; letter-spacing: .04em; background: var(--color-background-secondary); padding: 6px 14px; border-bottom: 0.5px solid var(--color-border-secondary); }
+  @media (prefers-color-scheme: dark) { .bm { background: #0C447C; color: #B5D4F4; } .bo { background: #444441; color: #D3D1C7; } .bn { background: #5C3317; color: #FFD9B3; } }
+  .json-details { margin-bottom: 16px; }
+  .json-details summary { cursor: pointer; font-size: 13px; font-weight: 500; padding: 8px 14px; border-radius: var(--border-radius-md); border: 0.5px solid var(--color-border-tertiary); background: var(--color-background-secondary); }
+  .json-details pre { margin: 8px 0 0; padding: 12px 14px; border-radius: var(--border-radius-md); border: 0.5px solid var(--color-border-tertiary); background: var(--color-background-secondary); font-family: var(--font-mono); font-size: 12px; overflow-x: auto; }
+</style>
+</head>
+<body>
+  <h1>POST https://wsapidev.indara.co.th/pogtws_sit/service.asmx?op=CallTHI  (rpcNumber=103 · VMI ออกภาคสมัครใจ)</h1>
+  <p class="endpoint"><span class="method">POST</span>https://wsapidev.indara.co.th/pogtws_sit/service.asmx?op=CallTHI  (rpcNumber=103 · VMI ออกภาคสมัครใจ)</p>
+  <div class="hints">
+    <p>ข้อควรรู้</p>
+    <ul><li>endpoint จริงมีตัวเดียว (https://wsapidev.indara.co.th/pogtws_sit/service.asmx?op=CallTHI) แยก operation ด้วยค่า rpcNumber ใน body ไม่ใช่คนละ URL</li><li>รูปแบบจริงบน wire คือ SOAP 1.1 (POST, Content-Type: text/xml) ไม่ใช่ JSON — body คือ SOAP envelope ที่มี <rpcNumber> กับ <inStr> (XML string ใน CDATA) ตารางด้านล่างแสดงฟิลด์ที่อยู่ *ข้างใน* inStr/CallTHIResult เพื่อให้อ่านง่าย ไม่ใช่ตัว JSON จริง</li><li>rpcNumber Fixed = 103 สำหรับ VMI (ออกภาคสมัครใจ) — เอกสาร/Postman เก่าบางที่ใช้ 103CAL แต่ field spec ทางการไม่มี CAL suffix ให้ใช้ 103 เฉยๆ</li><li>⚠️ ตัวอย่าง Postman ต้นฉบับของ Indara ไม่มี EPOLICY block (DELIVERY_OPT ฯลฯ) เลยทั้งก้อน ทั้งที่ field spec ระบุ Mandatory เหมือน CMI — เติมให้ครบตาม spec แล้ว ยังไม่เคยทดสอบจริง</li><li>REBATE1/REBATE2 เฉพาะ VMI เท่านั้น (CMI ไม่มี)</li><li>รองรับข้อมูลผู้ขับขี่เพิ่มเติมได้สูงสุด 5 คน (DRI_TITLE1-5 ฯลฯ) ทั้งหมด Optional — ไม่ระบุในตัวอย่างนี้</li><li>AGENT_CODE/USER_ID/PASSWORD_AGENT ในตัวอย่างนี้เป็น test account ของ Indara เอง (มาจากเอกสารอ้างอิงที่ Indara ส่งให้) — 724 ต้องใช้ credential จริงที่ Indara ออกให้ 724 โดยเฉพาะ (ขอจาก PM ผ่านช่องทางที่ปลอดภัย ไม่ publish ไว้ในเอกสารนี้)</li><li>Production endpoint: https://wsapi.indara.co.th/pogtws/service.asmx?op=CallTHI (credential Production คนละชุดกับ UAT — ขอจาก PM)</li><li>อ้างอิงจาก field spec ทางการของ Indara รุ่น v1.7.0 (ออก 2026-08-03)</li></ul>
+    <p style="margin-top:10px">ประวัติการสร้าง/อัปเดต Spec</p><table class="hist-tbl"><tr><th>ครั้งที่</th><th>วันที่</th><th>รายละเอียด</th></tr><tr><td>1</td><td>03/08/2026</td><td>Create</td></tr></table>
+  </div>
+  <div class="toolbar">
+    <div class="tab active" data-tab="request" onclick="setTab('request')">Request</div>
+    <div class="tab" data-tab="response" onclick="setTab('response')">Response</div>
+    <div style="flex:1"></div>
+    <div class="search-wrap">
+      <i class="ti ti-search"></i>
+      <input type="text" id="search" placeholder="Filter parameter..." oninput="render()">
+    </div>
+  </div>
+  <div id="content"></div>
+
+  <div style="display:flex;gap:16px;margin-top:12px;font-size:12px;color:var(--color-text-secondary);align-items:center">
+    <span style="display:flex;align-items:center;gap:6px"><span class="badge bm">M</span>Mandatory</span>
+    <span style="display:flex;align-items:center;gap:6px"><span class="badge bo">O</span>Optional</span>
+    <span style="display:flex;align-items:center;gap:6px"><span class="badge bn">New</span>Field ที่เพิ่มใหม่จากเวอร์ชันก่อนหน้า</span>
+  </div>
+
+<script>
+const SCHEMA = {"request": [{"group": "Request Body", "fields": [{"name": "rpcNumber", "type": "int", "om": "M", "desc": "หมายเลขระบุ operation ของ Indara (Fixed ต่อ operation — ห้ามใช้ suffix อื่น เช่น CAL ที่พบในเอกสารเก่า ไม่มีอยู่จริงตาม field spec ทางการ v1.7.0)", "remark": "", "new": false}, {"name": "TRAN_DATE", "type": "string", "om": "M", "desc": "วันที่ส่งข้อมูล (รูปแบบ DD-MM-YYYY)", "remark": "", "new": false}, {"name": "TRAN_TIME", "type": "string", "om": "M", "desc": "เวลาที่ส่งข้อมูล (รูปแบบ HH:MM)", "remark": "", "new": false}, {"name": "TITLE", "type": "string", "om": "M", "desc": "รหัสคำนำหน้าชื่อ — ดูรายการใน Sheet: TITLE (เช่น 042=นาย, 059=บริษัท)", "remark": "", "new": false}, {"name": "FIRST_NAME", "type": "string", "om": "M", "desc": "ชื่อผู้เอาประกัน (กรณีนิติบุคคลใส่ชื่อบริษัท)", "remark": "", "new": false}, {"name": "LAST_NAME", "type": "string", "om": "M", "desc": "นามสกุลผู้เอาประกัน — นิติบุคคลปล่อยว่างได้", "remark": "", "new": false}, {"name": "ID_NBR", "type": "string", "om": "M", "desc": "เลขบัตรประชาชน/พาสปอร์ต/เลขผู้เสียภาษี ตาม CHK_IDCARD", "remark": "", "new": false}, {"name": "CHK_IDCARD", "type": "string", "om": "M", "desc": "ประเภทเอกสารระบุตัวตน — IDCARD/PASSPORT (บุคคล) หรือ IDTAX (นิติบุคคล)", "remark": "", "new": false}, {"name": "MOBILE_NO", "type": "string", "om": "M", "desc": "เบอร์มือถือผู้เอาประกัน (Mandatory — พบว่าตัวอย่าง Postman เดิมของ Indara ขาดฟิลด์นี้ไปเลย)", "remark": "", "new": false}, {"name": "TEL_NO", "type": "string", "om": "M", "desc": "เบอร์โทรศัพท์ผู้เอาประกัน (Mandatory)", "remark": "", "new": false}, {"name": "ADDRESS", "type": "string", "om": "M", "desc": "ที่อยู่ผู้เอาประกัน (บรรทัดที่อยู่)", "remark": "", "new": false}, {"name": "TAMBON", "type": "string", "om": "M", "desc": "รหัสตำบล — ตาม Sheet: ADDR", "remark": "", "new": false}, {"name": "AMPHOE", "type": "string", "om": "M", "desc": "รหัสอำเภอ — ตาม Sheet: ADDR (รูปแบบเฉพาะ เช่น 00*44)", "remark": "", "new": false}, {"name": "PROVINCE", "type": "string", "om": "M", "desc": "รหัสจังหวัด — ตาม Sheet: ADDR", "remark": "", "new": false}, {"name": "POST_CODE", "type": "string", "om": "M", "desc": "รหัสไปรษณีย์ — ตาม Sheet: ADDR", "remark": "", "new": false}, {"name": "COUNTRY", "type": "string", "om": "M", "desc": "รหัสประเทศ — ตาม Sheet: COUNTRY", "remark": "", "new": false}, {"name": "PLAN_CODE", "type": "string", "om": "M", "desc": "รหัสแผนประกัน — ตาม Sheet: CMI_PlanCode (CMI) หรือ VMI_PlanCode (VMI)", "remark": "", "new": false}, {"name": "EFF_DATE", "type": "string", "om": "M", "desc": "วันเริ่มคุ้มครอง (ค.ศ., DD-MM-YYYY)", "remark": "", "new": false}, {"name": "EXP_DATE", "type": "string", "om": "M", "desc": "วันสิ้นสุดความคุ้มครอง (ค.ศ., DD-MM-YYYY)", "remark": "", "new": false}, {"name": "REBATE1", "type": "int", "om": "M", "desc": "ส่วนลดที่ 1 (เฉพาะ VMI)", "remark": "", "new": false}, {"name": "REBATE2", "type": "int", "om": "M", "desc": "ส่วนลดที่ 2 (เฉพาะ VMI)", "remark": "", "new": false}, {"name": "CAR_COLOR", "type": "string", "om": "M", "desc": "รหัสสีรถ — ตาม Sheet: CAR_COLOR", "remark": "", "new": false}, {"name": "VEHICLE", "type": "string", "om": "M", "desc": "รหัสยี่ห้อรถ — ตาม Sheet: CMI_VehicleData/VMI_VehicleData", "remark": "", "new": false}, {"name": "VEHICLE_MODEL", "type": "string", "om": "M", "desc": "รหัสรุ่นรถ — ตาม Sheet: CMI_VehicleData/VMI_VehicleData", "remark": "", "new": false}, {"name": "YEAR_MADE", "type": "int", "om": "M", "desc": "ปีที่จดทะเบียนรถ", "remark": "", "new": false}, {"name": "VEHICLE_GROUP", "type": "string", "om": "M", "desc": "กลุ่มรถตาม Tariff", "remark": "", "new": false}, {"name": "DISP", "type": "int", "om": "M", "desc": "ความจุกระบอกสูบ (ซีซี)", "remark": "", "new": false}, {"name": "SEAT", "type": "int", "om": "M", "desc": "จำนวนที่นั่ง", "remark": "", "new": false}, {"name": "WEIGHT", "type": "int", "om": "M", "desc": "น้ำหนักรถ", "remark": "", "new": false}, {"name": "PLATE_TYPE", "type": "string", "om": "M", "desc": "ชนิดทะเบียนรถ — ตาม Sheet: PLATE_TYPE (VEH00004 = มีทะเบียนในประเทศ, VEH00002 = ป้ายแดง)", "remark": "", "new": false}, {"name": "VEH_NBR1", "type": "string", "om": "M", "desc": "เลขทะเบียนส่วนที่ 1 (ตัวเลข+อักษร) — กรณีป้ายแดงส่งค่า \"ป้ายแดง\"", "remark": "", "new": false}, {"name": "VEH_NBR2", "type": "string", "om": "M", "desc": "เลขทะเบียนส่วนที่ 2 (ตัวเลข ไม่เกิน 4 หลัก) — กรณีป้ายแดงไม่ต้องส่ง", "remark": "", "new": false}, {"name": "VEHICLE_PROV", "type": "string", "om": "M", "desc": "รหัสจังหวัดทะเบียนรถ — ตาม Sheet: VEHICLE_PROV", "remark": "", "new": false}, {"name": "CHASSIS_NBR", "type": "string", "om": "M", "desc": "เลขตัวถัง", "remark": "", "new": false}, {"name": "ENGINE_NBR", "type": "string", "om": "M", "desc": "เลขเครื่องยนต์ (Optional)", "remark": "", "new": false}, {"name": "USER_ID", "type": "string", "om": "M", "desc": "User ของระบบ Broker — ต้องลงท้ายด้วย \"_API\" เสมอ", "remark": "", "new": false}, {"name": "AGENT_CODE", "type": "string", "om": "M", "desc": "รหัสตัวแทน Fix ตามที่ Indara แจ้งให้ 724 โดยเฉพาะ (ค่าในตัวอย่างนี้เป็น test account ของ Indara เอง ไม่ใช่ของ 724 — ดู credential จริงใน status.md/RFC แยกต่างหาก ห้ามใช้ค่านี้ยิงจริง)", "remark": "", "new": false}, {"name": "PASSWORD_AGENT", "type": "string", "om": "M", "desc": "รหัสยืนยันตัวตนของ Agent — ค่าทดสอบ (UAT) กับค่า Production ไม่เหมือนกัน ขอจาก Indara/PM โดยตรง", "remark": "", "new": false}, {"name": "DELIVERY_OPT", "type": "string", "om": "M", "desc": "ช่องทางจัดส่งกรมธรรม์ — EPOL (อิเล็กทรอนิกส์) หรือ PAPER", "remark": "", "new": false}, {"name": "DELIVERY_FLAG", "type": "string", "om": "M", "desc": "รูปแบบจัดส่งของ EPOL — EMAIL/SMS/ALL (Mandatory ถ้า DELIVERY_OPT=EPOL)", "remark": "", "new": false}, {"name": "DELIVERY_TITLE", "type": "string", "om": "M", "desc": "คำนำหน้าผู้รับเอกสาร — ตาม Sheet: TITLE (Mandatory เสมอ แม้เลือก EPOL)", "remark": "", "new": false}, {"name": "DELIVERY_FIRSTNAME", "type": "string", "om": "M", "desc": "ชื่อผู้รับเอกสาร (Mandatory เสมอ)", "remark": "", "new": false}, {"name": "DELIVERY_LASTNAME", "type": "string", "om": "M", "desc": "นามสกุลผู้รับเอกสาร (Mandatory เสมอ)", "remark": "", "new": false}, {"name": "DELIVERY_EMAIL", "type": "string", "om": "M", "desc": "อีเมลรับเอกสาร — Mandatory ถ้า DELIVERY_OPT=EPOL และ DELIVERY_FLAG=EMAIL", "remark": "", "new": false}, {"name": "REC_TITLE", "type": "string", "om": "M", "desc": "คำนำหน้าบนใบเสร็จ — ตาม Sheet: TITLE", "remark": "", "new": false}, {"name": "REC_FNAME", "type": "string", "om": "M", "desc": "ชื่อบนใบเสร็จ", "remark": "", "new": false}, {"name": "REC_LNAME", "type": "string", "om": "M", "desc": "นามสกุล/ส่วนต่อท้ายชื่อบนใบเสร็จ", "remark": "", "new": false}, {"name": "REC_ADDR", "type": "string", "om": "M", "desc": "ที่อยู่บนใบเสร็จ", "remark": "", "new": false}, {"name": "REC_TAMBON", "type": "string", "om": "M", "desc": "รหัสตำบลบนใบเสร็จ — ตาม Sheet: ADDR", "remark": "", "new": false}, {"name": "REC_AMPHOE", "type": "string", "om": "M", "desc": "รหัสอำเภอบนใบเสร็จ — ตาม Sheet: ADDR", "remark": "", "new": false}, {"name": "REC_PROV", "type": "string", "om": "M", "desc": "รหัสจังหวัดบนใบเสร็จ — ตาม Sheet: ADDR", "remark": "", "new": false}, {"name": "REC_POSTCODE", "type": "string", "om": "M", "desc": "รหัสไปรษณีย์บนใบเสร็จ", "remark": "", "new": false}, {"name": "REC_COUNTRY", "type": "string", "om": "M", "desc": "รหัสประเทศบนใบเสร็จ", "remark": "", "new": false}, {"name": "REC_ID_BRANCH", "type": "string", "om": "M", "desc": "HQ/BR — สำนักงานใหญ่หรือสาขาออกใบเสร็จ", "remark": "", "new": false}, {"name": "CEO", "type": "Object", "om": "M", "desc": "ชุดข้อมูลกรรมการผู้จัดการ (Mandatory เมื่อผู้เอาประกันเป็นนิติบุคคล)", "remark": "", "new": false}]}, {"group": "CEO", "fields": [{"name": "CEOTitle", "type": "string", "om": "M", "desc": "คำนำหน้ากรรมการผู้จัดการ — ตาม Sheet: TITLE", "remark": "", "new": false}, {"name": "CEOname", "type": "string", "om": "M", "desc": "ชื่อกรรมการผู้จัดการ", "remark": "", "new": false}, {"name": "CEOLname", "type": "string", "om": "M", "desc": "นามสกุลกรรมการผู้จัดการ", "remark": "", "new": false}, {"name": "CEOADDRREG", "type": "string", "om": "M", "desc": "ที่อยู่กรรมการผู้จัดการ", "remark": "", "new": false}, {"name": "CEOTambon", "type": "string", "om": "M", "desc": "รหัสตำบลกรรมการผู้จัดการ — ตาม Sheet: ADDR", "remark": "", "new": false}, {"name": "CEOAmphoe", "type": "string", "om": "M", "desc": "รหัสอำเภอกรรมการผู้จัดการ — ตาม Sheet: ADDR", "remark": "", "new": false}, {"name": "CEOCorProvince", "type": "string", "om": "M", "desc": "รหัสจังหวัดกรรมการผู้จัดการ — ตาม Sheet: ADDR", "remark": "", "new": false}, {"name": "CEOPostCode", "type": "string", "om": "M", "desc": "รหัสไปรษณีย์กรรมการผู้จัดการ", "remark": "", "new": false}, {"name": "CEOCountry", "type": "string", "om": "M", "desc": "รหัสประเทศกรรมการผู้จัดการ", "remark": "", "new": false}, {"name": "CEOIDType", "type": "string", "om": "M", "desc": "ประเภทบัตร — IDCARD", "remark": "", "new": false}, {"name": "CEOIDNBR", "type": "string", "om": "M", "desc": "เลขบัตรประชาชนกรรมการผู้จัดการ", "remark": "", "new": false}]}], "response": [{"group": "Response Body", "fields": [{"name": "TRAN_ID", "type": "string", "om": "M", "desc": "เลขอ้างอิง transaction ฝั่ง Indara (สำหรับ audit)", "remark": "", "new": false}, {"name": "TRAN_DATE", "type": "string", "om": "M", "desc": "วันที่ส่งข้อมูล (รูปแบบ DD-MM-YYYY)", "remark": "", "new": false}, {"name": "TRAN_TIME", "type": "string", "om": "M", "desc": "เวลาที่ส่งข้อมูล (รูปแบบ HH:MM)", "remark": "", "new": false}, {"name": "ERROR_CODE", "type": "int", "om": "M", "desc": "0 = สำเร็จ, 1 = ล้มเหลว", "remark": "", "new": false}, {"name": "ERROR_DESC", "type": "string", "om": "O", "desc": "รายละเอียด error เมื่อ ERROR_CODE = 1", "remark": "", "new": false}, {"name": "POL_NBR", "type": "string", "om": "M", "desc": "เลขกรมธรรม์ที่ออก (VMI)", "remark": "", "new": false}, {"name": "GROSS_PREM", "type": "number", "om": "M", "desc": "เบี้ยประกันสุทธิ (บาท)", "remark": "", "new": false}, {"name": "STAMP_AMT", "type": "number", "om": "M", "desc": "อากรแสตมป์ (บาท)", "remark": "", "new": false}, {"name": "VAT_AMT", "type": "number", "om": "M", "desc": "ภาษีมูลค่าเพิ่ม (บาท)", "remark": "", "new": false}, {"name": "TOTAL_DUE", "type": "number", "om": "M", "desc": "เบี้ยประกันรวมที่ต้องชำระ (บาท) — ไม่มี API แยกคำนวณเบี้ยก่อนออกกรมธรรม์ ค่านี้ทราบได้ตอนออกกรมธรรม์แล้วเท่านั้น", "remark": "", "new": false}, {"name": "PRINT_URL", "type": "string", "om": "M", "desc": "ลิงก์ดาวน์โหลด PDF กรมธรรม์/เอกสาร", "remark": "", "new": false}]}], "request_json": "{\n  \"rpcNumber\": 103,\n  \"TRAN_DATE\": \"02-06-2026\",\n  \"TRAN_TIME\": \"15:00\",\n  \"TITLE\": \"042\",\n  \"FIRST_NAME\": \"ทดสอบ\",\n  \"LAST_NAME\": \"เอพีไอพีเอ็นโอ\",\n  \"ID_NBR\": \"3601516989138\",\n  \"CHK_IDCARD\": \"IDCARD\",\n  \"MOBILE_NO\": \"0817956982\",\n  \"TEL_NO\": \"027050963\",\n  \"ADDRESS\": \"166/11\",\n  \"TAMBON\": \"104702\",\n  \"AMPHOE\": \"00*44\",\n  \"PROVINCE\": \"00\",\n  \"POST_CODE\": \"10260\",\n  \"COUNTRY\": \"THA\",\n  \"PLAN_CODE\": \"26USJ3PG110DAO005P1\",\n  \"EFF_DATE\": \"15-06-2026\",\n  \"EXP_DATE\": \"15-06-2027\",\n  \"REBATE1\": 300,\n  \"REBATE2\": 40000,\n  \"CAR_COLOR\": \"CL004\",\n  \"VEHICLE\": \"HON\",\n  \"VEHICLE_MODEL\": \"HON*14CD\",\n  \"YEAR_MADE\": 2014,\n  \"VEHICLE_GROUP\": \"3\",\n  \"DISP\": 1997,\n  \"SEAT\": 4,\n  \"WEIGHT\": 0,\n  \"PLATE_TYPE\": \"VEH00004\",\n  \"VEH_NBR1\": \"5ขฆ\",\n  \"VEH_NBR2\": \"6003\",\n  \"VEHICLE_PROV\": \"กท\",\n  \"CHASSIS_NBR\": \"ITUAT2606026003\",\n  \"ENGINE_NBR\": \"ENG2606026003\",\n  \"USER_ID\": \"TGSIT_API\",\n  \"AGENT_CODE\": \"1110199998\",\n  \"PASSWORD_AGENT\": \"12345678\",\n  \"DELIVERY_OPT\": \"EPOL\",\n  \"DELIVERY_FLAG\": \"EMAIL\",\n  \"DELIVERY_TITLE\": \"014\",\n  \"DELIVERY_FIRSTNAME\": \"แจน\",\n  \"DELIVERY_LASTNAME\": \"ตระกูลศีลธรรม\",\n  \"DELIVERY_EMAIL\": \"example@partner.co.th\",\n  \"REC_TITLE\": \"059\",\n  \"REC_FNAME\": \"ไทยกรุ๊ป เซอร์วิสเซส\",\n  \"REC_LNAME\": \"จำกัด\",\n  \"REC_ADDR\": \"99/99\",\n  \"REC_TAMBON\": \"570101\",\n  \"REC_AMPHOE\": \"12*01\",\n  \"REC_PROV\": \"12\",\n  \"REC_POSTCODE\": \"57000\",\n  \"REC_COUNTRY\": \"THA\",\n  \"REC_ID_BRANCH\": \"HQ\",\n  \"CEO\": {\n    \"CEOTitle\": \"042\",\n    \"CEOname\": \"ก้วย\",\n    \"CEOLname\": \"ทดสอบเอพีไอ\",\n    \"CEOADDRREG\": \"44 ชั้นลอยฟ้า\",\n    \"CEOTambon\": \"102901\",\n    \"CEOAmphoe\": \"00*30\",\n    \"CEOCorProvince\": \"00\",\n    \"CEOPostCode\": \"10800\",\n    \"CEOCountry\": \"THA\",\n    \"CEOIDType\": \"IDCARD\",\n    \"CEOIDNBR\": \"1720700069854\"\n  }\n}", "response_json": "{\n  \"TRAN_ID\": \"21338_52795.08958623_5818\",\n  \"TRAN_DATE\": \"20260602\",\n  \"TRAN_TIME\": \"14:39:55\",\n  \"ERROR_CODE\": 0,\n  \"ERROR_DESC\": \"\",\n  \"POL_NBR\": \"80801D-V3P-26-00001130\",\n  \"GROSS_PREM\": 4653.9,\n  \"STAMP_AMT\": 19.0,\n  \"VAT_AMT\": 327.1,\n  \"TOTAL_DUE\": 5000.0,\n  \"PRINT_URL\": \"https://wsapidev.indara.co.th/uatweb/WebPrint/00001_21338_COVERLETTERONLINE_00811007_1.pdf\"\n}", "history": [{"no": 1, "date": "03/08/2026", "desc": "Create"}]};
+let activeTab = "request";
+
+function escapeHtml(s) {
+  return s.replace(/&/g, '&amp;').replace(/</g, '&lt;').replace(/>/g, '&gt;');
+}
+
+function copyName(name, el) {
+  navigator.clipboard.writeText(name);
+  el.className = 'ti ti-check copy-icon';
+  el.style.color = 'var(--color-text-success)';
+  setTimeout(function () {
+    el.className = 'ti ti-copy copy-icon';
+    el.style.color = 'var(--color-text-tertiary)';
+  }, 1000);
+}
+
+function render() {
+  const groups = SCHEMA[activeTab];
+  const jsonBody = SCHEMA[activeTab + '_json'];
+  const q = document.getElementById('search').value.trim().toLowerCase();
+
+  let html = '<details class="json-details"><summary>JSON Body</summary><pre>' + escapeHtml(jsonBody) + '</pre></details>';
+
+  html += '<div class="sw"><table class="tbl"><thead><tr>';
+  html += '<th style="width:200px">Parameter</th><th style="width:120px">Type</th><th style="width:44px;text-align:center">O/M</th><th>Description</th>';
+  html += '</tr></thead><tbody>';
+
+  groups.forEach(function (g) {
+    const fields = g.fields.filter(function (f) {
+      return !q || f.name.toLowerCase().includes(q);
+    });
+    if (fields.length === 0) return;
+
+    html += '<tr class="sec-row"><td colspan="4">' + g.group + '</td></tr>';
+    fields.forEach(function (f) {
+      const om = f.om === 'M' ? '<span class="badge bm">M</span>' : '<span class="badge bo">O</span>';
+      const small = f.remark ? '<small>' + f.remark + '</small>' : '';
+      const newBadge = f.new ? '<span class="badge bn">New</span>' : '';
+      html += '<tr>';
+      html += '<td class="td-name">' + f.name + '<i class="ti ti-copy copy-icon" onclick="copyName(\'' + f.name + '\', this)"></i>' + newBadge + '</td>';
+      html += '<td><span class="type-badge">' + f.type + '</span></td>';
+      html += '<td class="td-om">' + om + '</td>';
+      html += '<td class="td-desc">' + f.desc + small + '</td>';
+      html += '</tr>';
+    });
+  });
+
+  html += '</tbody></table></div>';
+  document.getElementById('content').innerHTML = html || '<p style="color:var(--color-text-tertiary)">No matching parameters</p>';
+}
+
+function setTab(tab) {
+  activeTab = tab;
+  document.querySelectorAll('.tab').forEach(function (el) {
+    el.classList.toggle('active', el.getAttribute('data-tab') === tab);
+  });
+  render();
+}
+
+render();
+</script>
+</body>
+</html>

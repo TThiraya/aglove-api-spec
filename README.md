@@ -79,3 +79,10 @@
 - [POST /Policy/package/list](https://tthiraya.github.io/aglove-api-spec/API%20Spec/Policy/package-list.html)
 - [POST /Policy/v1/package/list](https://tthiraya.github.io/aglove-api-spec/API%20Spec/Policy/v1-package-list.html)
 
+## Indara (IIC) — partner API (SOAP/XML, ไม่ใช่ AGLove เอง)
+
+- [CallTHI rpcNumber=104 · Verify](https://tthiraya.github.io/aglove-api-spec/API%20Spec/Indara/verify.html)
+- [CallTHI rpcNumber=108 · CMI (ออก พ.ร.บ.)](https://tthiraya.github.io/aglove-api-spec/API%20Spec/Indara/cmi.html)
+- [CallTHI rpcNumber=103 · VMI (ออกภาคสมัครใจ)](https://tthiraya.github.io/aglove-api-spec/API%20Spec/Indara/vmi.html)
+- [CallTHI rpcNumber=112 · Cancel](https://tthiraya.github.io/aglove-api-spec/API%20Spec/Indara/cancel.html)
+
