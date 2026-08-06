@@ -17,6 +17,7 @@
 ## ComparePrice
 
 - [POST /ComparePrice/package/ext/search](https://tthiraya.github.io/aglove-api-spec/API%20Spec/ComparePrice/package-ext-search.html)
+- [POST /ComparePrice/package/search](https://tthiraya.github.io/aglove-api-spec/API%20Spec/ComparePrice/package-search.html)
 
 ## Customer
 
