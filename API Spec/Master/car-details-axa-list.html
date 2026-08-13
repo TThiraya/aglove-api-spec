@@ -1,0 +1,179 @@
+<!DOCTYPE html>
+<html lang="th">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>POST /Master/car-details/axa/list</title>
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/tabler-icons/3.35.0/tabler-icons.min.css">
+<style>
+  :root {
+    --color-background-primary: #ffffff;
+    --color-background-secondary: #f4f3ef;
+    --color-background-tertiary: #ebe9e1;
+    --color-text-primary: #0f172a;
+    --color-text-secondary: #5f5e5a;
+    --color-text-tertiary: #888780;
+    --color-text-success: #0f6e56;
+    --color-border-tertiary: rgba(15,23,42,.15);
+    --color-border-secondary: rgba(15,23,42,.3);
+    --font-sans: -apple-system, "Segoe UI", Roboto, Helvetica, Arial, sans-serif;
+    --font-mono: ui-monospace, SFMono-Regular, Menlo, Consolas, monospace;
+    --border-radius-md: 8px;
+    --border-radius-lg: 12px;
+  }
+  @media (prefers-color-scheme: dark) {
+    :root {
+      --color-background-primary: #1c1c1a;
+      --color-background-secondary: #2c2c2a;
+      --color-background-tertiary: #383836;
+      --color-text-primary: #f1efe8;
+      --color-text-secondary: #b4b2a9;
+      --color-text-tertiary: #888780;
+      --color-text-success: #5dcaa5;
+      --color-border-tertiary: rgba(255,255,255,.15);
+      --color-border-secondary: rgba(255,255,255,.3);
+    }
+  }
+  * { box-sizing: border-box; }
+  body {
+    margin: 0; padding: 24px; font-family: var(--font-sans);
+    background: var(--color-background-primary); color: var(--color-text-primary);
+    font-size: 14px; line-height: 1.6;
+  }
+  h1 { font-size: 20px; font-weight: 500; margin: 0 0 4px; }
+  .endpoint { font-family: var(--font-mono); font-size: 14px; color: var(--color-text-secondary); margin: 0 0 16px; }
+  .method { display: inline-block; font-size: 12px; font-weight: 500; padding: 2px 8px; border-radius: var(--border-radius-md); background: #E6F1FB; color: #0C447C; font-family: var(--font-mono); margin-right: 8px; }
+  .hints { background: var(--color-background-secondary); border-radius: var(--border-radius-md); padding: 12px 16px; margin-bottom: 20px; font-size: 13px; }
+  .hints p { margin: 0 0 6px; font-weight: 500; }
+  .hints ul { margin: 0; padding-left: 20px; }
+  .hints li { margin-bottom: 4px; color: var(--color-text-secondary); }
+  .hist-tbl { border-collapse: collapse; font-size: 12px; margin-top: 4px; }
+  .hist-tbl th, .hist-tbl td { padding: 4px 10px; text-align: left; border: 0.5px solid var(--color-border-tertiary); }
+  .hist-tbl th { font-weight: 500; color: var(--color-text-secondary); }
+  .hist-tbl td { color: var(--color-text-secondary); }
+  .toolbar { display: flex; align-items: center; gap: 8px; margin-bottom: 16px; }
+  .tab { cursor: pointer; padding: 6px 14px; border-radius: var(--border-radius-md); border: 0.5px solid var(--color-border-tertiary); font-size: 13px; font-weight: 500; }
+  .tab.active { background: var(--color-background-secondary); border-color: var(--color-border-secondary); }
+  input[type=text] {
+    padding: 6px 10px 6px 30px; border-radius: var(--border-radius-md); border: 0.5px solid var(--color-border-tertiary);
+    background: var(--color-background-primary); color: var(--color-text-primary); font-size: 13px; width: 220px;
+  }
+  .search-wrap { position: relative; }
+  .search-wrap i { position: absolute; left: 10px; top: 50%; transform: translateY(-50%); font-size: 14px; color: var(--color-text-tertiary); }
+
+  .sw { padding: 1.5rem 0; font-family: var(--font-sans); }
+  .sw-label { font-size: 11px; font-weight: 500; color: var(--color-text-secondary); text-transform: uppercase; letter-spacing: .06em; margin: 0 0 12px; }
+  .tbl { width: 100%; border-collapse: collapse; border-radius: var(--border-radius-lg); overflow: hidden; border: 0.5px solid var(--color-border-tertiary); }
+  .tbl thead th { font-size: 11px; font-weight: 500; color: var(--color-text-secondary); text-transform: uppercase; letter-spacing: .06em; padding: 8px 14px; background: var(--color-background-secondary); border-bottom: 0.5px solid var(--color-border-secondary); text-align: left; }
+  .tbl tbody tr { border-bottom: 0.5px solid var(--color-border-tertiary); }
+  .tbl tbody tr:last-child { border-bottom: none; }
+  .tbl tbody tr:hover { background: var(--color-background-secondary); }
+  .tbl td { padding: 9px 14px; font-size: 13px; vertical-align: middle; }
+  .td-name { font-family: var(--font-mono); font-size: 12px; font-weight: 500; color: var(--color-text-primary); white-space: nowrap; }
+  .td-name.indent { padding-left: 28px; }
+  .copy-icon { cursor: pointer; font-size: 14px; color: var(--color-text-tertiary); margin-left: 6px; vertical-align: -2px; }
+  .type-badge { display: inline-block; font-size: 11px; font-weight: 500; padding: 2px 8px; border-radius: var(--border-radius-md); border: 0.5px solid var(--color-border-tertiary); color: var(--color-text-secondary); font-family: var(--font-mono); }
+  .td-desc { color: var(--color-text-primary); font-size: 13px; }
+  .td-desc small { display: block; font-size: 11px; color: var(--color-text-secondary); margin-top: 2px; }
+  .td-om { text-align: center; white-space: nowrap; }
+  .badge { font-size: 11px; font-weight: 500; padding: 2px 8px; border-radius: 99px; }
+  .bm { background: #E6F1FB; color: #0C447C; }
+  .bo { background: #F1EFE8; color: #444441; }
+  .bn { background: #FCE8D6; color: #9A4B0C; margin-left: 6px; }
+  .sec-row td { font-size: 11px; font-weight: 500; color: var(--color-text-secondary); text-transform: uppercase; letter-spacing: .04em; background: var(--color-background-secondary); padding: 6px 14px; border-bottom: 0.5px solid var(--color-border-secondary); }
+  @media (prefers-color-scheme: dark) { .bm { background: #0C447C; color: #B5D4F4; } .bo { background: #444441; color: #D3D1C7; } .bn { background: #5C3317; color: #FFD9B3; } }
+  .json-details { margin-bottom: 16px; }
+  .json-details summary { cursor: pointer; font-size: 13px; font-weight: 500; padding: 8px 14px; border-radius: var(--border-radius-md); border: 0.5px solid var(--color-border-tertiary); background: var(--color-background-secondary); }
+  .json-details pre { margin: 8px 0 0; padding: 12px 14px; border-radius: var(--border-radius-md); border: 0.5px solid var(--color-border-tertiary); background: var(--color-background-secondary); font-family: var(--font-mono); font-size: 12px; overflow-x: auto; }
+</style>
+</head>
+<body>
+  <h1>POST /Master/car-details/axa/list</h1>
+  <p class="endpoint"><span class="method">POST</span>/Master/car-details/axa/list</p>
+  <div class="hints">
+    <p>ข้อควรรู้</p>
+    <ul><li>ใช้แปลงรถที่เลือกจาก car-master 724 (ยี่ห้อ/รุ่น/ขนาด/ประเภทการใช้งาน) เป็น CMI VehicleKey ของ AXA สำหรับออกกรมธรรม์ พ.ร.บ.</li><li>ไม่ต้องส่ง Authorization header — endpoint นี้เปิดให้เรียกได้โดยไม่ต้อง login (ต่างจาก endpoint อื่นของ AgentLove ส่วนใหญ่)</li><li>ฟิลด์ทั้ง 5 ที่ใช้จริง (UseCarCode/CarTypeCode/CarCategoryID/CarBrandID/CarModelID) เป็น optional ทั้งหมด — AND เข้า query เฉพาะตัวที่ไม่ว่าง</li><li>CarSalesYear รับค่าได้แต่ไม่ได้ใช้กรองข้อมูลเลย (เคยกรองได้แต่ column ถูกตัดออกจาก view แล้ว) — แต่ยังมีผลต่อ cache key ฝั่ง server</li><li>⚠️ ห้ามส่ง {} (ทุกฟิลด์ว่าง) — จากการทดสอบทำให้ query กวาดข้อมูลทั้ง view (~35.6k แถว) จน DB timeout ที่ ~30 วินาที แล้วตอบกลับเป็น A225804 (เข้าใจผิดว่า 'ไม่พบข้อมูล' ได้) ให้ส่งอย่างน้อย UseCarCode+CarTypeCode เสมอ</li><li>⚠️ .Clean() ฝั่ง server ไม่ตัดช่องว่างนำหน้า (leading space) เช่น " PERSONAL" จะหาไม่เจอ (ตกไปที่ A225804) ทั้งที่ "PERSONAL " (ช่องว่างต่อท้าย) หาเจอปกติ — ควร trim ค่าก่อนส่งเสมอ</li><li>ไม่พบข้อมูล (0 แถว) และ DB/Dapper error แยกไม่ออกจาก response — ทั้งคู่ตอบเป็น A225804 พร้อม ErrorMessage ต่างกัน</li><li>ผลลัพธ์เป็น SELECT DISTINCT ไม่มี ORDER BY — ลำดับแถวไม่แน่นอน</li><li>คืนเฉพาะแถวที่ CMI_VehicleKey ไม่เป็น null เท่านั้น (WHERE CMI_VehicleKey IS NOT NULL)</li><li>ผลลัพธ์ที่สำเร็จถูก cache ไว้ 3 ชั่วโมง โดย cache key คำนวณจาก request แบบดิบก่อน .Clean() — เว้นวรรค/CarSalesYear ต่างกันทำให้ cache แตกกันแม้ query จะเหมือนกันในทางปฏิบัติ</li><li>ErrorCode ที่พบ: A225203 (ความยาวฟิลด์เกิน 50 ตัว — Message เป็น null, Options.Parameter บอกชื่อฟิลด์), A225804 (ไม่พบข้อมูล/DB error), A225999 (unhandled exception รวมถึง body ว่าง/parse ไม่ได้)</li><li>ถ้าไม่ส่ง body เลย (ไม่มี Content-Length) จะได้ HTTP 411 แบบ HTML ไม่ใช่ envelope ปกติ — ต้องส่ง body เป็น JSON เสมอแม้จะเป็น {}</li></ul>
+    <p style="margin-top:10px">ประวัติการสร้าง/อัปเดต Spec</p><table class="hist-tbl"><tr><th>ครั้งที่</th><th>วันที่</th><th>รายละเอียด</th></tr><tr><td>1</td><td>13/08/2026</td><td>Create</td></tr></table>
+  </div>
+  <div class="toolbar">
+    <div class="tab active" data-tab="request" onclick="setTab('request')">Request</div>
+    <div class="tab" data-tab="response" onclick="setTab('response')">Response</div>
+    <div style="flex:1"></div>
+    <div class="search-wrap">
+      <i class="ti ti-search"></i>
+      <input type="text" id="search" placeholder="Filter parameter..." oninput="render()">
+    </div>
+  </div>
+  <div id="content"></div>
+
+  <div style="display:flex;gap:16px;margin-top:12px;font-size:12px;color:var(--color-text-secondary);align-items:center">
+    <span style="display:flex;align-items:center;gap:6px"><span class="badge bm">M</span>Mandatory</span>
+    <span style="display:flex;align-items:center;gap:6px"><span class="badge bo">O</span>Optional</span>
+    <span style="display:flex;align-items:center;gap:6px"><span class="badge bn">New</span>Field ที่เพิ่มใหม่จากเวอร์ชันก่อนหน้า</span>
+  </div>
+
+<script>
+const SCHEMA = {"request": [{"group": "Request Body", "fields": [{"name": "UseCarCode", "type": "string", "om": "M", "desc": "รหัสประเภทการใช้รถ เช่น PERSONAL, HIRE — กรองเฉพาะเมื่อไม่ว่าง", "remark": "", "new": false}, {"name": "CarTypeCode", "type": "string", "om": "M", "desc": "รหัสประเภทรถยนต์ เช่น CAR_PASSENGER, CAR — กรองเฉพาะเมื่อไม่ว่าง", "remark": "", "new": false}, {"name": "CarCategoryID", "type": "GUID", "om": "M", "desc": "รหัสขนาดรถ (GUID 32 ตัวอักษรไม่มีขีด) — กรองเฉพาะเมื่อไม่ว่าง", "remark": "GUID", "new": false}, {"name": "CarSalesYear", "type": "string", "om": "O", "desc": "⚠️ รับค่าได้แต่ระบบไม่ได้ใช้กรองข้อมูลเลย (ไม่มีคอลัมน์นี้ใน view แล้ว) — แต่ยังมีผลต่อ cache key ฝั่ง server ทำให้ค่าเดิมคนละ CarSalesYear กลายเป็นคนละ cache entry", "remark": "", "new": false}, {"name": "CarBrandID", "type": "GUID", "om": "M", "desc": "รหัสยี่ห้อรถ (GUID 32 ตัวอักษรไม่มีขีด) — กรองเฉพาะเมื่อไม่ว่าง", "remark": "GUID", "new": false}, {"name": "CarModelID", "type": "GUID", "om": "M", "desc": "รหัสรุ่นรถ (GUID 32 ตัวอักษรไม่มีขีด) — กรองเฉพาะเมื่อไม่ว่าง", "remark": "GUID", "new": false}]}], "response": [{"group": "Response Body", "fields": [{"name": "Status", "type": "int", "om": "M", "desc": "สถานะการทำงานของ API / สถานะรายการ", "remark": "", "new": false}, {"name": "Message", "type": "string", "om": "O", "desc": "ข้อความตอบกลับจากระบบ", "remark": "", "new": false}, {"name": "ErrorCode", "type": "string", "om": "O", "desc": "รหัสข้อผิดพลาด", "remark": "", "new": false}, {"name": "ErrorMessage", "type": "string", "om": "O", "desc": "รายละเอียดข้อผิดพลาด", "remark": "", "new": false}, {"name": "Data", "type": "Array", "om": "M", "desc": "ข้อมูลผลลัพธ์", "remark": "", "new": false}, {"name": "Options", "type": "string", "om": "O", "desc": "ข้อมูลเพิ่มเติมของระบบ", "remark": "", "new": false}]}, {"group": "Data[]", "fields": [{"name": "CMI_VehicleKey", "type": "string", "om": "M", "desc": "รหัสรถของ CMI (ใช้ผูกตอนออกกรมธรรม์ พ.ร.บ.)", "remark": "", "new": false}, {"name": "CMI_Make", "type": "string", "om": "M", "desc": "ยี่ห้อรถตามฐานข้อมูล CMI", "remark": "", "new": false}, {"name": "CMI_Model", "type": "string", "om": "M", "desc": "รุ่นรถตามฐานข้อมูล CMI", "remark": "", "new": false}, {"name": "CMI_SubModel", "type": "string", "om": "M", "desc": "รุ่นย่อยตามฐานข้อมูล CMI", "remark": "", "new": false}, {"name": "CMI_RegisteredType", "type": "int", "om": "M", "desc": "ประเภทการจดทะเบียนตามฐานข้อมูล CMI", "remark": "int?", "new": false}, {"name": "CMI_EngineSize", "type": "int", "om": "M", "desc": "ขนาดเครื่องยนต์ (CC) ตามฐานข้อมูล CMI", "remark": "int?", "new": false}]}], "request_json": "{\n  \"UseCarCode\": \"PERSONAL\",\n  \"CarTypeCode\": \"CAR_PASSENGER\",\n  \"CarCategoryID\": \"7452F017878C46488FF253023BC47CC6\",\n  \"CarSalesYear\": \"\",\n  \"CarBrandID\": \"9D7B683710574E5282395FEAA9B114B0\",\n  \"CarModelID\": \"44D727FBF4894F86A80E3FD4D05E004C\"\n}", "response_json": "{\n  \"Status\": 200,\n  \"Message\": \"\",\n  \"ErrorCode\": \"\",\n  \"ErrorMessage\": \"\",\n  \"Data\": [\n    {\n      \"CMI_VehicleKey\": \"EB3201\",\n      \"CMI_Make\": \"TOYOTA\",\n      \"CMI_Model\": \"IPSUM\",\n      \"CMI_SubModel\": \"2.0 - 2000 cc\",\n      \"CMI_RegisteredType\": 1,\n      \"CMI_EngineSize\": 2000\n    }\n  ],\n  \"Options\": null\n}", "history": [{"no": 1, "date": "13/08/2026", "desc": "Create"}]};
+let activeTab = "request";
+
+function escapeHtml(s) {
+  return s.replace(/&/g, '&amp;').replace(/</g, '&lt;').replace(/>/g, '&gt;');
+}
+
+function copyName(name, el) {
+  navigator.clipboard.writeText(name);
+  el.className = 'ti ti-check copy-icon';
+  el.style.color = 'var(--color-text-success)';
+  setTimeout(function () {
+    el.className = 'ti ti-copy copy-icon';
+    el.style.color = 'var(--color-text-tertiary)';
+  }, 1000);
+}
+
+function render() {
+  const groups = SCHEMA[activeTab];
+  const jsonBody = SCHEMA[activeTab + '_json'];
+  const q = document.getElementById('search').value.trim().toLowerCase();
+
+  let html = '<details class="json-details"><summary>JSON Body</summary><pre>' + escapeHtml(jsonBody) + '</pre></details>';
+
+  html += '<div class="sw"><table class="tbl"><thead><tr>';
+  html += '<th style="width:200px">Parameter</th><th style="width:120px">Type</th><th style="width:44px;text-align:center">O/M</th><th>Description</th>';
+  html += '</tr></thead><tbody>';
+
+  groups.forEach(function (g) {
+    const fields = g.fields.filter(function (f) {
+      return !q || f.name.toLowerCase().includes(q);
+    });
+    if (fields.length === 0) return;
+
+    html += '<tr class="sec-row"><td colspan="4">' + g.group + '</td></tr>';
+    fields.forEach(function (f) {
+      const om = f.om === 'M' ? '<span class="badge bm">M</span>' : '<span class="badge bo">O</span>';
+      const small = f.remark ? '<small>' + f.remark + '</small>' : '';
+      const newBadge = f.new ? '<span class="badge bn">New</span>' : '';
+      html += '<tr>';
+      html += '<td class="td-name">' + f.name + '<i class="ti ti-copy copy-icon" onclick="copyName(\'' + f.name + '\', this)"></i>' + newBadge + '</td>';
+      html += '<td><span class="type-badge">' + f.type + '</span></td>';
+      html += '<td class="td-om">' + om + '</td>';
+      html += '<td class="td-desc">' + f.desc + small + '</td>';
+      html += '</tr>';
+    });
+  });
+
+  html += '</tbody></table></div>';
+  document.getElementById('content').innerHTML = html || '<p style="color:var(--color-text-tertiary)">No matching parameters</p>';
+}
+
+function setTab(tab) {
+  activeTab = tab;
+  document.querySelectorAll('.tab').forEach(function (el) {
+    el.classList.toggle('active', el.getAttribute('data-tab') === tab);
+  });
+  render();
+}
+
+render();
+</script>
+</body>
+</html>
