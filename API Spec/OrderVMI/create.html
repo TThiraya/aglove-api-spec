@@ -1,0 +1,179 @@
+<!DOCTYPE html>
+<html lang="th">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>POST /OrderVMI/create</title>
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/tabler-icons/3.35.0/tabler-icons.min.css">
+<style>
+  :root {
+    --color-background-primary: #ffffff;
+    --color-background-secondary: #f4f3ef;
+    --color-background-tertiary: #ebe9e1;
+    --color-text-primary: #0f172a;
+    --color-text-secondary: #5f5e5a;
+    --color-text-tertiary: #888780;
+    --color-text-success: #0f6e56;
+    --color-border-tertiary: rgba(15,23,42,.15);
+    --color-border-secondary: rgba(15,23,42,.3);
+    --font-sans: -apple-system, "Segoe UI", Roboto, Helvetica, Arial, sans-serif;
+    --font-mono: ui-monospace, SFMono-Regular, Menlo, Consolas, monospace;
+    --border-radius-md: 8px;
+    --border-radius-lg: 12px;
+  }
+  @media (prefers-color-scheme: dark) {
+    :root {
+      --color-background-primary: #1c1c1a;
+      --color-background-secondary: #2c2c2a;
+      --color-background-tertiary: #383836;
+      --color-text-primary: #f1efe8;
+      --color-text-secondary: #b4b2a9;
+      --color-text-tertiary: #888780;
+      --color-text-success: #5dcaa5;
+      --color-border-tertiary: rgba(255,255,255,.15);
+      --color-border-secondary: rgba(255,255,255,.3);
+    }
+  }
+  * { box-sizing: border-box; }
+  body {
+    margin: 0; padding: 24px; font-family: var(--font-sans);
+    background: var(--color-background-primary); color: var(--color-text-primary);
+    font-size: 14px; line-height: 1.6;
+  }
+  h1 { font-size: 20px; font-weight: 500; margin: 0 0 4px; }
+  .endpoint { font-family: var(--font-mono); font-size: 14px; color: var(--color-text-secondary); margin: 0 0 16px; }
+  .method { display: inline-block; font-size: 12px; font-weight: 500; padding: 2px 8px; border-radius: var(--border-radius-md); background: #E6F1FB; color: #0C447C; font-family: var(--font-mono); margin-right: 8px; }
+  .hints { background: var(--color-background-secondary); border-radius: var(--border-radius-md); padding: 12px 16px; margin-bottom: 20px; font-size: 13px; }
+  .hints p { margin: 0 0 6px; font-weight: 500; }
+  .hints ul { margin: 0; padding-left: 20px; }
+  .hints li { margin-bottom: 4px; color: var(--color-text-secondary); }
+  .hist-tbl { border-collapse: collapse; font-size: 12px; margin-top: 4px; }
+  .hist-tbl th, .hist-tbl td { padding: 4px 10px; text-align: left; border: 0.5px solid var(--color-border-tertiary); }
+  .hist-tbl th { font-weight: 500; color: var(--color-text-secondary); }
+  .hist-tbl td { color: var(--color-text-secondary); }
+  .toolbar { display: flex; align-items: center; gap: 8px; margin-bottom: 16px; }
+  .tab { cursor: pointer; padding: 6px 14px; border-radius: var(--border-radius-md); border: 0.5px solid var(--color-border-tertiary); font-size: 13px; font-weight: 500; }
+  .tab.active { background: var(--color-background-secondary); border-color: var(--color-border-secondary); }
+  input[type=text] {
+    padding: 6px 10px 6px 30px; border-radius: var(--border-radius-md); border: 0.5px solid var(--color-border-tertiary);
+    background: var(--color-background-primary); color: var(--color-text-primary); font-size: 13px; width: 220px;
+  }
+  .search-wrap { position: relative; }
+  .search-wrap i { position: absolute; left: 10px; top: 50%; transform: translateY(-50%); font-size: 14px; color: var(--color-text-tertiary); }
+
+  .sw { padding: 1.5rem 0; font-family: var(--font-sans); }
+  .sw-label { font-size: 11px; font-weight: 500; color: var(--color-text-secondary); text-transform: uppercase; letter-spacing: .06em; margin: 0 0 12px; }
+  .tbl { width: 100%; border-collapse: collapse; border-radius: var(--border-radius-lg); overflow: hidden; border: 0.5px solid var(--color-border-tertiary); }
+  .tbl thead th { font-size: 11px; font-weight: 500; color: var(--color-text-secondary); text-transform: uppercase; letter-spacing: .06em; padding: 8px 14px; background: var(--color-background-secondary); border-bottom: 0.5px solid var(--color-border-secondary); text-align: left; }
+  .tbl tbody tr { border-bottom: 0.5px solid var(--color-border-tertiary); }
+  .tbl tbody tr:last-child { border-bottom: none; }
+  .tbl tbody tr:hover { background: var(--color-background-secondary); }
+  .tbl td { padding: 9px 14px; font-size: 13px; vertical-align: middle; }
+  .td-name { font-family: var(--font-mono); font-size: 12px; font-weight: 500; color: var(--color-text-primary); white-space: nowrap; }
+  .td-name.indent { padding-left: 28px; }
+  .copy-icon { cursor: pointer; font-size: 14px; color: var(--color-text-tertiary); margin-left: 6px; vertical-align: -2px; }
+  .type-badge { display: inline-block; font-size: 11px; font-weight: 500; padding: 2px 8px; border-radius: var(--border-radius-md); border: 0.5px solid var(--color-border-tertiary); color: var(--color-text-secondary); font-family: var(--font-mono); }
+  .td-desc { color: var(--color-text-primary); font-size: 13px; }
+  .td-desc small { display: block; font-size: 11px; color: var(--color-text-secondary); margin-top: 2px; }
+  .td-om { text-align: center; white-space: nowrap; }
+  .badge { font-size: 11px; font-weight: 500; padding: 2px 8px; border-radius: 99px; }
+  .bm { background: #E6F1FB; color: #0C447C; }
+  .bo { background: #F1EFE8; color: #444441; }
+  .bn { background: #FCE8D6; color: #9A4B0C; margin-left: 6px; }
+  .sec-row td { font-size: 11px; font-weight: 500; color: var(--color-text-secondary); text-transform: uppercase; letter-spacing: .04em; background: var(--color-background-secondary); padding: 6px 14px; border-bottom: 0.5px solid var(--color-border-secondary); }
+  @media (prefers-color-scheme: dark) { .bm { background: #0C447C; color: #B5D4F4; } .bo { background: #444441; color: #D3D1C7; } .bn { background: #5C3317; color: #FFD9B3; } }
+  .json-details { margin-bottom: 16px; }
+  .json-details summary { cursor: pointer; font-size: 13px; font-weight: 500; padding: 8px 14px; border-radius: var(--border-radius-md); border: 0.5px solid var(--color-border-tertiary); background: var(--color-background-secondary); }
+  .json-details pre { margin: 8px 0 0; padding: 12px 14px; border-radius: var(--border-radius-md); border: 0.5px solid var(--color-border-tertiary); background: var(--color-background-secondary); font-family: var(--font-mono); font-size: 12px; overflow-x: auto; }
+</style>
+</head>
+<body>
+  <h1>POST /OrderVMI/create</h1>
+  <p class="endpoint"><span class="method">POST</span>/OrderVMI/create</p>
+  <div class="hints">
+    <p>ข้อควรรู้</p>
+    <ul><li>สร้างคำสั่งซื้อภาคสมัครใจ (VMI) แบบเดี่ยว ไม่มีการสร้าง/ผูก พ.ร.บ. (CMI) ให้ — ถ้าต้องการสร้างคู่กับ พ.ร.บ. ในคำขอเดียว ให้ใช้ v1/create แทน</li><li>endpoint นี้ต้องการ VMIRequest.CompanyId และ ClassId (เอกพจน์) — คนละชุดกับ v1/create ที่ใช้ CompanyCode และ ClassIds (พหูพจน์) ส่ง body ผิดชุดจะ validate ไม่ผ่าน</li><li>ค้นหาแพ็กเกจผ่าน ComparePriceController โดยตรง (ไม่ใช่ bzComparePriceExZ เหมือน v1/*) และไม่กรองผลลัพธ์ตาม CompanyCode</li><li>Response สำเร็จคืนแค่ { OrderNo } อย่างเดียว ไม่ใช่ array แบบ endpoint อื่นในชุด OrderVMI</li><li>ถ้า Customer เป็น null จะได้ ErrorCode D902999 (UNKNOWN) ไม่ใช่ error field required — เพราะโค้ด dereference IsPerson ก่อนเช็ค null</li></ul>
+    <p style="margin-top:10px">ประวัติการสร้าง/อัปเดต Spec</p><table class="hist-tbl"><tr><th>ครั้งที่</th><th>วันที่</th><th>รายละเอียด</th></tr><tr><td>1</td><td>18/08/2026</td><td>Create</td></tr></table>
+  </div>
+  <div class="toolbar">
+    <div class="tab active" data-tab="request" onclick="setTab('request')">Request</div>
+    <div class="tab" data-tab="response" onclick="setTab('response')">Response</div>
+    <div style="flex:1"></div>
+    <div class="search-wrap">
+      <i class="ti ti-search"></i>
+      <input type="text" id="search" placeholder="Filter parameter..." oninput="render()">
+    </div>
+  </div>
+  <div id="content"></div>
+
+  <div style="display:flex;gap:16px;margin-top:12px;font-size:12px;color:var(--color-text-secondary);align-items:center">
+    <span style="display:flex;align-items:center;gap:6px"><span class="badge bm">M</span>Mandatory</span>
+    <span style="display:flex;align-items:center;gap:6px"><span class="badge bo">O</span>Optional</span>
+    <span style="display:flex;align-items:center;gap:6px"><span class="badge bn">New</span>Field ที่เพิ่มใหม่จากเวอร์ชันก่อนหน้า</span>
+  </div>
+
+<script>
+const SCHEMA = {"request": [{"group": "Request Body", "fields": [{"name": "VMIRequest", "type": "Object", "om": "M", "desc": "พารามิเตอร์ที่ใช้เรียกขั้นตอนถัดไปฝั่งภาคสมัครใจ (ใช้ต่อกับ /OrderCMI หรือ payment flow)", "remark": "", "new": false}, {"name": "CarDetailsExtension", "type": "Object", "om": "M", "desc": "ข้อมูลรถเพิ่มเติม (ทะเบียน/เลขตัวถัง/สี)", "remark": "", "new": false}, {"name": "Customer", "type": "Object", "om": "M", "desc": "ข้อมูลลูกค้า/ผู้เอาประกัน", "remark": "", "new": false}, {"name": "DeliveryMethod1", "type": "Object", "om": "M", "desc": "ช่องทางจัดส่งเอกสารหลัก (กรมธรรม์)", "remark": "", "new": false}, {"name": "DeliveryMethod2", "type": "string", "om": "O", "desc": "ช่องทางจัดส่งเอกสารรอง (ใบกำกับภาษี) — ต้องส่งเมื่อ IsTaxInvoice=true และ DeliveryMethod1 ไม่ใช่ ALL_AT_ONCE", "remark": "", "new": false}, {"name": "IsTaxInvoice", "type": "boolean", "om": "M", "desc": "ต้องการใบกำกับภาษีหรือไม่", "remark": "true/false", "new": false}]}, {"group": "VMIRequest", "fields": [{"name": "PackageId", "type": "int", "om": "M", "desc": "รหัสแพ็กเกจ", "remark": "", "new": false}, {"name": "PackageCode", "type": "string", "om": "M", "desc": "รหัสแพ็กเกจ (Code)", "remark": "", "new": false}, {"name": "CarId", "type": "int", "om": "M", "desc": "รหัสรุ่นย่อยรถ (Sub Car Model ID)", "remark": "", "new": false}, {"name": "CarBrandId", "type": "int", "om": "M", "desc": "รหัสยี่ห้อรถ (integer) — คนละฟิลด์กับ CarBrandID ที่เป็น GUID ฝั่งผลลัพธ์ ComparePrice", "remark": "", "new": false}, {"name": "CarModelId", "type": "int", "om": "M", "desc": "รหัสรุ่นรถ (integer) — คนละฟิลด์กับ CarModelID ที่เป็น GUID ฝั่งผลลัพธ์ ComparePrice", "remark": "", "new": false}, {"name": "CarYear", "type": "int", "om": "M", "desc": "ปีรถ", "remark": "", "new": false}, {"name": "CarCost", "type": "int", "om": "M", "desc": "ราคา/ทุนรถยนต์ที่ใช้คำนวณเบี้ย", "remark": "", "new": false}, {"name": "CarTypeId", "type": "int", "om": "M", "desc": "รหัสประเภทรถ (integer)", "remark": "", "new": false}, {"name": "CarTypeCode", "type": "string", "om": "M", "desc": "รหัสประเภทรถ (ใช้คู่กับ CarTypeName ในผลลัพธ์)", "remark": "", "new": false}, {"name": "ProvinceId", "type": "int", "om": "M", "desc": "รหัสจังหวัด (integer) — คนละฟิลด์กับ ProvinceID ที่เป็น GUID ฝั่งที่อยู่", "remark": "", "new": false}, {"name": "RepairTypeId", "type": "int", "om": "M", "desc": "รหัสประเภทการซ่อม (integer)", "remark": "", "new": false}, {"name": "Coverage6", "type": "int", "om": "M", "desc": "ทุนความเสียหายส่วนแรกที่เลือก", "remark": "", "new": false}, {"name": "Coverage11", "type": "int", "om": "M", "desc": "ทุนคุ้มครองน้ำท่วมที่เลือก", "remark": "", "new": false}, {"name": "ClassId", "type": "int", "om": "M", "desc": "รหัสชั้นประกัน", "remark": "", "new": false}, {"name": "CompanyId", "type": "int", "om": "M", "desc": "รหัสบริษัทประกัน (integer) — ใช้เฉพาะ endpoint create (เอกพจน์); v1/* ใช้ CompanyCode แทน", "remark": "", "new": false}, {"name": "AgentCode", "type": "string", "om": "M", "desc": "รหัสตัวแทน", "remark": "", "new": false}, {"name": "CompanyCode", "type": "string", "om": "M", "desc": "รหัสบริษัทประกัน — บาง endpoint (เช่น /ComparePrice/package/search) ปล่อยว่างได้เพื่อค้นทุกบริษัท แต่บาง endpoint (เช่น /ComparePrice/package/ext/search) ว่างไม่ได้ (error B261805)", "remark": "", "new": false}, {"name": "EffectiveDate", "type": "string", "om": "M", "desc": "วันที่เริ่มคุ้มครอง — บาง endpoint ต้องส่งรูปแบบ yyyy-MM-dd หรือ yyyy/MM/dd เท่านั้น (ส่ง ISO datetime เต็มจะ error)", "remark": "รูปแบบ yyyy-MM-dd หรือ yyyy/MM/dd (บาง endpoint)", "new": false}, {"name": "ExpireDate", "type": "string", "om": "M", "desc": "วันที่สิ้นสุดความคุ้มครอง — บาง endpoint ต้องส่งรูปแบบ yyyy-MM-dd หรือ yyyy/MM/dd เท่านั้น (ส่ง ISO datetime เต็มจะ error)", "remark": "รูปแบบ yyyy-MM-dd หรือ yyyy/MM/dd (บาง endpoint)", "new": false}]}, {"group": "CarDetailsExtension", "fields": [{"name": "License", "type": "string", "om": "M", "desc": "ทะเบียนรถ", "remark": "", "new": false}, {"name": "BodyNo", "type": "string", "om": "M", "desc": "เลขตัวถังรถ (Chassis Number)", "remark": "", "new": false}, {"name": "EngineNo", "type": "string", "om": "M", "desc": "เลขเครื่องยนต์", "remark": "", "new": false}, {"name": "ColorID", "type": "GUID", "om": "M", "desc": "รหัสสีรถ (GUID)", "remark": "GUID", "new": false}, {"name": "LicenseProvinceID", "type": "GUID", "om": "M", "desc": "รหัสจังหวัดที่จดทะเบียนรถ (GUID)", "remark": "GUID", "new": false}, {"name": "LicenseFileID", "type": "string", "om": "O", "desc": "รหัสไฟล์ภาพป้ายทะเบียน (GUID) — ระบบ publish ไฟล์นี้ตอน commit คำสั่งซื้อ", "remark": "GUID (เมื่อมีไฟล์แนบ)", "new": false}, {"name": "IsRedLicense", "type": "boolean", "om": "M", "desc": "ป้ายทะเบียนแดง (รถป้ายแดง) หรือไม่", "remark": "true/false", "new": false}]}, {"group": "Customer", "fields": [{"name": "IsPerson", "type": "boolean", "om": "M", "desc": "เป็นบุคคลธรรมดาหรือไม่ (false = นิติบุคคล)", "remark": "true/false", "new": false}, {"name": "IsBranch", "type": "boolean", "om": "M", "desc": "เป็นสาขาของนิติบุคคลหรือไม่", "remark": "true/false", "new": false}, {"name": "PersonProfile", "type": "Object", "om": "M", "desc": "ข้อมูลผู้เอาประกัน (กรณีบุคคลธรรมดา)", "remark": "", "new": false}, {"name": "DefaultAddress", "type": "Object", "om": "M", "desc": "ที่อยู่ปัจจุบัน", "remark": "", "new": false}, {"name": "IsDeliveryAddressSameAsDefault", "type": "boolean", "om": "M", "desc": "ที่อยู่จัดส่งเหมือนที่อยู่ปัจจุบันหรือไม่", "remark": "true/false", "new": false}, {"name": "IsTaxInvoiceAddressSameAsDefault", "type": "boolean", "om": "M", "desc": "ที่อยู่ออกใบกำกับภาษีเหมือนที่อยู่ปัจจุบันหรือไม่", "remark": "true/false", "new": false}, {"name": "IsTaxInvoiceDeliveryAddressSameAsDefault", "type": "boolean", "om": "M", "desc": "ที่อยู่จัดส่งใบกำกับภาษีเหมือนที่อยู่ปัจจุบันหรือไม่", "remark": "true/false", "new": false}]}, {"group": "PersonProfile", "fields": [{"name": "PrefixID", "type": "GUID", "om": "M", "desc": "รหัสคำนำหน้าชื่อ", "remark": "GUID", "new": false}, {"name": "FirstName", "type": "string", "om": "M", "desc": "ชื่อ", "remark": "", "new": false}, {"name": "LastName", "type": "string", "om": "M", "desc": "นามสกุล", "remark": "", "new": false}, {"name": "BirthDate", "type": "DateTime", "om": "M", "desc": "วันเกิด", "remark": "รูปแบบ DateTime", "new": false}, {"name": "PersonalID", "type": "string", "om": "M", "desc": "เลขบัตรประชาชน/พาสปอร์ตผู้เอาประกัน", "remark": "", "new": false}, {"name": "NationalityID", "type": "GUID", "om": "M", "desc": "รหัสสัญชาติ (GUID) — resolve จาก Master nationality", "remark": "GUID", "new": false}, {"name": "PhoneNumber", "type": "string", "om": "M", "desc": "เบอร์โทรศัพท์", "remark": "", "new": false}, {"name": "Email", "type": "string", "om": "M", "desc": "อีเมล", "remark": "", "new": false}]}, {"group": "DefaultAddress", "fields": [{"name": "FirstName", "type": "string", "om": "M", "desc": "ชื่อ", "remark": "", "new": false}, {"name": "LastName", "type": "string", "om": "M", "desc": "นามสกุล", "remark": "", "new": false}, {"name": "PhoneNumber", "type": "string", "om": "M", "desc": "เบอร์โทรศัพท์", "remark": "", "new": false}, {"name": "No", "type": "string", "om": "M", "desc": "บ้านเลขที่", "remark": "", "new": false}, {"name": "Road", "type": "string", "om": "M", "desc": "ถนน", "remark": "", "new": false}, {"name": "ProvinceID", "type": "string", "om": "M", "desc": "รหัสจังหวัด (GUID) — resolve จาก POST /Master/province/List", "remark": "GUID", "new": false}, {"name": "DistrictID", "type": "string", "om": "M", "desc": "รหัสอำเภอ (GUID) — resolve จาก POST /Master/v1/district/list", "remark": "GUID", "new": false}, {"name": "SubDistrictID", "type": "string", "om": "M", "desc": "รหัสตำบล (GUID) — resolve จาก POST /Master/v1/subdistrict/list", "remark": "GUID", "new": false}, {"name": "ZipCode", "type": "string", "om": "M", "desc": "รหัสไปรษณีย์ — ระบบ derive จาก SubDistrictID อัตโนมัติ", "remark": "", "new": false}]}, {"group": "DeliveryMethod1", "fields": [{"name": "MethodType", "type": "string", "om": "M", "desc": "รูปแบบการจัดส่งเอกสาร (ALL_AT_ONCE/POLICY/EXCLUDE สำหรับ method 1, TAXINVOICE สำหรับ method 2)", "remark": "", "new": false}, {"name": "DeliveryType", "type": "string", "om": "M", "desc": "ประเภทการจัดส่ง (DELIVERY=จัดส่งไปรษณีย์/PAPER=รับกระดาษ/ELECTRONIC=อิเล็กทรอนิกส์)", "remark": "", "new": false}, {"name": "DeliveryChannelType", "type": "string", "om": "M", "desc": "ช่องทางจัดส่ง (เช่น THAIPOST) — บังคับเมื่อ DeliveryType = DELIVERY", "remark": "", "new": false}]}], "response": [{"group": "Response Body", "fields": [{"name": "Status", "type": "int", "om": "M", "desc": "สถานะการทำงานของ API / สถานะรายการ", "remark": "", "new": false}, {"name": "Message", "type": "string", "om": "O", "desc": "ข้อความตอบกลับจากระบบ", "remark": "", "new": false}, {"name": "ErrorCode", "type": "string", "om": "O", "desc": "รหัสข้อผิดพลาด", "remark": "", "new": false}, {"name": "ErrorMessage", "type": "string", "om": "O", "desc": "รายละเอียดข้อผิดพลาด", "remark": "", "new": false}, {"name": "Data", "type": "Object", "om": "M", "desc": "ข้อมูลผลลัพธ์", "remark": "", "new": false}, {"name": "Options", "type": "string", "om": "O", "desc": "ข้อมูลเพิ่มเติมของระบบ", "remark": "", "new": false}]}, {"group": "Data", "fields": [{"name": "OrderNo", "type": "string", "om": "M", "desc": "เลขที่คำสั่งซื้อ", "remark": "", "new": false}]}], "request_json": "{\n  \"VMIRequest\": {\n    \"PackageId\": 105482,\n    \"PackageCode\": \"VMI-1-TVI\",\n    \"CarId\": 24913,\n    \"CarBrandId\": 21,\n    \"CarModelId\": 1180,\n    \"CarYear\": 2019,\n    \"CarCost\": 450000,\n    \"CarTypeId\": 1,\n    \"CarTypeCode\": \"110\",\n    \"ProvinceId\": 1,\n    \"RepairTypeId\": 2,\n    \"Coverage6\": 1,\n    \"Coverage11\": 0,\n    \"ClassId\": 1,\n    \"CompanyId\": 17,\n    \"AgentCode\": \"AM000123\",\n    \"CompanyCode\": \"TVI\",\n    \"EffectiveDate\": \"2026-09-01\",\n    \"ExpireDate\": \"2027-09-01\"\n  },\n  \"CarDetailsExtension\": {\n    \"License\": \"1กก 1234\",\n    \"BodyNo\": \"MR0FZ29G901234567\",\n    \"EngineNo\": \"2TR1234567\",\n    \"ColorID\": \"0A1B2C3D4E5F6071829304A5B6C7D8E9\",\n    \"LicenseProvinceID\": \"5F1E2D3C4B5A69788796A5B4C3D2E1F0\",\n    \"LicenseFileID\": \"\",\n    \"IsRedLicense\": false\n  },\n  \"Customer\": {\n    \"IsPerson\": true,\n    \"IsBranch\": false,\n    \"PersonProfile\": {\n      \"PrefixID\": \"A1B2C3D4E5F60718293A4B5C6D7E8F90\",\n      \"FirstName\": \"สมชาย\",\n      \"LastName\": \"ใจดี\",\n      \"BirthDate\": \"1988-04-15\",\n      \"PersonalID\": \"1103700123456\",\n      \"NationalityID\": \"62ED0829703B4E589A2A63C740B88155\",\n      \"PhoneNumber\": \"0812345678\",\n      \"Email\": \"somchai@example.com\"\n    },\n    \"DefaultAddress\": {\n      \"FirstName\": \"สมชาย\",\n      \"LastName\": \"ใจดี\",\n      \"PhoneNumber\": \"0812345678\",\n      \"No\": \"99/1\",\n      \"Road\": \"พหลโยธิน\",\n      \"ProvinceID\": \"10\",\n      \"DistrictID\": \"1003\",\n      \"SubDistrictID\": \"100301\",\n      \"ZipCode\": \"10900\"\n    },\n    \"IsDeliveryAddressSameAsDefault\": true,\n    \"IsTaxInvoiceAddressSameAsDefault\": true,\n    \"IsTaxInvoiceDeliveryAddressSameAsDefault\": true\n  },\n  \"DeliveryMethod1\": {\n    \"MethodType\": \"ALL_AT_ONCE\",\n    \"DeliveryType\": \"DELIVERY\",\n    \"DeliveryChannelType\": \"THAIPOST\"\n  },\n  \"DeliveryMethod2\": null,\n  \"IsTaxInvoice\": false\n}", "response_json": "{\n  \"Status\": 200,\n  \"Message\": \"\",\n  \"ErrorCode\": \"\",\n  \"ErrorMessage\": \"\",\n  \"Data\": {\n    \"OrderNo\": \"VMI2609000123\"\n  },\n  \"Options\": null\n}", "history": [{"no": 1, "date": "18/08/2026", "desc": "Create"}]};
+let activeTab = "request";
+
+function escapeHtml(s) {
+  return s.replace(/&/g, '&amp;').replace(/</g, '&lt;').replace(/>/g, '&gt;');
+}
+
+function copyName(name, el) {
+  navigator.clipboard.writeText(name);
+  el.className = 'ti ti-check copy-icon';
+  el.style.color = 'var(--color-text-success)';
+  setTimeout(function () {
+    el.className = 'ti ti-copy copy-icon';
+    el.style.color = 'var(--color-text-tertiary)';
+  }, 1000);
+}
+
+function render() {
+  const groups = SCHEMA[activeTab];
+  const jsonBody = SCHEMA[activeTab + '_json'];
+  const q = document.getElementById('search').value.trim().toLowerCase();
+
+  let html = '<details class="json-details"><summary>JSON Body</summary><pre>' + escapeHtml(jsonBody) + '</pre></details>';
+
+  html += '<div class="sw"><table class="tbl"><thead><tr>';
+  html += '<th style="width:200px">Parameter</th><th style="width:120px">Type</th><th style="width:44px;text-align:center">O/M</th><th>Description</th>';
+  html += '</tr></thead><tbody>';
+
+  groups.forEach(function (g) {
+    const fields = g.fields.filter(function (f) {
+      return !q || f.name.toLowerCase().includes(q);
+    });
+    if (fields.length === 0) return;
+
+    html += '<tr class="sec-row"><td colspan="4">' + g.group + '</td></tr>';
+    fields.forEach(function (f) {
+      const om = f.om === 'M' ? '<span class="badge bm">M</span>' : '<span class="badge bo">O</span>';
+      const small = f.remark ? '<small>' + f.remark + '</small>' : '';
+      const newBadge = f.new ? '<span class="badge bn">New</span>' : '';
+      html += '<tr>';
+      html += '<td class="td-name">' + f.name + '<i class="ti ti-copy copy-icon" onclick="copyName(\'' + f.name + '\', this)"></i>' + newBadge + '</td>';
+      html += '<td><span class="type-badge">' + f.type + '</span></td>';
+      html += '<td class="td-om">' + om + '</td>';
+      html += '<td class="td-desc">' + f.desc + small + '</td>';
+      html += '</tr>';
+    });
+  });
+
+  html += '</tbody></table></div>';
+  document.getElementById('content').innerHTML = html || '<p style="color:var(--color-text-tertiary)">No matching parameters</p>';
+}
+
+function setTab(tab) {
+  activeTab = tab;
+  document.querySelectorAll('.tab').forEach(function (el) {
+    el.classList.toggle('active', el.getAttribute('data-tab') === tab);
+  });
+  render();
+}
+
+render();
+</script>
+</body>
+</html>

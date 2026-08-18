@@ -38,6 +38,16 @@
 
 - [POST /OrderCMI/v2/summary/get](https://tthiraya.github.io/aglove-api-spec/API%20Spec/OrderCMI/v2-summary-get.html)
 
+## OrderVMI
+
+- [POST /OrderVMI/create](https://tthiraya.github.io/aglove-api-spec/API%20Spec/OrderVMI/create.html)
+- [POST /OrderVMI/v1/create](https://tthiraya.github.io/aglove-api-spec/API%20Spec/OrderVMI/v1-create.html)
+- [POST /OrderVMI/v1/save](https://tthiraya.github.io/aglove-api-spec/API%20Spec/OrderVMI/v1-save.html)
+- [POST /OrderVMI/summary/get](https://tthiraya.github.io/aglove-api-spec/API%20Spec/OrderVMI/summary-get.html)
+- [POST /OrderVMI/v1/summary/get](https://tthiraya.github.io/aglove-api-spec/API%20Spec/OrderVMI/v1-summary-get.html)
+- [POST /OrderVMI/details/get](https://tthiraya.github.io/aglove-api-spec/API%20Spec/OrderVMI/details-get.html)
+- [POST /OrderVMI/v1/details/get](https://tthiraya.github.io/aglove-api-spec/API%20Spec/OrderVMI/v1-details-get.html)
+
 ## OrderBackEnd
 
 - [POST /OrderBackEnd/status/group/get](https://tthiraya.github.io/aglove-api-spec/API%20Spec/OrderBackEnd/status-group-get.html)

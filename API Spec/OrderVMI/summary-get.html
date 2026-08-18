@@ -1,0 +1,179 @@
+<!DOCTYPE html>
+<html lang="th">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>POST /OrderVMI/summary/get</title>
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/tabler-icons/3.35.0/tabler-icons.min.css">
+<style>
+  :root {
+    --color-background-primary: #ffffff;
+    --color-background-secondary: #f4f3ef;
+    --color-background-tertiary: #ebe9e1;
+    --color-text-primary: #0f172a;
+    --color-text-secondary: #5f5e5a;
+    --color-text-tertiary: #888780;
+    --color-text-success: #0f6e56;
+    --color-border-tertiary: rgba(15,23,42,.15);
+    --color-border-secondary: rgba(15,23,42,.3);
+    --font-sans: -apple-system, "Segoe UI", Roboto, Helvetica, Arial, sans-serif;
+    --font-mono: ui-monospace, SFMono-Regular, Menlo, Consolas, monospace;
+    --border-radius-md: 8px;
+    --border-radius-lg: 12px;
+  }
+  @media (prefers-color-scheme: dark) {
+    :root {
+      --color-background-primary: #1c1c1a;
+      --color-background-secondary: #2c2c2a;
+      --color-background-tertiary: #383836;
+      --color-text-primary: #f1efe8;
+      --color-text-secondary: #b4b2a9;
+      --color-text-tertiary: #888780;
+      --color-text-success: #5dcaa5;
+      --color-border-tertiary: rgba(255,255,255,.15);
+      --color-border-secondary: rgba(255,255,255,.3);
+    }
+  }
+  * { box-sizing: border-box; }
+  body {
+    margin: 0; padding: 24px; font-family: var(--font-sans);
+    background: var(--color-background-primary); color: var(--color-text-primary);
+    font-size: 14px; line-height: 1.6;
+  }
+  h1 { font-size: 20px; font-weight: 500; margin: 0 0 4px; }
+  .endpoint { font-family: var(--font-mono); font-size: 14px; color: var(--color-text-secondary); margin: 0 0 16px; }
+  .method { display: inline-block; font-size: 12px; font-weight: 500; padding: 2px 8px; border-radius: var(--border-radius-md); background: #E6F1FB; color: #0C447C; font-family: var(--font-mono); margin-right: 8px; }
+  .hints { background: var(--color-background-secondary); border-radius: var(--border-radius-md); padding: 12px 16px; margin-bottom: 20px; font-size: 13px; }
+  .hints p { margin: 0 0 6px; font-weight: 500; }
+  .hints ul { margin: 0; padding-left: 20px; }
+  .hints li { margin-bottom: 4px; color: var(--color-text-secondary); }
+  .hist-tbl { border-collapse: collapse; font-size: 12px; margin-top: 4px; }
+  .hist-tbl th, .hist-tbl td { padding: 4px 10px; text-align: left; border: 0.5px solid var(--color-border-tertiary); }
+  .hist-tbl th { font-weight: 500; color: var(--color-text-secondary); }
+  .hist-tbl td { color: var(--color-text-secondary); }
+  .toolbar { display: flex; align-items: center; gap: 8px; margin-bottom: 16px; }
+  .tab { cursor: pointer; padding: 6px 14px; border-radius: var(--border-radius-md); border: 0.5px solid var(--color-border-tertiary); font-size: 13px; font-weight: 500; }
+  .tab.active { background: var(--color-background-secondary); border-color: var(--color-border-secondary); }
+  input[type=text] {
+    padding: 6px 10px 6px 30px; border-radius: var(--border-radius-md); border: 0.5px solid var(--color-border-tertiary);
+    background: var(--color-background-primary); color: var(--color-text-primary); font-size: 13px; width: 220px;
+  }
+  .search-wrap { position: relative; }
+  .search-wrap i { position: absolute; left: 10px; top: 50%; transform: translateY(-50%); font-size: 14px; color: var(--color-text-tertiary); }
+
+  .sw { padding: 1.5rem 0; font-family: var(--font-sans); }
+  .sw-label { font-size: 11px; font-weight: 500; color: var(--color-text-secondary); text-transform: uppercase; letter-spacing: .06em; margin: 0 0 12px; }
+  .tbl { width: 100%; border-collapse: collapse; border-radius: var(--border-radius-lg); overflow: hidden; border: 0.5px solid var(--color-border-tertiary); }
+  .tbl thead th { font-size: 11px; font-weight: 500; color: var(--color-text-secondary); text-transform: uppercase; letter-spacing: .06em; padding: 8px 14px; background: var(--color-background-secondary); border-bottom: 0.5px solid var(--color-border-secondary); text-align: left; }
+  .tbl tbody tr { border-bottom: 0.5px solid var(--color-border-tertiary); }
+  .tbl tbody tr:last-child { border-bottom: none; }
+  .tbl tbody tr:hover { background: var(--color-background-secondary); }
+  .tbl td { padding: 9px 14px; font-size: 13px; vertical-align: middle; }
+  .td-name { font-family: var(--font-mono); font-size: 12px; font-weight: 500; color: var(--color-text-primary); white-space: nowrap; }
+  .td-name.indent { padding-left: 28px; }
+  .copy-icon { cursor: pointer; font-size: 14px; color: var(--color-text-tertiary); margin-left: 6px; vertical-align: -2px; }
+  .type-badge { display: inline-block; font-size: 11px; font-weight: 500; padding: 2px 8px; border-radius: var(--border-radius-md); border: 0.5px solid var(--color-border-tertiary); color: var(--color-text-secondary); font-family: var(--font-mono); }
+  .td-desc { color: var(--color-text-primary); font-size: 13px; }
+  .td-desc small { display: block; font-size: 11px; color: var(--color-text-secondary); margin-top: 2px; }
+  .td-om { text-align: center; white-space: nowrap; }
+  .badge { font-size: 11px; font-weight: 500; padding: 2px 8px; border-radius: 99px; }
+  .bm { background: #E6F1FB; color: #0C447C; }
+  .bo { background: #F1EFE8; color: #444441; }
+  .bn { background: #FCE8D6; color: #9A4B0C; margin-left: 6px; }
+  .sec-row td { font-size: 11px; font-weight: 500; color: var(--color-text-secondary); text-transform: uppercase; letter-spacing: .04em; background: var(--color-background-secondary); padding: 6px 14px; border-bottom: 0.5px solid var(--color-border-secondary); }
+  @media (prefers-color-scheme: dark) { .bm { background: #0C447C; color: #B5D4F4; } .bo { background: #444441; color: #D3D1C7; } .bn { background: #5C3317; color: #FFD9B3; } }
+  .json-details { margin-bottom: 16px; }
+  .json-details summary { cursor: pointer; font-size: 13px; font-weight: 500; padding: 8px 14px; border-radius: var(--border-radius-md); border: 0.5px solid var(--color-border-tertiary); background: var(--color-background-secondary); }
+  .json-details pre { margin: 8px 0 0; padding: 12px 14px; border-radius: var(--border-radius-md); border: 0.5px solid var(--color-border-tertiary); background: var(--color-background-secondary); font-family: var(--font-mono); font-size: 12px; overflow-x: auto; }
+</style>
+</head>
+<body>
+  <h1>POST /OrderVMI/summary/get</h1>
+  <p class="endpoint"><span class="method">POST</span>/OrderVMI/summary/get</p>
+  <div class="hints">
+    <p>ข้อควรรู้</p>
+    <ul><li>อ่านคำสั่งซื้อภาคสมัครใจ (VMI) กลับมาเป็นฟอร์มแก้ไข — ไม่ resolve พ.ร.บ. ที่ผูกกันให้ ถ้าต้องการอ่านคู่กัน ให้ใช้ v1/summary/get</li><li>⚠️ Cache เขียนแล้วอ่านคืนไม่ได้เลย (dead cache) เพราะ key ตอนเช็คกับตอนเขียนไม่ตรงกัน — ทุก call จะ query DB จริงเสมอ ไม่ต้องกังวลเรื่องข้อมูล stale</li><li>VMIRequest จะเป็น object ที่ทุก field เป็น null (ไม่ใช่ null ตรงๆ ทั้งก้อน) เมื่อ order.OrderType ไม่ใช่ VOLUNTARY</li><li>การ re-hydrate VMIRequest (parse PackageID/ClassID/…) อยู่นอก try block — ถ้าข้อมูลเพี้ยนจะพังเป็น D904999 (UNKNOWN) แทนที่จะเป็น error เจาะจง</li></ul>
+    <p style="margin-top:10px">ประวัติการสร้าง/อัปเดต Spec</p><table class="hist-tbl"><tr><th>ครั้งที่</th><th>วันที่</th><th>รายละเอียด</th></tr><tr><td>1</td><td>18/08/2026</td><td>Create</td></tr></table>
+  </div>
+  <div class="toolbar">
+    <div class="tab active" data-tab="request" onclick="setTab('request')">Request</div>
+    <div class="tab" data-tab="response" onclick="setTab('response')">Response</div>
+    <div style="flex:1"></div>
+    <div class="search-wrap">
+      <i class="ti ti-search"></i>
+      <input type="text" id="search" placeholder="Filter parameter..." oninput="render()">
+    </div>
+  </div>
+  <div id="content"></div>
+
+  <div style="display:flex;gap:16px;margin-top:12px;font-size:12px;color:var(--color-text-secondary);align-items:center">
+    <span style="display:flex;align-items:center;gap:6px"><span class="badge bm">M</span>Mandatory</span>
+    <span style="display:flex;align-items:center;gap:6px"><span class="badge bo">O</span>Optional</span>
+    <span style="display:flex;align-items:center;gap:6px"><span class="badge bn">New</span>Field ที่เพิ่มใหม่จากเวอร์ชันก่อนหน้า</span>
+  </div>
+
+<script>
+const SCHEMA = {"request": [{"group": "Request Body", "fields": [{"name": "OrderNo", "type": "string", "om": "M", "desc": "เลขที่คำสั่งซื้อ", "remark": "", "new": false}]}], "response": [{"group": "Response Body", "fields": [{"name": "Status", "type": "int", "om": "M", "desc": "สถานะการทำงานของ API / สถานะรายการ", "remark": "", "new": false}, {"name": "Message", "type": "string", "om": "O", "desc": "ข้อความตอบกลับจากระบบ", "remark": "", "new": false}, {"name": "ErrorCode", "type": "string", "om": "O", "desc": "รหัสข้อผิดพลาด", "remark": "", "new": false}, {"name": "ErrorMessage", "type": "string", "om": "O", "desc": "รายละเอียดข้อผิดพลาด", "remark": "", "new": false}, {"name": "Data", "type": "Array", "om": "M", "desc": "ข้อมูลผลลัพธ์", "remark": "", "new": false}, {"name": "Options", "type": "string", "om": "O", "desc": "ข้อมูลเพิ่มเติมของระบบ", "remark": "", "new": false}]}, {"group": "Data[]", "fields": [{"name": "Order", "type": "Object", "om": "M", "desc": "อ็อบเจกต์ข้อมูลคำสั่งซื้อ (ฟอร์มแก้ไข)", "remark": "", "new": false}, {"name": "OrderEx", "type": "Array", "om": "M", "desc": "ข้อมูลเสริมของคำสั่งซื้อ (array 1 element)", "remark": "", "new": false}, {"name": "VMIRequest", "type": "Object", "om": "M", "desc": "พารามิเตอร์ที่ใช้เรียกขั้นตอนถัดไปฝั่งภาคสมัครใจ (ใช้ต่อกับ /OrderCMI หรือ payment flow)", "remark": "", "new": false}, {"name": "PaymentTransaction", "type": "string", "om": "O", "desc": "รายการชำระเงินของคำสั่งซื้อนี้ (ฟอร์มแก้ไข) — null ถ้ายังไม่มี", "remark": "", "new": false}, {"name": "Payment", "type": "string", "om": "O", "desc": "ข้อมูลการชำระเงินโดยรวม — null ถ้ายังไม่มี", "remark": "", "new": false}]}, {"group": "Order", "fields": [{"name": "Package", "type": "Object", "om": "M", "desc": "ข้อมูลแพ็กเกจ พ.ร.บ. ที่เลือก (ถ้ามี) — ไม่ส่ง = ไม่สร้าง/ตัดการผูก พ.ร.บ.", "remark": "", "new": false}, {"name": "CarDetails", "type": "Object", "om": "M", "desc": "ข้อมูลรถ (จาก view ของระบบ หรือสรุปย่อแล้วแต่ endpoint)", "remark": "", "new": false}, {"name": "CarDetailsExtension", "type": "Object", "om": "M", "desc": "ข้อมูลรถเพิ่มเติม (ทะเบียน/เลขตัวถัง/สี)", "remark": "", "new": false}, {"name": "CarDetailsView", "type": "Object", "om": "M", "desc": "ข้อมูลรถจาก view ของระบบ (raw)", "remark": "", "new": false}, {"name": "InsureDetails", "type": "Object", "om": "M", "desc": "ข้อมูลความคุ้มครอง (จาก view ของระบบ)", "remark": "", "new": false}, {"name": "Customer", "type": "Object", "om": "M", "desc": "ข้อมูลลูกค้า/ผู้เอาประกัน", "remark": "", "new": false}, {"name": "DeliveryMethod1", "type": "Object", "om": "M", "desc": "ช่องทางจัดส่งเอกสารหลัก (กรมธรรม์)", "remark": "", "new": false}, {"name": "DeliveryMethod2", "type": "string", "om": "O", "desc": "ช่องทางจัดส่งเอกสารรอง (ใบกำกับภาษี) — ต้องส่งเมื่อ IsTaxInvoice=true และ DeliveryMethod1 ไม่ใช่ ALL_AT_ONCE", "remark": "", "new": false}, {"name": "ProductID", "type": "string", "om": "O", "desc": "รหัสผลิตภัณฑ์", "remark": "", "new": false}, {"name": "IsTaxInvoice", "type": "boolean", "om": "M", "desc": "ต้องการใบกำกับภาษีหรือไม่", "remark": "true/false", "new": false}]}, {"group": "Package", "fields": [{"name": "UseCarCode", "type": "string", "om": "M", "desc": "รหัสประเภทการใช้รถ (PERSONAL/HIRE/RENT)", "remark": "", "new": false}, {"name": "CarTypeCode", "type": "string", "om": "M", "desc": "รหัสประเภทรถ (ใช้คู่กับ CarTypeName ในผลลัพธ์)", "remark": "", "new": false}, {"name": "CarCategoryID", "type": "string", "om": "M", "desc": "รหัสขนาดรถ (GUID)", "remark": "GUID", "new": false}, {"name": "CarSalesYear", "type": "string", "om": "M", "desc": "ปีที่ผลิต/ปีรุ่นขายของรถ", "remark": "", "new": false}, {"name": "CarBrandID", "type": "string", "om": "M", "desc": "รหัสยี่ห้อรถ — เป็น integer ที่ระดับ request/VMIRequest แต่เป็น GUID ใน PackageResultCMI.PackageResult (คนละ format กัน)", "remark": "", "new": false}, {"name": "CarModelID", "type": "string", "om": "M", "desc": "รหัสรุ่นรถ — เป็น integer ที่ระดับ request/VMIRequest แต่เป็น GUID ใน PackageResultCMI.PackageResult (คนละ format กัน)", "remark": "", "new": false}, {"name": "SubCarModelID", "type": "string", "om": "M", "desc": "รหัสรุ่นย่อยรถ", "remark": "", "new": false}, {"name": "CompanyCode", "type": "string", "om": "M", "desc": "รหัสบริษัทประกัน — บาง endpoint (เช่น /ComparePrice/package/search) ปล่อยว่างได้เพื่อค้นทุกบริษัท แต่บาง endpoint (เช่น /ComparePrice/package/ext/search) ว่างไม่ได้ (error B261805)", "remark": "", "new": false}, {"name": "AgentCode", "type": "string", "om": "M", "desc": "รหัสตัวแทน", "remark": "", "new": false}, {"name": "EffectiveType", "type": "string", "om": "M", "desc": "รูปแบบระยะเวลาคุ้มครอง (เช่น FULLYEAR=เต็มปี)", "remark": "", "new": false}, {"name": "EffectiveDate", "type": "string", "om": "M", "desc": "วันที่เริ่มคุ้มครอง — บาง endpoint ต้องส่งรูปแบบ yyyy-MM-dd หรือ yyyy/MM/dd เท่านั้น (ส่ง ISO datetime เต็มจะ error)", "remark": "รูปแบบ yyyy-MM-dd หรือ yyyy/MM/dd (บาง endpoint)", "new": false}, {"name": "ExpireDate", "type": "string", "om": "M", "desc": "วันที่สิ้นสุดความคุ้มครอง — บาง endpoint ต้องส่งรูปแบบ yyyy-MM-dd หรือ yyyy/MM/dd เท่านั้น (ส่ง ISO datetime เต็มจะ error)", "remark": "รูปแบบ yyyy-MM-dd หรือ yyyy/MM/dd (บาง endpoint)", "new": false}]}, {"group": "CarDetails", "fields": [{"name": "CarType", "type": "string", "om": "M", "desc": "ชื่อ/รหัสประเภทรถ (ข้อความสรุป)", "remark": "", "new": false}, {"name": "CarBrand", "type": "string", "om": "M", "desc": "ชื่อยี่ห้อรถ", "remark": "", "new": false}, {"name": "CarModel", "type": "string", "om": "M", "desc": "ชื่อรุ่นรถ", "remark": "", "new": false}, {"name": "SubCarModel", "type": "string", "om": "M", "desc": "ชื่อรุ่นย่อยรถ", "remark": "", "new": false}, {"name": "CarSalesYear", "type": "int", "om": "M", "desc": "ปีที่ผลิต/ปีรุ่นขายของรถ", "remark": "", "new": false}, {"name": "CompanyCode", "type": "string", "om": "M", "desc": "รหัสบริษัทประกัน — บาง endpoint (เช่น /ComparePrice/package/search) ปล่อยว่างได้เพื่อค้นทุกบริษัท แต่บาง endpoint (เช่น /ComparePrice/package/ext/search) ว่างไม่ได้ (error B261805)", "remark": "", "new": false}]}, {"group": "CarDetailsExtension", "fields": [{"name": "License", "type": "string", "om": "M", "desc": "ทะเบียนรถ", "remark": "", "new": false}, {"name": "BodyNo", "type": "string", "om": "M", "desc": "เลขตัวถังรถ (Chassis Number)", "remark": "", "new": false}, {"name": "EngineNo", "type": "string", "om": "M", "desc": "เลขเครื่องยนต์", "remark": "", "new": false}, {"name": "ColorID", "type": "GUID", "om": "M", "desc": "รหัสสีรถ (GUID)", "remark": "GUID", "new": false}, {"name": "LicenseProvinceID", "type": "GUID", "om": "M", "desc": "รหัสจังหวัดที่จดทะเบียนรถ (GUID)", "remark": "GUID", "new": false}, {"name": "LicenseFileID", "type": "string", "om": "O", "desc": "รหัสไฟล์ภาพป้ายทะเบียน (GUID) — ระบบ publish ไฟล์นี้ตอน commit คำสั่งซื้อ", "remark": "GUID (เมื่อมีไฟล์แนบ)", "new": false}, {"name": "IsRedLicense", "type": "boolean", "om": "M", "desc": "ป้ายทะเบียนแดง (รถป้ายแดง) หรือไม่", "remark": "true/false", "new": false}]}, {"group": "CarDetailsView", "fields": [{"name": "RefCarBrandID", "type": "int", "om": "M", "desc": "รหัสอ้างอิงยี่ห้อรถ (integer)", "remark": "", "new": false}, {"name": "RefCarModelID", "type": "int", "om": "M", "desc": "รหัสอ้างอิงรุ่นรถ (integer)", "remark": "", "new": false}, {"name": "RefCarID", "type": "int", "om": "M", "desc": "รหัสอ้างอิงรุ่นย่อยรถ (integer, Sub Car Model ID)", "remark": "", "new": false}, {"name": "CarCost", "type": "int", "om": "M", "desc": "ราคา/ทุนรถยนต์ที่ใช้คำนวณเบี้ย", "remark": "", "new": false}]}, {"group": "InsureDetails", "fields": [{"name": "ClassID", "type": "string", "om": "M", "desc": "รหัสชั้นประกัน (ฝั่ง view ผลลัพธ์) — คนละฟิลด์กับ ClassId/ClassIds ฝั่ง request", "remark": "", "new": false}, {"name": "RepairTypeID", "type": "string", "om": "M", "desc": "รหัสประเภทการซ่อม (1=ซ่อมห้าง, 2=ซ่อมอู่)", "remark": "", "new": false}, {"name": "RefProvinceID", "type": "string", "om": "M", "desc": "รหัสจังหวัดอ้างอิง (integer) — คนละฟิลด์กับ ProvinceID ที่เป็น GUID", "remark": "", "new": false}, {"name": "IsDeduct", "type": "boolean", "om": "M", "desc": "ต้องการแพ็กเกจแบบมีความรับผิดส่วนแรก (Deductible) หรือไม่", "remark": "true/false", "new": false}, {"name": "IsFloodCoverage", "type": "boolean", "om": "M", "desc": "ต้องการความคุ้มครองน้ำท่วมหรือไม่", "remark": "true/false", "new": false}]}, {"group": "Customer", "fields": [{"name": "IsPerson", "type": "boolean", "om": "M", "desc": "เป็นบุคคลธรรมดาหรือไม่ (false = นิติบุคคล)", "remark": "true/false", "new": false}, {"name": "IsBranch", "type": "boolean", "om": "M", "desc": "เป็นสาขาของนิติบุคคลหรือไม่", "remark": "true/false", "new": false}, {"name": "PersonProfile", "type": "Object", "om": "M", "desc": "ข้อมูลผู้เอาประกัน (กรณีบุคคลธรรมดา)", "remark": "", "new": false}, {"name": "DefaultAddress", "type": "Object", "om": "M", "desc": "ที่อยู่ปัจจุบัน", "remark": "", "new": false}]}, {"group": "PersonProfile", "fields": [{"name": "CustomerID", "type": "GUID", "om": "M", "desc": "รหัสลูกค้า (GUID) — มีค่า = ลูกค้าเดิมที่เคยบันทึกไว้แล้ว", "remark": "GUID — มีเมื่อเป็นลูกค้าเดิม", "new": false}, {"name": "FirstName", "type": "string", "om": "M", "desc": "ชื่อ", "remark": "", "new": false}]}, {"group": "DefaultAddress", "fields": [{"name": "AddressID", "type": "GUID", "om": "M", "desc": "รหัสที่อยู่ (GUID) — ระบบจะสร้าง GUID ใหม่ทุกครั้งที่ save", "remark": "GUID — เปลี่ยนค่าใหม่ทุกครั้งที่ save", "new": false}]}, {"group": "DeliveryMethod1", "fields": [{"name": "MethodType", "type": "string", "om": "M", "desc": "รูปแบบการจัดส่งเอกสาร (ALL_AT_ONCE/POLICY/EXCLUDE สำหรับ method 1, TAXINVOICE สำหรับ method 2)", "remark": "", "new": false}, {"name": "DeliveryType", "type": "string", "om": "M", "desc": "ประเภทการจัดส่ง (DELIVERY=จัดส่งไปรษณีย์/PAPER=รับกระดาษ/ELECTRONIC=อิเล็กทรอนิกส์)", "remark": "", "new": false}, {"name": "DeliveryChannelType", "type": "string", "om": "M", "desc": "ช่องทางจัดส่ง (เช่น THAIPOST) — บังคับเมื่อ DeliveryType = DELIVERY", "remark": "", "new": false}]}, {"group": "OrderEx[]", "fields": [{"name": "PackageID", "type": "string", "om": "M", "desc": "รหัสแพ็กเกจ (ใช้ filter ตอนค้นหา — ปล่อยว่างเพื่อค้นหาทุกแพ็กเกจ)", "remark": "", "new": false}, {"name": "PackageCode", "type": "string", "om": "M", "desc": "รหัสแพ็กเกจ (Code)", "remark": "", "new": false}, {"name": "RefAppNo", "type": "string", "om": "O", "desc": "เลขที่ใบคำขอ (Application No) อ้างอิง", "remark": "", "new": false}, {"name": "PolicyNo", "type": "string", "om": "O", "desc": "เลขที่กรมธรรม์", "remark": "", "new": false}, {"name": "RefPolicyNo", "type": "string", "om": "O", "desc": "เลขที่กรมธรรม์อ้างอิง", "remark": "", "new": false}, {"name": "RefOrderNo", "type": "string", "om": "O", "desc": "เลขที่คำสั่งซื้ออ้างอิง", "remark": "", "new": false}, {"name": "RefCancelOrderNo", "type": "string", "om": "O", "desc": "เลขที่คำสั่งซื้อที่ถูกยกเลิกอ้างอิง", "remark": "", "new": false}, {"name": "RefCancelNewOrderNo", "type": "string", "om": "O", "desc": "เลขที่คำสั่งซื้อใหม่ที่สร้างแทนตัวที่ถูกยกเลิก", "remark": "", "new": false}, {"name": "JobType", "type": "string", "om": "M", "desc": "ประเภทงาน (NEW=สร้างใหม่/RENEW=ต่ออายุ/...)", "remark": "", "new": false}, {"name": "CreateType", "type": "string", "om": "M", "desc": "ช่องทางการสร้างรายการ (ONLINE/...)", "remark": "", "new": false}, {"name": "RenewNo", "type": "int", "om": "M", "desc": "ลำดับครั้งที่ต่ออายุ", "remark": "", "new": false}, {"name": "OrderType", "type": "string", "om": "M", "desc": "ประเภทคำสั่งซื้อ (VOLUNTARY=ภาคสมัครใจ/COMPULSORY=พ.ร.บ.)", "remark": "", "new": false}, {"name": "OrderSubType", "type": "string", "om": "M", "desc": "ประเภทย่อยของคำสั่งซื้อ", "remark": "", "new": false}, {"name": "OrderClassType", "type": "string", "om": "O", "desc": "ประเภทชั้นของคำสั่งซื้อ", "remark": "", "new": false}, {"name": "OrderGroupType", "type": "string", "om": "M", "desc": "ประเภทกลุ่มคำสั่งซื้อ (เช่น INSURANCE)", "remark": "", "new": false}, {"name": "CreateDate", "type": "DateTime", "om": "M", "desc": "วันที่สร้างรายการ", "remark": "รูปแบบ DateTime", "new": false}, {"name": "CancelDate", "type": "DateTime", "om": "O", "desc": "วันที่ยกเลิกรายการ", "remark": "รูปแบบ DateTime", "new": false}, {"name": "PreCancelDate", "type": "DateTime", "om": "O", "desc": "วันที่ก่อนการยกเลิกรายการ", "remark": "รูปแบบ DateTime", "new": false}]}, {"group": "VMIRequest", "fields": [{"name": "PackageId", "type": "int", "om": "M", "desc": "รหัสแพ็กเกจ", "remark": "", "new": false}, {"name": "CarTypeCode", "type": "string", "om": "M", "desc": "รหัสประเภทรถ (ใช้คู่กับ CarTypeName ในผลลัพธ์)", "remark": "", "new": false}, {"name": "RepairTypeId", "type": "int", "om": "M", "desc": "รหัสประเภทการซ่อม (integer)", "remark": "", "new": false}, {"name": "ProvinceId", "type": "int", "om": "M", "desc": "รหัสจังหวัด (integer) — คนละฟิลด์กับ ProvinceID ที่เป็น GUID ฝั่งที่อยู่", "remark": "", "new": false}, {"name": "CarYear", "type": "int", "om": "M", "desc": "ปีรถ", "remark": "", "new": false}, {"name": "CarBrandId", "type": "int", "om": "M", "desc": "รหัสยี่ห้อรถ (integer) — คนละฟิลด์กับ CarBrandID ที่เป็น GUID ฝั่งผลลัพธ์ ComparePrice", "remark": "", "new": false}, {"name": "CarModelId", "type": "int", "om": "M", "desc": "รหัสรุ่นรถ (integer) — คนละฟิลด์กับ CarModelID ที่เป็น GUID ฝั่งผลลัพธ์ ComparePrice", "remark": "", "new": false}, {"name": "CarId", "type": "int", "om": "M", "desc": "รหัสรุ่นย่อยรถ (Sub Car Model ID)", "remark": "", "new": false}, {"name": "CarCost", "type": "int", "om": "M", "desc": "ราคา/ทุนรถยนต์ที่ใช้คำนวณเบี้ย", "remark": "", "new": false}, {"name": "ClassIds", "type": "Array", "om": "M", "desc": "รายการรหัสชั้นประกัน (ฝั่ง response/VMIRequest)", "remark": "", "new": false}, {"name": "CompanyCode", "type": "string", "om": "M", "desc": "รหัสบริษัทประกัน — บาง endpoint (เช่น /ComparePrice/package/search) ปล่อยว่างได้เพื่อค้นทุกบริษัท แต่บาง endpoint (เช่น /ComparePrice/package/ext/search) ว่างไม่ได้ (error B261805)", "remark": "", "new": false}, {"name": "Coverage6", "type": "int", "om": "M", "desc": "ทุนความเสียหายส่วนแรกที่เลือก", "remark": "", "new": false}, {"name": "Coverage11", "type": "int", "om": "M", "desc": "ทุนคุ้มครองน้ำท่วมที่เลือก", "remark": "", "new": false}]}], "request_json": "{\n  \"OrderNo\": \"VMI2609000123\"\n}", "response_json": "{\n  \"Status\": 200,\n  \"Message\": \"\",\n  \"ErrorCode\": \"\",\n  \"ErrorMessage\": \"\",\n  \"Data\": [\n    {\n      \"Order\": {\n        \"Package\": {\n          \"UseCarCode\": \"110\",\n          \"CarTypeCode\": \"1.10\",\n          \"CarCategoryID\": \"1\",\n          \"CarSalesYear\": \"2019\",\n          \"CarBrandID\": \"21\",\n          \"CarModelID\": \"1180\",\n          \"SubCarModelID\": \"24913\",\n          \"CompanyCode\": \"TVI\",\n          \"AgentCode\": \"AM000123\",\n          \"EffectiveType\": \"FULLYEAR\",\n          \"EffectiveDate\": \"2026-09-01\",\n          \"ExpireDate\": \"2027-09-01\"\n        },\n        \"CarDetails\": {\n          \"CarType\": \"1.10\",\n          \"CarBrand\": \"TOYOTA\",\n          \"CarModel\": \"HILUX REVO\",\n          \"SubCarModel\": \"2.4 J PLUS\",\n          \"CarSalesYear\": 2019,\n          \"CompanyCode\": \"TVI\"\n        },\n        \"CarDetailsExtension\": {\n          \"License\": \"1กก 1234\",\n          \"BodyNo\": \"MR0FZ29G901234567\",\n          \"EngineNo\": \"2TR1234567\",\n          \"ColorID\": \"0A1B2C3D4E5F6071829304A5B6C7D8E9\",\n          \"LicenseProvinceID\": \"5F1E2D3C4B5A69788796A5B4C3D2E1F0\",\n          \"LicenseFileID\": \"\",\n          \"IsRedLicense\": false\n        },\n        \"CarDetailsView\": {\n          \"RefCarBrandID\": 21,\n          \"RefCarModelID\": 1180,\n          \"RefCarID\": 24913,\n          \"CarCost\": 450000\n        },\n        \"InsureDetails\": {\n          \"ClassID\": \"1\",\n          \"RepairTypeID\": \"2\",\n          \"RefProvinceID\": \"1\",\n          \"IsDeduct\": true,\n          \"IsFloodCoverage\": false\n        },\n        \"Customer\": {\n          \"IsPerson\": true,\n          \"IsBranch\": false,\n          \"PersonProfile\": {\n            \"CustomerID\": \"7A6B5C4D3E2F10090807060504030201\",\n            \"FirstName\": \"สมชาย\"\n          },\n          \"DefaultAddress\": {\n            \"AddressID\": \"11112222333344445555666677778888\"\n          }\n        },\n        \"DeliveryMethod1\": {\n          \"MethodType\": \"ALL_AT_ONCE\",\n          \"DeliveryType\": \"DELIVERY\",\n          \"DeliveryChannelType\": \"THAIPOST\"\n        },\n        \"DeliveryMethod2\": null,\n        \"ProductID\": \"\",\n        \"IsTaxInvoice\": false\n      },\n      \"OrderEx\": [\n        {\n          \"PackageID\": \"105482\",\n          \"PackageCode\": \"VMI-1-TVI\",\n          \"RefAppNo\": \"\",\n          \"PolicyNo\": \"\",\n          \"RefPolicyNo\": \"\",\n          \"RefOrderNo\": \"\",\n          \"RefCancelOrderNo\": \"\",\n          \"RefCancelNewOrderNo\": \"\",\n          \"JobType\": \"NEW\",\n          \"CreateType\": \"ONLINE\",\n          \"RenewNo\": 0,\n          \"OrderType\": \"VOLUNTARY\",\n          \"OrderSubType\": \"M\",\n          \"OrderClassType\": \"\",\n          \"OrderGroupType\": \"INSURANCE\",\n          \"CreateDate\": \"2026-08-18T10:22:31Z\",\n          \"CancelDate\": \"\",\n          \"PreCancelDate\": \"\"\n        }\n      ],\n      \"VMIRequest\": {\n        \"PackageId\": 105482,\n        \"CarTypeCode\": \"1.10\",\n        \"RepairTypeId\": 2,\n        \"ProvinceId\": 1,\n        \"CarYear\": 2019,\n        \"CarBrandId\": 21,\n        \"CarModelId\": 1180,\n        \"CarId\": 24913,\n        \"CarCost\": 450000,\n        \"ClassIds\": [\n          1\n        ],\n        \"CompanyCode\": \"TVI\",\n        \"Coverage6\": 1,\n        \"Coverage11\": 0\n      },\n      \"PaymentTransaction\": null,\n      \"Payment\": null\n    }\n  ],\n  \"Options\": null\n}", "history": [{"no": 1, "date": "18/08/2026", "desc": "Create"}]};
+let activeTab = "request";
+
+function escapeHtml(s) {
+  return s.replace(/&/g, '&amp;').replace(/</g, '&lt;').replace(/>/g, '&gt;');
+}
+
+function copyName(name, el) {
+  navigator.clipboard.writeText(name);
+  el.className = 'ti ti-check copy-icon';
+  el.style.color = 'var(--color-text-success)';
+  setTimeout(function () {
+    el.className = 'ti ti-copy copy-icon';
+    el.style.color = 'var(--color-text-tertiary)';
+  }, 1000);
+}
+
+function render() {
+  const groups = SCHEMA[activeTab];
+  const jsonBody = SCHEMA[activeTab + '_json'];
+  const q = document.getElementById('search').value.trim().toLowerCase();
+
+  let html = '<details class="json-details"><summary>JSON Body</summary><pre>' + escapeHtml(jsonBody) + '</pre></details>';
+
+  html += '<div class="sw"><table class="tbl"><thead><tr>';
+  html += '<th style="width:200px">Parameter</th><th style="width:120px">Type</th><th style="width:44px;text-align:center">O/M</th><th>Description</th>';
+  html += '</tr></thead><tbody>';
+
+  groups.forEach(function (g) {
+    const fields = g.fields.filter(function (f) {
+      return !q || f.name.toLowerCase().includes(q);
+    });
+    if (fields.length === 0) return;
+
+    html += '<tr class="sec-row"><td colspan="4">' + g.group + '</td></tr>';
+    fields.forEach(function (f) {
+      const om = f.om === 'M' ? '<span class="badge bm">M</span>' : '<span class="badge bo">O</span>';
+      const small = f.remark ? '<small>' + f.remark + '</small>' : '';
+      const newBadge = f.new ? '<span class="badge bn">New</span>' : '';
+      html += '<tr>';
+      html += '<td class="td-name">' + f.name + '<i class="ti ti-copy copy-icon" onclick="copyName(\'' + f.name + '\', this)"></i>' + newBadge + '</td>';
+      html += '<td><span class="type-badge">' + f.type + '</span></td>';
+      html += '<td class="td-om">' + om + '</td>';
+      html += '<td class="td-desc">' + f.desc + small + '</td>';
+      html += '</tr>';
+    });
+  });
+
+  html += '</tbody></table></div>';
+  document.getElementById('content').innerHTML = html || '<p style="color:var(--color-text-tertiary)">No matching parameters</p>';
+}
+
+function setTab(tab) {
+  activeTab = tab;
+  document.querySelectorAll('.tab').forEach(function (el) {
+    el.classList.toggle('active', el.getAttribute('data-tab') === tab);
+  });
+  render();
+}
+
+render();
+</script>
+</body>
+</html>
