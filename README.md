@@ -4,6 +4,10 @@
 
 > คลิกลิงก์ด้านล่างเพื่อเปิดดูแบบ render (ผ่าน GitHub Pages)
 
+## Agent
+
+- [POST /Agent/referral/check](https://tthiraya.github.io/aglove-api-spec/API%20Spec/Agent/referral-check.html)
+
 ## Challenge
 
 - [POST /Challenge/list](https://tthiraya.github.io/aglove-api-spec/API%20Spec/Challenge/list.html)
