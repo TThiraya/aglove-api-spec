@@ -40,6 +40,7 @@
 
 ## OrderCMI
 
+- [POST /OrderCMI/v2/save](https://tthiraya.github.io/aglove-api-spec/API%20Spec/OrderCMI/v2-save.html)
 - [POST /OrderCMI/v2/summary/get](https://tthiraya.github.io/aglove-api-spec/API%20Spec/OrderCMI/v2-summary-get.html)
 
 ## OrderVMI
