@@ -65,6 +65,8 @@
 
 ## Payment
 
+- [POST /Payment/v1/calculate](https://tthiraya.github.io/aglove-api-spec/API%20Spec/Payment/v1-calculate.html)
+- [POST /Payment/v1/save](https://tthiraya.github.io/aglove-api-spec/API%20Spec/Payment/v1-save.html)
 - [POST /Payment/v1/confirm](https://tthiraya.github.io/aglove-api-spec/API%20Spec/Payment/v1-confirm.html)
 
 ## SKRegisterBackEnd
