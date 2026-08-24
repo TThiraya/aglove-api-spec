@@ -33,6 +33,7 @@
 - [POST /Master/occupation-type/sk-register/list](https://tthiraya.github.io/aglove-api-spec/API%20Spec/Master/occupation-type-sk-register-list.html)
 - [POST /Master/car-details/axa/list](https://tthiraya.github.io/aglove-api-spec/API%20Spec/Master/car-details-axa-list.html)
 - [POST /Master/car-details/anc/list](https://tthiraya.github.io/aglove-api-spec/API%20Spec/Master/car-details-anc-list.html)
+- [POST /Master/v1/subdistrict/list](https://tthiraya.github.io/aglove-api-spec/API%20Spec/Master/v1-subdistrict-list.html)
 
 ## Package
 
