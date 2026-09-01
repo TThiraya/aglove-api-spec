@@ -39,6 +39,12 @@
 
 - [POST /Package/pa/list](https://tthiraya.github.io/aglove-api-spec/API%20Spec/Package/pa-list.html)
 
+## Order
+
+- [POST /Order/policy/by-order/cancel](https://tthiraya.github.io/aglove-api-spec/API%20Spec/Order/policy-by-order-cancel.html)
+- [POST /Order/v1/grid/history/list](https://tthiraya.github.io/aglove-api-spec/API%20Spec/Order/Order-v1-grid-history-list.html)
+- [POST /Order/document/stream/get](https://tthiraya.github.io/aglove-api-spec/API%20Spec/Order/Order-document-stream-get.html)
+
 ## OrderCMI
 
 - [POST /OrderCMI/v2/save](https://tthiraya.github.io/aglove-api-spec/API%20Spec/OrderCMI/v2-save.html)
