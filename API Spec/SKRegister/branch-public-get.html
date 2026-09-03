@@ -1,0 +1,179 @@
+<!DOCTYPE html>
+<html lang="th">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>POST /SKRegister/branch/public/get</title>
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/tabler-icons/3.35.0/tabler-icons.min.css">
+<style>
+  :root {
+    --color-background-primary: #ffffff;
+    --color-background-secondary: #f4f3ef;
+    --color-background-tertiary: #ebe9e1;
+    --color-text-primary: #0f172a;
+    --color-text-secondary: #5f5e5a;
+    --color-text-tertiary: #888780;
+    --color-text-success: #0f6e56;
+    --color-border-tertiary: rgba(15,23,42,.15);
+    --color-border-secondary: rgba(15,23,42,.3);
+    --font-sans: -apple-system, "Segoe UI", Roboto, Helvetica, Arial, sans-serif;
+    --font-mono: ui-monospace, SFMono-Regular, Menlo, Consolas, monospace;
+    --border-radius-md: 8px;
+    --border-radius-lg: 12px;
+  }
+  @media (prefers-color-scheme: dark) {
+    :root {
+      --color-background-primary: #1c1c1a;
+      --color-background-secondary: #2c2c2a;
+      --color-background-tertiary: #383836;
+      --color-text-primary: #f1efe8;
+      --color-text-secondary: #b4b2a9;
+      --color-text-tertiary: #888780;
+      --color-text-success: #5dcaa5;
+      --color-border-tertiary: rgba(255,255,255,.15);
+      --color-border-secondary: rgba(255,255,255,.3);
+    }
+  }
+  * { box-sizing: border-box; }
+  body {
+    margin: 0; padding: 24px; font-family: var(--font-sans);
+    background: var(--color-background-primary); color: var(--color-text-primary);
+    font-size: 14px; line-height: 1.6;
+  }
+  h1 { font-size: 20px; font-weight: 500; margin: 0 0 4px; }
+  .endpoint { font-family: var(--font-mono); font-size: 14px; color: var(--color-text-secondary); margin: 0 0 16px; }
+  .method { display: inline-block; font-size: 12px; font-weight: 500; padding: 2px 8px; border-radius: var(--border-radius-md); background: #E6F1FB; color: #0C447C; font-family: var(--font-mono); margin-right: 8px; }
+  .hints { background: var(--color-background-secondary); border-radius: var(--border-radius-md); padding: 12px 16px; margin-bottom: 20px; font-size: 13px; }
+  .hints p { margin: 0 0 6px; font-weight: 500; }
+  .hints ul { margin: 0; padding-left: 20px; }
+  .hints li { margin-bottom: 4px; color: var(--color-text-secondary); }
+  .hist-tbl { border-collapse: collapse; font-size: 12px; margin-top: 4px; }
+  .hist-tbl th, .hist-tbl td { padding: 4px 10px; text-align: left; border: 0.5px solid var(--color-border-tertiary); }
+  .hist-tbl th { font-weight: 500; color: var(--color-text-secondary); }
+  .hist-tbl td { color: var(--color-text-secondary); }
+  .toolbar { display: flex; align-items: center; gap: 8px; margin-bottom: 16px; }
+  .tab { cursor: pointer; padding: 6px 14px; border-radius: var(--border-radius-md); border: 0.5px solid var(--color-border-tertiary); font-size: 13px; font-weight: 500; }
+  .tab.active { background: var(--color-background-secondary); border-color: var(--color-border-secondary); }
+  input[type=text] {
+    padding: 6px 10px 6px 30px; border-radius: var(--border-radius-md); border: 0.5px solid var(--color-border-tertiary);
+    background: var(--color-background-primary); color: var(--color-text-primary); font-size: 13px; width: 220px;
+  }
+  .search-wrap { position: relative; }
+  .search-wrap i { position: absolute; left: 10px; top: 50%; transform: translateY(-50%); font-size: 14px; color: var(--color-text-tertiary); }
+
+  .sw { padding: 1.5rem 0; font-family: var(--font-sans); }
+  .sw-label { font-size: 11px; font-weight: 500; color: var(--color-text-secondary); text-transform: uppercase; letter-spacing: .06em; margin: 0 0 12px; }
+  .tbl { width: 100%; border-collapse: collapse; border-radius: var(--border-radius-lg); overflow: hidden; border: 0.5px solid var(--color-border-tertiary); }
+  .tbl thead th { font-size: 11px; font-weight: 500; color: var(--color-text-secondary); text-transform: uppercase; letter-spacing: .06em; padding: 8px 14px; background: var(--color-background-secondary); border-bottom: 0.5px solid var(--color-border-secondary); text-align: left; }
+  .tbl tbody tr { border-bottom: 0.5px solid var(--color-border-tertiary); }
+  .tbl tbody tr:last-child { border-bottom: none; }
+  .tbl tbody tr:hover { background: var(--color-background-secondary); }
+  .tbl td { padding: 9px 14px; font-size: 13px; vertical-align: middle; }
+  .td-name { font-family: var(--font-mono); font-size: 12px; font-weight: 500; color: var(--color-text-primary); white-space: nowrap; }
+  .td-name.indent { padding-left: 28px; }
+  .copy-icon { cursor: pointer; font-size: 14px; color: var(--color-text-tertiary); margin-left: 6px; vertical-align: -2px; }
+  .type-badge { display: inline-block; font-size: 11px; font-weight: 500; padding: 2px 8px; border-radius: var(--border-radius-md); border: 0.5px solid var(--color-border-tertiary); color: var(--color-text-secondary); font-family: var(--font-mono); }
+  .td-desc { color: var(--color-text-primary); font-size: 13px; }
+  .td-desc small { display: block; font-size: 11px; color: var(--color-text-secondary); margin-top: 2px; }
+  .td-om { text-align: center; white-space: nowrap; }
+  .badge { font-size: 11px; font-weight: 500; padding: 2px 8px; border-radius: 99px; }
+  .bm { background: #E6F1FB; color: #0C447C; }
+  .bo { background: #F1EFE8; color: #444441; }
+  .bn { background: #FCE8D6; color: #9A4B0C; margin-left: 6px; }
+  .sec-row td { font-size: 11px; font-weight: 500; color: var(--color-text-secondary); text-transform: uppercase; letter-spacing: .04em; background: var(--color-background-secondary); padding: 6px 14px; border-bottom: 0.5px solid var(--color-border-secondary); }
+  @media (prefers-color-scheme: dark) { .bm { background: #0C447C; color: #B5D4F4; } .bo { background: #444441; color: #D3D1C7; } .bn { background: #5C3317; color: #FFD9B3; } }
+  .json-details { margin-bottom: 16px; }
+  .json-details summary { cursor: pointer; font-size: 13px; font-weight: 500; padding: 8px 14px; border-radius: var(--border-radius-md); border: 0.5px solid var(--color-border-tertiary); background: var(--color-background-secondary); }
+  .json-details pre { margin: 8px 0 0; padding: 12px 14px; border-radius: var(--border-radius-md); border: 0.5px solid var(--color-border-tertiary); background: var(--color-background-secondary); font-family: var(--font-mono); font-size: 12px; overflow-x: auto; }
+</style>
+</head>
+<body>
+  <h1>POST /SKRegister/branch/public/get</h1>
+  <p class="endpoint"><span class="method">POST</span>/SKRegister/branch/public/get</p>
+  <div class="hints">
+    <p>ข้อควรรู้</p>
+    <ul><li>Base URL dev: <code>https://api-cnt-aglove.724insure.net</code> — ทดสอบจริงเมื่อ 03/09/2026</li><li>ทุก endpoint ตอบ <b>HTTP 200 เสมอ</b> แม้เป็น error — ต้องอ่านสถานะจริงจากฟิลด์ <code>Status</code> (200/400) และ <code>ErrorCode</code> ใน body</li><li><b>ErrorMessage ของ error กลุ่ม validation มีส่วนต่อท้าย</b> <code>(Parameter 'ชื่อฟิลด์')</code> ติดมาด้วยเสมอ เช่น <code>"IDCard cannot be empty. (Parameter 'IDCard')"</code> — ห้ามเอาไปแสดงผลให้ผู้ใช้ตรง ๆ ให้ map จาก ErrorCode เอง</li><li><b>ไม่ต้องใช้ token</b> (anonymous) — ใช้กับหน้า public <code>/srikrung-branch/{BranchCode}</code> (CR-7)</li><li><b style='color:#b91c1c'>⚠ พบข้อมูลไม่ตรงสเปก:</b> ผลทดสอบจริงคืนค่า <code>OwnerID</code>, <code>OwnerIDCard</code>, <code>OwnerFullName</code>, <code>OwnerEmail</code>, <code>OwnerLineID</code> ออกมาด้วย ทั้งที่ CR-7 ระบุให้ปกปิด — <b>ยังไม่ควรใช้ response นี้ตรง ๆ บนหน้า public จนกว่าจะแก้</b></li><li><code>AgentCode</code> ไม่ใช่ field ที่ส่งได้ — ส่วน <code>/{AgentCode}</code> ในลิงก์คือ<b>คนที่แชร์ลิงก์</b> ไม่ใช่เจ้าของสาขา</li><li><code>EA16405 "Branch does not exist."</code> ใช้ตอบรวมทุกกรณี (ไม่มีสาขา / PENDING / REJECTED / IsActive=false) โดยตั้งใจ — ห้ามเอาไปแยกสถานะแสดงผล</li><li><b>ไม่คืน AddressText และไม่คืนชื่อจังหวัด/อำเภอ/ตำบล</b> — หน้าเว็บต้องประกอบที่อยู่เองจากฟิลด์ Address* และ resolve ชื่อจาก /Master/* เอง</li></ul>
+    <p style="margin-top:10px">ประวัติการสร้าง/อัปเดต Spec</p><table class="hist-tbl"><tr><th>ครั้งที่</th><th>วันที่</th><th>รายละเอียด</th></tr><tr><td>1</td><td>03/09/2026</td><td>Create</td></tr></table>
+  </div>
+  <div class="toolbar">
+    <div class="tab active" data-tab="request" onclick="setTab('request')">Request</div>
+    <div class="tab" data-tab="response" onclick="setTab('response')">Response</div>
+    <div style="flex:1"></div>
+    <div class="search-wrap">
+      <i class="ti ti-search"></i>
+      <input type="text" id="search" placeholder="Filter parameter..." oninput="render()">
+    </div>
+  </div>
+  <div id="content"></div>
+
+  <div style="display:flex;gap:16px;margin-top:12px;font-size:12px;color:var(--color-text-secondary);align-items:center">
+    <span style="display:flex;align-items:center;gap:6px"><span class="badge bm">M</span>Mandatory</span>
+    <span style="display:flex;align-items:center;gap:6px"><span class="badge bo">O</span>Optional</span>
+    <span style="display:flex;align-items:center;gap:6px"><span class="badge bn">New</span>Field ที่เพิ่มใหม่จากเวอร์ชันก่อนหน้า</span>
+  </div>
+
+<script>
+const SCHEMA = {"request": [{"group": "Request Body", "fields": [{"name": "BranchCode", "type": "string", "om": "M", "desc": "รหัสสาขา รูปแบบ BRxxxx ออกให้ตอน approve เท่านั้น (ไม่ใช่ unique key — ซ้ำกันได้)", "remark": "", "new": false}]}], "response": [{"group": "Response Body", "fields": [{"name": "Status", "type": "int", "om": "M", "desc": "สถานะคำขอสาขา — endpoint นี้คืนเฉพาะที่เป็น APPROVED เท่านั้น", "remark": "", "new": false}, {"name": "Message", "type": "string", "om": "O", "desc": "ข้อความตอบกลับจากระบบ", "remark": "", "new": false}, {"name": "ErrorCode", "type": "string", "om": "O", "desc": "รหัสข้อผิดพลาด", "remark": "", "new": false}, {"name": "ErrorMessage", "type": "string", "om": "O", "desc": "รายละเอียดข้อผิดพลาด", "remark": "", "new": false}, {"name": "Data", "type": "Object", "om": "M", "desc": "payload ของแต่ละ endpoint", "remark": "", "new": false}, {"name": "Options", "type": "string", "om": "O", "desc": "ข้อมูลเสริม — เป็นได้ทั้ง object, string หรือ null", "remark": "", "new": false}]}, {"group": "Data", "fields": [{"name": "ID", "type": "GUID", "om": "M", "desc": "GUID 32 หลักของ SKBranchRegister (primary key ตัวเดียวที่ unique)", "remark": "GUID", "new": false}, {"name": "OwnerID", "type": "GUID", "om": "M", "desc": "UserID ของเจ้าของสาขา", "remark": "GUID", "new": false}, {"name": "BranchCode", "type": "string", "om": "M", "desc": "รหัสสาขา รูปแบบ BRxxxx ออกให้ตอน approve เท่านั้น (ไม่ใช่ unique key — ซ้ำกันได้)", "remark": "", "new": false}, {"name": "OwnerAgentCode", "type": "string", "om": "M", "desc": "รหัส agent เจ้าของสาขา ประกอบจาก AgentType+AgentID (server อ่านจาก session ไม่รับจาก client)", "remark": "", "new": false}, {"name": "OwnerIDCard", "type": "string", "om": "M", "desc": "เลขบัตรประชาชนเจ้าของสาขา (server อ่านจาก Agent profile ไม่รับจาก client)", "remark": "", "new": false}, {"name": "OwnerFullName", "type": "string", "om": "M", "desc": "ชื่อ-สกุลเจ้าของสาขา", "remark": "", "new": false}, {"name": "OwnerPhone", "type": "string", "om": "M", "desc": "เบอร์โทรเจ้าของสาขา", "remark": "", "new": false}, {"name": "OwnerEmail", "type": "string", "om": "M", "desc": "อีเมลเจ้าของสาขา (ไม่ validate รูปแบบ/ความยาว)", "remark": "", "new": false}, {"name": "OwnerLineID", "type": "string", "om": "M", "desc": "LINE ID เจ้าของสาขา (ไม่ validate ความยาว)", "remark": "", "new": false}, {"name": "BranchName", "type": "string", "om": "M", "desc": "ชื่อสาขา", "remark": "", "new": false}, {"name": "BranchPhone", "type": "string", "om": "M", "desc": "เบอร์โทรสาขา", "remark": "", "new": false}, {"name": "AddressNo", "type": "string", "om": "M", "desc": "บ้านเลขที่", "remark": "", "new": false}, {"name": "AddressMoo", "type": "string", "om": "M", "desc": "หมู่", "remark": "", "new": false}, {"name": "AddressPlace", "type": "string", "om": "M", "desc": "หมู่บ้าน/สถานที่", "remark": "", "new": false}, {"name": "AddressRoom", "type": "string", "om": "O", "desc": "ห้อง", "remark": "", "new": false}, {"name": "AddressBuilding", "type": "string", "om": "O", "desc": "อาคาร", "remark": "", "new": false}, {"name": "AddressFloor", "type": "string", "om": "O", "desc": "ชั้น", "remark": "", "new": false}, {"name": "AddressAlley", "type": "string", "om": "M", "desc": "ซอย", "remark": "", "new": false}, {"name": "AddressYaek", "type": "string", "om": "O", "desc": "ตรอก/แยก", "remark": "", "new": false}, {"name": "AddressRoad", "type": "string", "om": "M", "desc": "ถนน", "remark": "", "new": false}, {"name": "ProvinceID", "type": "GUID", "om": "M", "desc": "GUID จังหวัด จาก POST /Master/province/List", "remark": "GUID", "new": false}, {"name": "DistrictID", "type": "GUID", "om": "M", "desc": "GUID อำเภอ จาก POST /Master/v1/district/list", "remark": "GUID", "new": false}, {"name": "SubDistrictID", "type": "GUID", "om": "M", "desc": "GUID ตำบล จาก POST /Master/v1/subdistrict/list", "remark": "GUID", "new": false}, {"name": "PostalCode", "type": "string", "om": "M", "desc": "รหัสไปรษณีย์ (ไม่ cross-check กับ SubDistrict)", "remark": "", "new": false}, {"name": "ServiceHours", "type": "string", "om": "M", "desc": "เวลาทำการ (free text 1-255 ตัวอักษร)", "remark": "", "new": false}, {"name": "IsAcceptedPolicy", "type": "boolean", "om": "M", "desc": "ยอมรับเงื่อนไข ต้องเป็น true เท่านั้น มิฉะนั้น EA14206", "remark": "true/false", "new": false}, {"name": "AcceptedPolicyDate", "type": "DateTime", "om": "M", "desc": "วันเวลาที่กดยอมรับเงื่อนไข", "remark": "DateTime", "new": false}, {"name": "Status", "type": "string", "om": "M", "desc": "สถานะคำขอสาขา — endpoint นี้คืนเฉพาะที่เป็น APPROVED เท่านั้น", "remark": "", "new": false}, {"name": "RejectReason", "type": "string", "om": "O", "desc": "เหตุผลที่ปฏิเสธ (บังคับเมื่อ IsApprove=false)", "remark": "", "new": false}, {"name": "IsActive", "type": "boolean", "om": "M", "desc": "เปิด/ปิดการใช้งานลิงก์สาขา (ปิดแล้ว public/get จะตอบ EA16405)", "remark": "true/false", "new": false}, {"name": "ApproveUser", "type": "string", "om": "M", "desc": "ผู้อนุมัติ", "remark": "", "new": false}, {"name": "ApproveDate", "type": "DateTime", "om": "M", "desc": "วันเวลาที่อนุมัติ", "remark": "DateTime", "new": false}, {"name": "CreateUser", "type": "string", "om": "M", "desc": "ผู้สร้างรายการ", "remark": "", "new": false}, {"name": "CreateDate", "type": "DateTime", "om": "M", "desc": "วันที่สร้างรายการ", "remark": "DateTime", "new": false}]}], "request_json": "{\n  \"BranchCode\": \"BR0001\"\n}", "response_json": "{\n  \"Status\": 200,\n  \"Message\": \"\",\n  \"ErrorCode\": \"\",\n  \"ErrorMessage\": \"\",\n  \"Data\": {\n    \"ID\": \"85C93254543E4FDD8EA00756F4BF2554\",\n    \"OwnerID\": \"5BBDDF70090345E0B6D1DA65329F8829\",\n    \"BranchCode\": \"BR0001\",\n    \"OwnerAgentCode\": \"AM00371908\",\n    \"OwnerIDCard\": \"1100400284852\",\n    \"OwnerFullName\": \"ทดสอบ สเปกสาขา\",\n    \"OwnerPhone\": \"0897240124\",\n    \"OwnerEmail\": \"branchtest@example.com\",\n    \"OwnerLineID\": \"branchtest724\",\n    \"BranchName\": \"724 มาร์เก็ต สาขาทดสอบ (API Spec)\",\n    \"BranchPhone\": \"0537240124\",\n    \"AddressNo\": \"123\",\n    \"AddressMoo\": \"4\",\n    \"AddressPlace\": \"หมู่บ้านสายน้ำ\",\n    \"AddressRoom\": \"\",\n    \"AddressBuilding\": \"\",\n    \"AddressFloor\": \"\",\n    \"AddressAlley\": \"ช้างคลาน 3\",\n    \"AddressYaek\": \"\",\n    \"AddressRoad\": \"ช้างคลาน\",\n    \"ProvinceID\": \"64CB25430DA94C6D8F5848490381414E\",\n    \"DistrictID\": \"0850427CFAB74DB7945CF60213EAD42B\",\n    \"SubDistrictID\": \"F1336F8A63564D2E9DDD0B612CAC0693\",\n    \"PostalCode\": \"50100\",\n    \"ServiceHours\": \"จันทร์–ศุกร์ 09:00–17:30 น.\",\n    \"IsAcceptedPolicy\": true,\n    \"AcceptedPolicyDate\": \"2026-09-03T16:34:47.867\",\n    \"Status\": \"APPROVED\",\n    \"RejectReason\": null,\n    \"IsActive\": true,\n    \"ApproveUser\": \"zicma\",\n    \"ApproveDate\": \"2026-09-03T16:35:01.243\",\n    \"CreateUser\": \"AM00371908\",\n    \"CreateDate\": \"2026-09-03T16:34:47.867\"\n  },\n  \"Options\": null\n}", "history": [{"no": 1, "date": "03/09/2026", "desc": "Create"}]};
+let activeTab = "request";
+
+function escapeHtml(s) {
+  return s.replace(/&/g, '&amp;').replace(/</g, '&lt;').replace(/>/g, '&gt;');
+}
+
+function copyName(name, el) {
+  navigator.clipboard.writeText(name);
+  el.className = 'ti ti-check copy-icon';
+  el.style.color = 'var(--color-text-success)';
+  setTimeout(function () {
+    el.className = 'ti ti-copy copy-icon';
+    el.style.color = 'var(--color-text-tertiary)';
+  }, 1000);
+}
+
+function render() {
+  const groups = SCHEMA[activeTab];
+  const jsonBody = SCHEMA[activeTab + '_json'];
+  const q = document.getElementById('search').value.trim().toLowerCase();
+
+  let html = '<details class="json-details"><summary>JSON Body</summary><pre>' + escapeHtml(jsonBody) + '</pre></details>';
+
+  html += '<div class="sw"><table class="tbl"><thead><tr>';
+  html += '<th style="width:200px">Parameter</th><th style="width:120px">Type</th><th style="width:44px;text-align:center">O/M</th><th>Description</th>';
+  html += '</tr></thead><tbody>';
+
+  groups.forEach(function (g) {
+    const fields = g.fields.filter(function (f) {
+      return !q || f.name.toLowerCase().includes(q);
+    });
+    if (fields.length === 0) return;
+
+    html += '<tr class="sec-row"><td colspan="4">' + g.group + '</td></tr>';
+    fields.forEach(function (f) {
+      const om = f.om === 'M' ? '<span class="badge bm">M</span>' : '<span class="badge bo">O</span>';
+      const small = f.remark ? '<small>' + f.remark + '</small>' : '';
+      const newBadge = f.new ? '<span class="badge bn">New</span>' : '';
+      html += '<tr>';
+      html += '<td class="td-name">' + f.name + '<i class="ti ti-copy copy-icon" onclick="copyName(\'' + f.name + '\', this)"></i>' + newBadge + '</td>';
+      html += '<td><span class="type-badge">' + f.type + '</span></td>';
+      html += '<td class="td-om">' + om + '</td>';
+      html += '<td class="td-desc">' + f.desc + small + '</td>';
+      html += '</tr>';
+    });
+  });
+
+  html += '</tbody></table></div>';
+  document.getElementById('content').innerHTML = html || '<p style="color:var(--color-text-tertiary)">No matching parameters</p>';
+}
+
+function setTab(tab) {
+  activeTab = tab;
+  document.querySelectorAll('.tab').forEach(function (el) {
+    el.classList.toggle('active', el.getAttribute('data-tab') === tab);
+  });
+  render();
+}
+
+render();
+</script>
+</body>
+</html>

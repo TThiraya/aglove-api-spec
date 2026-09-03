@@ -81,6 +81,12 @@
 - [POST /SKRegisterBackEnd/register/save](https://tthiraya.github.io/aglove-api-spec/API%20Spec/SKRegisterBackEnd/register-save.html)
 - [POST /SKRegisterBackEnd/register/summary/get](https://tthiraya.github.io/aglove-api-spec/API%20Spec/SKRegisterBackEnd/register-summary-get.html)
 - [POST /SKRegisterBackEnd/sk/approve/send](https://tthiraya.github.io/aglove-api-spec/API%20Spec/SKRegisterBackEnd/sk-approve-send.html)
+- [POST /SKRegisterBackEnd/branch/register/grid/list](https://tthiraya.github.io/aglove-api-spec/API%20Spec/SKRegisterBackEnd/branch-register-grid-list.html)
+- [POST /SKRegisterBackEnd/branch/register/get](https://tthiraya.github.io/aglove-api-spec/API%20Spec/SKRegisterBackEnd/branch-register-get.html)
+- [POST /SKRegisterBackEnd/branch/register/approve](https://tthiraya.github.io/aglove-api-spec/API%20Spec/SKRegisterBackEnd/branch-register-approve.html)
+- [POST /SKRegisterBackEnd/branch/register/update](https://tthiraya.github.io/aglove-api-spec/API%20Spec/SKRegisterBackEnd/branch-register-update.html)
+- [POST /SKRegisterBackEnd/branch/active/save](https://tthiraya.github.io/aglove-api-spec/API%20Spec/SKRegisterBackEnd/branch-active-save.html)
+- [POST /SKRegisterBackEnd/branch/report/summary](https://tthiraya.github.io/aglove-api-spec/API%20Spec/SKRegisterBackEnd/branch-report-summary.html)
 
 ## SKRegister
 
@@ -89,6 +95,10 @@
 - [POST /SKRegister/register/save](https://tthiraya.github.io/aglove-api-spec/API%20Spec/SKRegister/register-save.html)
 - [POST /SKRegister/register/payment/calculate](https://tthiraya.github.io/aglove-api-spec/API%20Spec/SKRegister/register-payment-calculate.html)
 - [POST /SKRegister/v1/register/payment/confirm](https://tthiraya.github.io/aglove-api-spec/API%20Spec/SKRegister/v1-register-payment-confirm.html)
+- [POST /SKRegister/register/create](https://tthiraya.github.io/aglove-api-spec/API%20Spec/SKRegister/register-create.html)
+- [POST /SKRegister/branch/register/create](https://tthiraya.github.io/aglove-api-spec/API%20Spec/SKRegister/branch-register-create.html)
+- [POST /SKRegister/branch/link/list](https://tthiraya.github.io/aglove-api-spec/API%20Spec/SKRegister/branch-link-list.html)
+- [POST /SKRegister/branch/public/get](https://tthiraya.github.io/aglove-api-spec/API%20Spec/SKRegister/branch-public-get.html)
 
 ## JobApproveBackEnd
 
