@@ -7,6 +7,7 @@
 ## Agent
 
 - [POST /Agent/referral/check](https://tthiraya.github.io/aglove-api-spec/API%20Spec/Agent/referral-check.html)
+- [POST /Agent/profile/get](https://tthiraya.github.io/aglove-api-spec/API%20Spec/Agent/profile-get.html)
 
 ## Challenge
 
