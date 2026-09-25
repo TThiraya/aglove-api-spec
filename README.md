@@ -23,6 +23,7 @@
 
 - [POST /ComparePrice/package/ext/search](https://tthiraya.github.io/aglove-api-spec/API%20Spec/ComparePrice/package-ext-search.html)
 - [POST /ComparePrice/package/search](https://tthiraya.github.io/aglove-api-spec/API%20Spec/ComparePrice/package-search.html)
+- [POST /ComparePrice/v2/package/search](https://tthiraya.github.io/aglove-api-spec/API%20Spec/ComparePrice/v2-package-search.html)
 
 ## Customer
 
@@ -116,6 +117,7 @@
 
 - [POST /Policy/package/list](https://tthiraya.github.io/aglove-api-spec/API%20Spec/Policy/package-list.html)
 - [POST /Policy/v1/package/list](https://tthiraya.github.io/aglove-api-spec/API%20Spec/Policy/v1-package-list.html)
+- [POST /Policy/v2/package/list](https://tthiraya.github.io/aglove-api-spec/API%20Spec/Policy/v2-package-list.html)
 
 ## Indara (IIC) — partner API (SOAP/XML, ไม่ใช่ AGLove เอง)
 
